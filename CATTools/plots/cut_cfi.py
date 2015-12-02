@@ -16,10 +16,9 @@ cut = [ "(step1==1)", "(step2==1)",  "(step3==1)", "(step4==1)","(step5==1)","(s
 mm_cuts ={
 "channel": "mm",
 "cut": [
-   "(1)"
+   "(1)",
 #   preselection,
    "("+mm+"&&"+trigger+")",
-   trigger,
    cut[0], cut[1], cut[2], cut[3], cut[4], cut[5]
 ]
 }
@@ -38,7 +37,6 @@ em_cuts = {
    "(1)", 
 #   preselection,
    "("+em+"&&"+trigger+")",
-   trigger,
    cut[0], cut[1], cut[2], cut[3], cut[4], cut[5]
 ]
 }
