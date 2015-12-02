@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+
+import sys, os
+
+from urllib import urlopen
+import csv
+import json
+
+
+#> catGetDatasetInfo v7-4-3
+
+cmsswpath=os.environ.get('SRT_CMSSW_BASE_SCRAMRTDEL')+"/src/CATTools/CatAnalyzer/data/"
+json_ = open(cmsswpath+"dataset.json")
+dataset = json.load(json_)
+
+iii=0
+args=["--jobName","--fileList","--maxFiles","--cfg","--transferDest","--args","--customise customise_cff.py"]
+for aa in dataset:
+ skip = (aa['name'].find("QCD")>-1 or aa['name'].find("SingleMuon")>-1 or aa['name'].find("SingleElectron")>-1 
+          or aa['name'].find("HT")>-1 or aa['name'].find("VBF")>-1 or aa['name'].find("Gl")>-1  )
+ if not skip :
+   #ddd = "./create-batch -n "
+   ddd = "./create-batch "
+   ddd+= args[0]+" "+aa['name']+" "
+   ddd+= args[1]+" "+cmsswpath+"dataset_"+aa['name']+".txt "
+   if aa['name'].find("Run2015")>-1:
+     ddd+= args[2]+" 2000 "
+   else:
+     ddd+= args[2]+" 20 "
+
+   #if ( aa['name'].find("Double")>-1 or aa['name'].find("MuonEG")>-1 ) :
+   #  ddd+= args[3]+" run_ntupleMakerRD_cfg.py "
+   #else :
+   fff = "/store/user/youngjo/Cattools/v7-4-6/"+aa['name']
+   ddd+= args[3]+" run_TtbarBbbarDiLeptonAnalyzer_cfg.py "
+   ddd+= args[4]+" "+fff+" "
+   ddd+= args[6]
+
+   #eee="srmmkdir srm://cms-se.sdfarm.kr:8443/srm/v2/server?SFN=/xrootd"+fff
+   #os.system(eee)
+   print ddd
+   os.system(ddd)
+   iii=iii+1
+
