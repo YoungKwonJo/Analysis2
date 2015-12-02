@@ -69,9 +69,9 @@ def make_bannerLumi(xmin,ymin,xmax,ymax,lumi):
 def addLegendLumi(lumi):
   #lumi2 = str(round(lumi*10)/10)
   lumi2 = str(round(lumi/100)/10)
-  tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (8 TeV)")
+  #tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (8 TeV)")
   #tex = TLatex(0.9380178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
-  #tex = TLatex(0.9380178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
+  tex = TLatex(0.9380178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
   #tex = TLatex(0.9360178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
   tex.SetNDC()
   tex.SetTextAlign(31)
