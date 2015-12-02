@@ -7,11 +7,11 @@ def files(mypath):
 
 
 #loc = "../"
-loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6/"
+loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
-ttcx=815.96
+ttcx=831.76
 
 def mAND(aaa,bbb):
   return "(" +aaa+ " && "+bbb+")"
@@ -36,31 +36,31 @@ def op_(aaa):
   return "!(" + aaa + ")"
 
 def GW(sel="1"):
-  return "(("+sel+")*(weight/abs(weight)))"
+  return "(("+sel+")*(weight/abs(weight))*(puweight))"
 
 ttotheslist = [op_(ttbb), op_(ttb), op_(tt2b),op_(ttc), op_(ttcc),op_(ttlf) ]
 ttothers = mAND2(ttotheslist)
 
-CS = [kOrange, kRed-7, kRed+2, kMagenta,kMagenta,kMagenta+2,kRed ]
+CS = [kOrange, kOrange-1, kRed-7, kRed+2, kMagenta,kMagenta+2, kRed ]
 BCS = [kBlue,kGreen+2,kGray,kViolet,kCyan]
 
 mcsamples=[
 
-{"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
-{"name":"MG5tt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[2],   "label":"t#bar{t}+2b      "       },
-{"name":"MG5ttb",   "selection": GW(ttb),      "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
-{"name":"MG5ttc",   "selection": GW(ttc),      "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
-{"name":"MG5ttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
-{"name":"MG5ttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
-{"name":"MG5ttot",  "selection": GW(ttothers), "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
+#{"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
+#{"name":"MG5tt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[2],   "label":"t#bar{t}+2b      "       },
+#{"name":"MG5ttb",   "selection": GW(ttb),      "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
+#{"name":"MG5ttc",   "selection": GW(ttc),      "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
+#{"name":"MG5ttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
+#{"name":"MG5ttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
+#{"name":"MG5ttot",  "selection": GW(ttothers), "file": files(loc + ttbarMG5), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
 
-{"name":"AMCttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
-{"name":"AMCtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[2],   "label":"t#bar{t}+2b      "       },
-{"name":"AMCttb",   "selection": GW(ttb),      "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
-{"name":"AMCttc",   "selection": GW(ttc),      "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
-{"name":"AMCttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
-{"name":"AMCttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
-{"name":"AMCttot",  "selection": GW(ttothers), "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
+#{"name":"AMCttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
+#{"name":"AMCtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[2],   "label":"t#bar{t}+2b      "       },
+#{"name":"AMCttb",   "selection": GW(ttb),      "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
+#{"name":"AMCttc",   "selection": GW(ttc),      "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
+#{"name":"AMCttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
+#{"name":"AMCttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
+#{"name":"AMCttot",  "selection": GW(ttothers), "file": files(loc + ttbarAMC), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
 
 {"name":"POWttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarPOW), "cx":ttcx, "color": CS[0],  "label":"t#bar{t}+b#bar{b}      " },
 {"name":"POWtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarPOW), "cx":ttcx, "color": CS[2],  "label":"t#bar{t}+2b      "       },
@@ -79,11 +79,11 @@ mcsamples=[
 {"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"),   "cx":136.02, "color": BCS[3],   "label":"SingleTop"    },
 {"name":"STbtW",  "selection": GW(), "file": files(loc + "SingleTbar_tW"), "cx":35.6,   "color": BCS[3],   "label":"SingleTop"      },
 {"name":"STtW",   "selection": GW(), "file": files(loc + "SingleTop_tW"),  "cx":35.6,   "color": BCS[3],   "label":"SingleTop"      },
-{"name":"WJets",  "selection": GW(), "file": files(loc + "WJets"),         "cx":61526.7,"color": BCS[1],   "label":"WJets      "       },
 {"name":"WW",     "selection": GW(), "file": files(loc + "WW"),            "cx":110.8,  "color": BCS[2],   "label":"VV            "    },
 {"name":"WZ",     "selection": GW(), "file": files(loc + "WZ"),            "cx":66.1,   "color": BCS[2],   "label":"VV            "   },
 {"name":"ZZ",     "selection": GW(), "file": files(loc + "ZZ"),            "cx":15.4,   "color": BCS[2],   "label":"VV            "   },
 
+{"name":"WJets",  "selection": GW(), "file": files(loc + "WJets"),         "cx":61526.7,"color": BCS[1],   "label":"WJets      "       },
 {"name":"DYJets", "selection": GW(), "file": files(loc + "DYJets"),        "cx":6025.2, "color": BCS[1], "label":"DYJets    "      },
 {"name":"DYJets10", "selection": GW(), "file": files(loc + "DYJets_10to50"),"cx":18271.92, "color": BCS[1], "label":"DYJets    "      },
 

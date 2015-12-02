@@ -67,10 +67,10 @@ def make_bannerLumi(xmin,ymin,xmax,ymax,lumi):
 
   return pt
 def addLegendLumi(lumi):
-  lumi2 = str(round(lumi*10)/10)
-  #lumi2 = str(round(lumi/100)/10)
-  #tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (8 TeV)")
-  tex = TLatex(0.9380178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
+  #lumi2 = str(round(lumi*10)/10)
+  lumi2 = str(round(lumi/100)/10)
+  tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (8 TeV)")
+  #tex = TLatex(0.9380178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
   #tex = TLatex(0.9380178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
   #tex = TLatex(0.9360178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
   tex.SetNDC()
@@ -378,7 +378,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(mc['color'])
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label']) + (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       leg.AddEntry(h3, label, "f")
       hs.Add(h3)
       hmcmerge.Reset()
@@ -386,7 +386,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(mc['color'])
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label']) + (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       leg2.AddEntry(h3, label, "f")
       hs.Add(h3)
       hmcmerge.Reset()
@@ -426,13 +426,13 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
 
   h2data.SetMaximum(scale*4000)
   h2data.SetMinimum(minimum)
-  labeltot = ("MC Total") + (" %.0f"%hmctot.Integral()).rjust(8)
-  leg2.AddEntry(hmctot,labeltot,"")
-  label = ("%s"%hmcSig.GetTitle()) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
+  labeltot = ("MC Total") #+ (" %.0f"%hmctot.Integral()).rjust(8)
+  #leg2.AddEntry(hmctot,labeltot,"")
+  label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
   if(hmcSig.Integral()>0) : leg2.AddEntry(hmcSig, label, "l")
  
-  labeldata = ("DATA     ") + (" %.0f"%h2data.Integral()).rjust(8)
-  leg.AddEntry(h2data,labeldata,"p")
+  labeldata = ("DATA     ")# + (" %.0f"%h2data.Integral()).rjust(8)
+  leg2.AddEntry(h2data,labeldata,"p")
 
 #########################################
   h2data.GetYaxis().SetTitle("Events")
@@ -649,7 +649,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
   if(hmcSig.Integral()>0) : leg2.AddEntry(hmcSig, label, "l")
   labeldata = ("DATA     ") #+ (" %.0f"%h2data.Integral()).rjust(8)
-  leg.AddEntry(h2data,labeldata,"p")
+  leg2.AddEntry(h2data,labeldata,"p")
 
 #########################################
   h2data.GetYaxis().SetTitle("Events")
