@@ -1,9 +1,13 @@
 
 #from mcsample_cfi import *
 
-mm= "(channel==26)" 
-ee= "(channel==22)"
-em= "(channel==24)"
+#mm= "(pseudoTopChannel==3)"
+#ee= "(pseudoTopChannel==2)"
+#em= "(pseudoTopChannel==1)"
+
+mm= "(channel==3)" 
+ee= "(channel==2)"
+em= "(channel==1)"
 
 preselection = "(filtered==1)" 
 trigger   = "(tri==1)"
@@ -12,8 +16,9 @@ cut = [ "(step1==1)", "(step2==1)",  "(step3==1)", "(step4==1)","(step5==1)","(s
 mm_cuts ={
 "channel": "mm",
 "cut": [
-   mm,
+   "(1)"
 #   preselection,
+   "("+mm+"&&"+trigger+")",
    trigger,
    cut[0], cut[1], cut[2], cut[3], cut[4], cut[5]
 ]
@@ -21,17 +26,18 @@ mm_cuts ={
 ee_cuts = {
 "channel": "ee",
 "cut": [
-   ee,
+   "(1)",
 #   preselection,
-   trigger,
+   "("+ee+"&&"+trigger+")",
    cut[0], cut[1], cut[2], cut[3], cut[4], cut[5]
 ]
 }
 em_cuts = {
 "channel": "em",
 "cut":[
-   em,
+   "(1)", 
 #   preselection,
+   "("+em+"&&"+trigger+")",
    trigger,
    cut[0], cut[1], cut[2], cut[3], cut[4], cut[5]
 ]

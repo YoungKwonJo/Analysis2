@@ -24,18 +24,6 @@ def mAND2(aaa):
       bbb=mAND(ii,bbb)
   return bbb
 
-"""
-         int category =0; // 0:tt+lf, 1:tt+cc, 2:tt+bb, 3:tt+2b, 4:tt+b  
-         int categorytb =0;
-         if(genTtbarId%100 == 0)                   category=0;
-         else if( ((int)(genTtbarId%100)/10) == 4) category=1;
-         else if( ((int)(genTtbarId%100)) == 51)   category=4;
-         else if( ((int)(genTtbarId%100)) == 52)   category=3;
-         else if( ((int)(genTtbarId%100)) == 53)   category=2;
-         else if( ((int)(genTtbarId%100)) == 54)   category=2;
-         else if( ((int)(genTtbarId%100)) == 55)   category=2;
-         categorytb=(int)(genTtbarId/100);
-"""
 ll = " (partonInPhaseLep==1 && NgenJet>=4 )"
 ttbb = mAND(" (genTtbarId%100>52) ", ll)
 ttb  = mAND(" (genTtbarId%100==51) ", ll)
