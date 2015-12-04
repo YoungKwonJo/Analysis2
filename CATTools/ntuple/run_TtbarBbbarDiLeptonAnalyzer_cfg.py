@@ -16,6 +16,16 @@ process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring())
 #useGold = True
 #isRunData = False
 catmet = 'catMETsNoHF'
+lumiMask = 'lumiMask'
+process.load("CATTools.CatProducer.pileupWeight_cff")                # loads pileup weighting tool
+from CATTools.CatProducer.pileupWeight_cff import pileupWeightMap
+process.pileupWeight.weightingMethod = "RedoWeight"                  # set mode to reweighting
+process.pileupWeight.pileupMC = pileupWeightMap["Startup2015_25ns"]  # MC pileup distrubition 
+from pileup import pileupMap                                         # new pileup file made with getPileUpData.py
+process.pileupWeight.pileupRD = pileupMap["Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON"] # new data PU distrubition
+process.pileupWeight.pileupUp = pileupMap["Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Up"]
+process.pileupWeight.pileupDn = pileupMap["Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_Dn"]
+
 #if useGold:
 #    catmet = 'catMETs'
 #    if isRunData:
@@ -83,9 +93,10 @@ process.cattree = cms.EDAnalyzer("TtbarBbbarDiLeptonAnalyzer",
     genweightQ = cms.InputTag("genWeight","Q"),
     genweightPDF = cms.InputTag("genWeight","pdfWeights"),
 
-    puweight = cms.InputTag("pileupWeight"),
-    puweightUp = cms.InputTag("pileupWeight","up"),
-    puweightDown = cms.InputTag("pileupWeight","dn"),
+    lumiSelection = cms.InputTag(lumiMask),
+    puweight = cms.InputTag("pileupWeight","","TtbarDiLeptonAnalyzer"),
+    puweightUp = cms.InputTag("pileupWeight","up","TtbarDiLeptonAnalyzer"),
+    puweightDown = cms.InputTag("pileupWeight","dn","TtbarDiLeptonAnalyzer"),
     trigMUEL = cms.InputTag("filterTrigMUEL"),
     trigMUMU = cms.InputTag("filterTrigMUMU"),
     trigELEL = cms.InputTag("filterTrigELEL"),
@@ -125,7 +136,7 @@ process.TFileService = cms.Service("TFileService",
     fileName = cms.string("cattree.root"
 ))
 
-process.p = cms.Path(process.cattree)
+process.p = cms.Path(process.pileupWeight + process.cattree)
 process.MessageLogger.cerr.FwkReport.reportEvery = 50000
 
 #from customise_cff import *
