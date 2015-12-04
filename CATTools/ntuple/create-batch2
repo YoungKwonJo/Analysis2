@@ -18,20 +18,22 @@ args=["--jobName","--fileList","--maxFiles","--cfg","--transferDest","--args","-
 for aa in dataset:
  skip = (aa['name'].find("QCD")>-1 or aa['name'].find("SingleMuon")>-1 or aa['name'].find("SingleElectron")>-1 
           or aa['name'].find("HT")>-1 or aa['name'].find("VBF")>-1 or aa['name'].find("Gl")>-1  )
+ #isDATA = aa['name'].find("Run2015")>-1
+ #if not skip and isDATA :
  if not skip :
    #ddd = "./create-batch -n "
    ddd = "./create-batch "
    ddd+= args[0]+" "+aa['name']+" "
    ddd+= args[1]+" "+cmsswpath+"dataset_"+aa['name']+".txt "
    if aa['name'].find("Run2015")>-1:
-     ddd+= args[2]+" 2000 "
+     ddd+= args[2]+" 20 "
    else:
      ddd+= args[2]+" 20 "
 
    #if ( aa['name'].find("Double")>-1 or aa['name'].find("MuonEG")>-1 ) :
    #  ddd+= args[3]+" run_ntupleMakerRD_cfg.py "
    #else :
-   fff = "/store/user/youngjo/Cattools/v7-4-6/"+aa['name']
+   fff = "/store/user/youngjo/Cattools/v7-4-6v2/"+aa['name']
    ddd+= args[3]+" run_TtbarBbbarDiLeptonAnalyzer_cfg.py "
    ddd+= args[4]+" "+fff+" "
    ddd+= args[6]
