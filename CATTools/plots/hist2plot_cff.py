@@ -9,6 +9,20 @@ log = False
 mainlumi=2110.
 
 ###################################################
+def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
+                       rd_ee_in, rd_mm_in, rd_em_in):    
+    kMM = sqrt(rd_mm_in/rd_ee_in)/2.
+    kEE = sqrt(rd_ee_in/rd_mm_in)/2.
+    print "kMM: "+str(kMM)+", KEE:"+str(kEE)
+
+    rMC_mm = mc_mm_out/mc_mm_in
+    rMC_ee = mc_ee_out/mc_ee_in
+    
+    nOutEst_mm = rMC_mm*(rd_mm_in - rd_em_in*kMM)
+    nOutEst_ee = rMC_ee*(rd_ee_in - rd_em_in*kEE)
+    return nOutEst_ee/mc_ee_out,nOutEst_mm/mc_mm_out
+
+###################################################
 def make_legend(xmin,ymin,xmax,ymax):
   #leg = TLegend(0.65,0.7, 0.89,0.89)
   leg = TLegend(xmin,ymin,xmax,ymax)
@@ -69,7 +83,7 @@ def make_bannerLumi(xmin,ymin,xmax,ymax,lumi):
 def addLegendLumi(lumi):
   #lumi2 = str(round(lumi*10)/10)
   lumi2 = str(round(lumi/100)/10)
-  #tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (8 TeV)")
+  #tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
   #tex = TLatex(0.9380178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
   tex = TLatex(0.9380178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
   #tex = TLatex(0.9360178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
@@ -304,12 +318,84 @@ def myHist2TGraphError(hist1):
 
 
 #####################
+def drellYanEstimationRun(f,step): #,mcsamples,datasamples):
+ 
+  step=step.replace("mm","")
+  step=step.replace("ee","")
+  step=step.replace("em","")
+  mcs = ["DYJets","DYJets10"]
+  mcxs = [6025.2,18271.92]
+  datas = ["1","2","3"]
+
+  hmceein = TH1F("mc_ee_in","",60,0,300)
+  hmcmmin = TH1F("mc_mm_in","",60,0,300)
+  hmcemin = TH1F("mc_em_in","",60,0,300)
+
+  hmceeout = TH1F("mc_ee_out","",60,0,300)
+  hmcmmout = TH1F("mc_mm_out","",60,0,300)
+
+  hrdeein = TH1F("rd_ee_in","",60,0,300)
+  hrdmmin = TH1F("rd_mm_in","",60,0,300)
+  hrdemin = TH1F("rd_em_in","",60,0,300)
+
+  for i,mc in enumerate(mcs) :
+    inee = "h1_"+mc+"_ZMass_"+step+"ee_in"
+    h1=f.Get(inee).Clone("hhhh_ee_"+mc) 
+    h1.Scale(mainlumi*mcxs[i])
+    hmceein.Add(h1)
+
+    inmm = "h1_"+mc+"_ZMass_"+step+"mm_in"
+    h2=f.Get(inmm).Clone("hhhh_mm_"+mc) 
+    h2.Scale(mainlumi*mcxs[i])
+    hmcmmin.Add(h2)
+
+    inem = "h1_"+mc+"_ZMass_"+step+"em_in"
+    h3=f.Get(inem).Clone("hhhh_em_"+mc) 
+    h3.Scale(mainlumi*mcxs[i])
+    hmcemin.Add(h3)
+
+    outee = "h1_"+mc+"_ZMass_"+step+"ee_out"
+    h11=f.Get(outee).Clone("hhhh_ee_"+mc) 
+    h11.Scale(mainlumi*mcxs[i])
+    hmceeout.Add(h11)
+
+    outmm = "h1_"+mc+"_ZMass_"+step+"mm_out"
+    h22=f.Get(outmm).Clone("hhhh_mm_"+mc) 
+    h22.Scale(mainlumi*mcxs[i])
+    hmcmmout.Add(h22)
+
+  for data in datas :
+    eein = "h1_ElEl"+data+"_ZMass_"+step+"ee_in"
+    h1=f.Get(eein).Clone("hhhh_rd_ee"+data)
+    hrdeein.Add(h1)
+
+    mmin = "h1_MuMu"+data+"_ZMass_"+step+"mm_in"
+    h2=f.Get(mmin).Clone("hhhh_rd_mm"+data)
+    hrdmmin.Add(h2)
+
+    emin = "h1_MuEl"+data+"_ZMass_"+step+"em_in"
+    h3=f.Get(emin).Clone("hhhh_rd_em"+data)
+    hrdemin.Add(h3)
+
+  mc_ee_in   = hmceein.Integral()
+  mc_ee_out  = hmceeout.Integral()
+  mc_mm_in   = hmcmmin.Integral()
+  mc_mm_out  = hmcmmout.Integral()
+  rd_ee_in   = hrdeein.Integral()
+  rd_mm_in   = hrdmmin.Integral()
+  rd_em_in   = hrdemin.Integral()
+
+  return drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out, rd_ee_in, rd_mm_in, rd_em_in)
+ 
 def singleplotStack2(filename,mon,step,mcsamples,datasamples,useReturn):
   f = TFile.Open(filename,"read")
   singleplotStack(f,mon,step,mcsamples,datasamples,useReturn)
   f.Close()
 
 def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
+
+  dyest = drellYanEstimationRun(f,step)
+
   #f = TFile.Open(filename,"read")
   canvasname = mon+step
   c1 = myCanvas(canvasname)
@@ -345,6 +431,9 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   hmcSig.Reset()
   hdata = hmctot.Clone("hdata")
 
+  isStat = mon.find("Stat")>-1
+  if isStat : 
+    print "step: "+step
 
   for i,mc in enumerate(mcsamples):
     isMC = mc['label'].find("DATA")==-1
@@ -363,6 +452,13 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     #if h2.Integral()>0 :  h2.Scale(lumi)
 
     ###############
+    isDY = mc['name'].find("DYJet")>-1
+    if isDY and int(step[1:2])>1: 
+      if step.find("ee")>-1:
+        h2.Scale(dyest[0])
+      if step.find("mm")>-1:
+        h2.Scale(dyest[1])
+
     isTTH = mc['name'].find("ttH")>-1
     if not isTTH:
       hmctot.Add( h2 )
@@ -379,6 +475,9 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       h3.SetFillColor(mc['color'])
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
+      if isStat:
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
       leg.AddEntry(h3, label, "f")
       hs.Add(h3)
       hmcmerge.Reset()
@@ -386,9 +485,15 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(mc['color'])
       h3.SetLineColor(kBlack)
+
       label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
+      if isStat:
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
+ 
       leg2.AddEntry(h3, label, "f")
       hs.Add(h3)
+      #hs.Add(h3)
       hmcmerge.Reset()
     elif not isSameNext and  isTTH : 
       h3=hmcmerge.Clone("h"+mc['name'])
@@ -419,26 +524,35 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       if log : print "data:"+mc['file']+": "+str(round(selEvet))+", "+str(selEnts)
 ################################
   scale = hmctot.GetMaximum()
-  minimum = 0.00005
+  minimum = 0.05
 
   h1data = hdata.Clone("h1data")
   h2data = myDataHistSet(h1data)
 
-  h2data.SetMaximum(scale*4000)
+  h2data.SetMaximum(scale*40)
   h2data.SetMinimum(minimum)
   labeltot = ("MC Total") #+ (" %.0f"%hmctot.Integral()).rjust(8)
   #leg2.AddEntry(hmctot,labeltot,"")
+  if isStat:
+    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $ "+str(round(hmctot.GetBinContent(1)*100)/100)+" \pm "+str(round(hmctot.GetBinError(1)*100)/100)+" $"
+    else                           : print " Stat: "+("MC Total").rjust(10)+" & $ "+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
+ 
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
   if(hmcSig.Integral()>0) : leg2.AddEntry(hmcSig, label, "l")
+  if isStat and (hmcSig.Integral()>0):
+    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)*100)/100)+" \pm "+str(round(hmcSig.GetBinError(1)*100)/100)+" $"
+    else                           : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
  
   labeldata = ("DATA     ")# + (" %.0f"%h2data.Integral()).rjust(8)
   leg2.AddEntry(h2data,labeldata,"p")
+  if isStat :
+    print " Stat: "+("DATA ").rjust(10)+" & $ "+str(round(h2data.GetBinContent(1)))+" $" # +" +- "+str(h2data.GetBinError(1))
 
 #########################################
   h2data.GetYaxis().SetTitle("Events")
   h2data.Draw()
-  hs.Draw("same,hist")
   gr = myHist2TGraphError(hmctot)
+  hs.Draw("same,hist")
   gr.Draw("same,2")
   hmcSig.Draw("same")
   h2data.Draw("same")
@@ -496,6 +610,9 @@ def singleplotStackLL2(filename,mon,step,mcsamples,datasamples,useReturn):
   f.Close()
 
 def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
+
+  dyest = drellYanEstimationRun(f,step)
+  print "step : "+step+":"+str(dyest)
   #f = TFile.Open(filename,"read")
   canvasname = mon+step
   c1 = myCanvas(canvasname)
@@ -531,6 +648,9 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   hmcSig.Reset()
   hdata = hmctot.Clone("hdata")
 
+  isStat = mon.find("Stat")>-1
+  if isStat : 
+    print "step: "+step
 
   for i,mc in enumerate(mcsamples):
     isMC = mc['label'].find("DATA")==-1
@@ -546,9 +666,17 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     if type(h2ll) is not TH1F :
       continue
 
+
     h2ll.AddBinContent(h2ll.GetNbinsX(),h2ll.GetBinContent(h2ll.GetNbinsX()+1))
     h2ee.AddBinContent(h2ee.GetNbinsX(),h2ee.GetBinContent(h2ee.GetNbinsX()+1))
     h2em.AddBinContent(h2em.GetNbinsX(),h2em.GetBinContent(h2em.GetNbinsX()+1))
+    ###############
+    isDY = mc['name'].find("DYJet")>-1
+    if isDY and int(step[1:2])>1: 
+        h2ee.Scale(dyest[0])
+        h2ll.Scale(dyest[1])
+
+
     #if h2.Integral()>0 :  h2.Scale(mc['cx']/Ntot*lumi)
     h2ll.Add(h2ee)
     h2ll.Add(h2em)
@@ -576,6 +704,10 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg.AddEntry(h3, label, "f")
+      if isStat:
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
+ 
       hs.Add(h3)
       hmcmerge.Reset()
     elif not isSameNext and not isTTH :
@@ -584,6 +716,10 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg2.AddEntry(h3, label, "f")
+      if isStat:
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
+ 
       hs.Add(h3)
       hmcmerge.Reset()
     elif not isSameNext and  isTTH : 
@@ -636,20 +772,31 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     #if not (round(selEvet) == round(selEnts)) : return 
 ################################
   scale = hmctot.GetMaximum()
-  minimum = 0.00005
+  minimum = 0.05
 
   h1data = hdata.Clone("h1data")
   h2data = myDataHistSet(h1data)
 
-  h2data.SetMaximum(scale*4000)
+  h2data.SetMaximum(scale*40)
   h2data.SetMinimum(minimum)
   #if log :  print "dddd"+str(type(hmctot))+("bbbb: %f"%hmctot.Integral())
   labeltot = ("MC Total") + (" %.0f"%hmctot.Integral()).rjust(8)
   #leg2.AddEntry(hmctot,labeltot,"")
+  if isStat:
+    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)*100)/100)+" \pm "+str(round(hmctot.GetBinError(1)*100)/100)+" $"
+    else                           : print " Stat: "+("MC Totlal").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
+ 
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
   if(hmcSig.Integral()>0) : leg2.AddEntry(hmcSig, label, "l")
+  if isStat and (hmcSig.Integral()>0):
+    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)*100)/100)+" \pm "+str(round(hmcSig.GetBinError(1)*100)/100)+" $"
+    else                       : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
+ 
   labeldata = ("DATA     ") #+ (" %.0f"%h2data.Integral()).rjust(8)
   leg2.AddEntry(h2data,labeldata,"p")
+  if isStat:
+    print " Stat: "+("DATA").rjust(10)+" & $ "+str(round(h2data.GetBinContent(1)))+" $" #+" +- "+str(h2data.GetBinError(1))
+ 
 
 #########################################
   h2data.GetYaxis().SetTitle("Events")

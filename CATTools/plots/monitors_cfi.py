@@ -2,7 +2,7 @@
 monitors = [
   { "name":"MET",          "unit":"Missing E_{T} without HF (GeV)","var":"met",   "xbin_set":[30,0,300]  },
 #  { "name":"METpf",        "unit":"Missing E_{T}  (GeV)",          "var":"met",       "xbin_set":[60,0,300]  },
-  { "name":"ZMass",        "unit":"Dilepton mass (GeV/c^{2}) ",    "var":"ll_m",  "xbin_set":[30,0,300]  },
+  { "name":"ZMass",        "unit":"Dilepton mass (GeV/c^{2}) ",    "var":"ll_m",  "xbin_set":[60,0,300]  },
   { "name":"nGoodPV",      "unit":"# of vertex ",             "var":"nvertex",   "xbin_set":[70,0,70]    },
 
   { "name":"Stat",         "unit":"Stat ",                         "var":"met",       "xbin_set":[1,0,10000]  },
@@ -38,10 +38,23 @@ monitors = [
   { "name":"jet2Phi",      "unit":"#phi of 2nd leading Jet ",      "var":"jets_phi[csvd_jetid[1]]",    "xbin_set":[10,-4,4]   },
   { "name":"jet3Phi",      "unit":"#phi of 3rd leading Jet ",      "var":"jets_phi[csvd_jetid[2]]",    "xbin_set":[10,-4,4]   },
   { "name":"jet4Phi",      "unit":"#phi of 4th leading Jet ",      "var":"jets_phi[csvd_jetid[3]]",    "xbin_set":[10,-4,4]   },
+
   { "name":"jet1CSV",     "unit":"CSVv2 of 1st leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[0]]",   "xbin_set":[10,0,1]     },
   { "name":"jet2CSV",     "unit":"CSVv2 of 2nd leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[1]]",   "xbin_set":[10,0,1]     },
   { "name":"jet3CSV",     "unit":"CSVv2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[2]]",   "xbin_set":[10,0,1]     },
   { "name":"jet4CSV",     "unit":"CSVv2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[3]]",   "xbin_set":[10,0,1]     },
+
+  { "name":"jet1Ptpt",      "unit":"p_T of 1st leading Jet ",      "var":"jets_pt[0]",    "xbin_set":[40,0,400]   },
+  { "name":"jet2Ptpt",      "unit":"p_T of 2nd leading Jet ",      "var":"jets_pt[1]",    "xbin_set":[40,0,400]   },
+  { "name":"jet3Ptpt",      "unit":"p_T of 3rd leading Jet ",      "var":"jets_pt[2]",    "xbin_set":[40,0,400]   },
+  { "name":"jet4Ptpt",      "unit":"p_T of 4th leading Jet ",      "var":"jets_pt[3]",    "xbin_set":[40,0,400]   },
+ 
+  { "name":"jet1CSVpt",     "unit":"CSVv2 of 1st leading Jet ",     "var":"jets_bDiscriminatorCSV[0]",   "xbin_set":[10,0,1]     },
+  { "name":"jet2CSVpt",     "unit":"CSVv2 of 2nd leading Jet ",     "var":"jets_bDiscriminatorCSV[1]",   "xbin_set":[10,0,1]     },
+  { "name":"jet3CSVpt",     "unit":"CSVv2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[2]",   "xbin_set":[10,0,1]     },
+  { "name":"jet4CSVpt",     "unit":"CSVv2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[3]",   "xbin_set":[10,0,1]     },
+
+
 #  { "name":"jetPP1CSV",   "unit":"CSV2 of 1st leading JetPuppi ",     "var":"jetPuppi_csv[0]",   "xbin_set":[20,0,1]     },
 #  { "name":"jetPP2CSV",   "unit":"CSV2 of 2nd leading JetPuppi ",     "var":"jetPuppi_csv[1]",   "xbin_set":[20,0,1]     },
 #  { "name":"jetPP3CSV",   "unit":"CSV2 of 3rd leading JetPuppi ",     "var":"jetPuppi_csv[2]",   "xbin_set":[20,0,1]     },

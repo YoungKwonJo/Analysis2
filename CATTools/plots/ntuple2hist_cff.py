@@ -3,8 +3,8 @@ import copy
 from array import array
 from math import sqrt
 
-log = False
-#log = True
+#log = False
+log = True
 
 def h1_maker(tree, mon, cut):
   h1 =  TH1F( mon['name'], mon['title'], mon['xbin_set'][0],mon['xbin_set'][1],mon['xbin_set'][2])
@@ -12,6 +12,8 @@ def h1_maker(tree, mon, cut):
   h1.GetYaxis().SetTitle(mon['y_name'])
   h1.Sumw2()
   tree.Project(mon['name'],mon['var'],cut)
+  if mon['name'].find("Stat")>-1:
+    print " Stat: "+mon['name']+" = "+str(h1.GetBinContent(1))+" +- "+str(h1.GetBinError(1)) 
   return h1  
 
 def h1_set(name,monitor,cutname):
@@ -21,14 +23,38 @@ def h1_set(name,monitor,cutname):
         }
   return mon
 
-def h_all_maker(tree,mc, monitors, cuts, eventweight,Ntot):
+def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
   h = []
   for cutname in cuts["cut"]:
     for i,ii in enumerate(monitors):
       mon = h1_set(mc['name'],monitors[i],cutname+cuts["channel"])
-      cut = "("+cuts["cut"][cutname]+" && "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
-      h1 = h1_maker(tree,mon,cut)
-      h.append(copy.deepcopy(h1))
+      cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
+      if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
+        h1 = h1_maker(tree,mon,cut)
+        h.append(copy.deepcopy(h1))
+      else :
+        h1 = h1_maker(tree2,mon,cut)
+        h.append(copy.deepcopy(h1))
+      #making shape for dy estimation
+      if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)):
+        incut = "((ll_m > 76) * (ll_m < 106))"
+        outcut ="(!((ll_m > 76) * (ll_m < 106)))"
+        monIN = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+"_in")
+        monOUT = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+"_out")
+        newCut = cuts["cut"][cutname].replace("* (step2==1)","")
+        cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
+        cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
+        if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
+          h1 = h1_maker(tree,monIN,cutIN)
+          h.append(copy.deepcopy(h1))
+          h2 = h1_maker(tree,monOUT,cutOUT)
+          h.append(copy.deepcopy(h2))
+        else :
+          h1 = h1_maker(tree2,monIN,cutIN)
+          h.append(copy.deepcopy(h1))
+          h2 = h1_maker(tree2,monOUT,cutOUT)
+          h.append(copy.deepcopy(h2))
+ 
   return h
 
 
@@ -56,7 +82,7 @@ def h2_all_maker(tree,mc, monitors, cuts,eventweight,Ntot):
       for j,jj in enumerate(monitors):
         if i<j:
           mon2 = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"])
-          cut = "("+cuts["cut"][cutname]+" && "+mc['selection']+")*("+str(eventweight)+"/"+str(Ntot)+")"
+          cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+str(eventweight)+"/"+str(Ntot)+")"
           h2 = h2_maker(tree,mon2,cut)
           h.append(copy.deepcopy(h2))
   return h
@@ -73,9 +99,9 @@ def cut_maker(cuts_):
     if i==0 :
       cuts["S%d"%i]=cut
     else:
-      cuts["S%d"%i]= cuts["S%d"%(i-1)] + " && " + cut
+      cuts["S%d"%i]= cuts["S%d"%(i-1)] + " * " + cut
   cutsN = {"channel":cuts_["channel"],"cut":cuts}
-  #if log : print cutsN
+  if log : print cutsN
   return cutsN
 
 def cut_maker2(cuts_):
@@ -115,9 +141,9 @@ def ntuple2hist(json,cuts):
     #htot = f.Get("hNEvent")
     #htot = f.Get("hsumWeight")
     #Ntot = htot.GetBinContent(1)
-    if log : print "total:"+mc['file']+":"+str(round(Ntot))
+    #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
-    h= h+h_all_maker(tree2,mcsamples[i],monitors,cuts,mceventweight,Ntot)
+    h= h+h_all_maker(tree,tree2,mcsamples[i],monitors,cuts,mceventweight,Ntot)
     f.Close()
   for i,mc in enumerate(datasamples):
     chain = TChain("cattree/nom")
@@ -134,9 +160,9 @@ def ntuple2hist(json,cuts):
     #htot = f.Get("hNEvent")
     #htot = f.Get("hsumWeight")
     Ntot = 1 #htot.GetBinContent(1)
-    if log : print "total:"+mc['file']+":"+str(round(Ntot))
+    #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
-    h= h+h_all_maker(tree2,datasamples[i],monitors,cuts,1,1)
+    h= h+h_all_maker(tree,tree2,datasamples[i],monitors,cuts,1,1)
     f.Close()
 
   return h
