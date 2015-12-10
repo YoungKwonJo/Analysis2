@@ -7,7 +7,14 @@ from os.path import isfile, join
 
 import os,commands
 import subprocess
+
 def files(path):
+    import socket
+    hostname = socket.gethostname()
+    if hostname.find("home")>-1:
+      llll = [""]
+      return llll
+
     cmd, xrdbase = "xrd cms-xrdr.sdfarm.kr ls ","/xrd"
     size = 0
     l = set()
@@ -116,10 +123,10 @@ mcsamples=[
 {"name":"TTZll",  "selection": GW(), "file": files(loc + "ttZToLLNuNu"+z),   "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}Z          "    },
 {"name":"TTZqq",  "selection": GW(), "file": files(loc + "ttZToQQ"+z),       "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}Z          "    },
 
-{"name":"STbt",   "selection": GW(), "file": files(loc + "SingleTbar_t"+z),  "cx":80.95,  "color": BCS[3],   "label":"SingleTop"    },
-{"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"+z),   "cx":136.02, "color": BCS[3],   "label":"SingleTop"    },
-{"name":"STbtW",  "selection": GW(), "file": files(loc + "SingleTbar_tW"+z), "cx":35.6,   "color": BCS[3],   "label":"SingleTop"      },
-{"name":"STtW",   "selection": GW(), "file": files(loc + "SingleTop_tW"+z),  "cx":35.6,   "color": BCS[3],   "label":"SingleTop"      },
+{"name":"STbt",   "selection": GW(), "file": files(loc + "SingleTbar_t"+z),  "cx":80.95,  "color": BCS[3],   "label":"Single t"    },
+{"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"+z),   "cx":136.02, "color": BCS[3],   "label":"Single t"    },
+{"name":"STbtW",  "selection": GW(), "file": files(loc + "SingleTbar_tW"+z), "cx":35.6,   "color": BCS[3],   "label":"Single t"      },
+{"name":"STtW",   "selection": GW(), "file": files(loc + "SingleTop_tW"+z),  "cx":35.6,   "color": BCS[3],   "label":"Single t"      },
 {"name":"WW",     "selection": GW(), "file": files(loc + "WW"+z),            "cx":110.8,  "color": BCS[2],   "label":"VV            "    },
 {"name":"WZ",     "selection": GW(), "file": files(loc + "WZ"+z),            "cx":66.1,   "color": BCS[2],   "label":"VV            "   },
 {"name":"ZZ",     "selection": GW(), "file": files(loc + "ZZ"+z),            "cx":15.4,   "color": BCS[2],   "label":"VV            "   },

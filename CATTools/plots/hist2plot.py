@@ -16,7 +16,6 @@ gStyle.SetPadTickX(1)
 gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
-
 mon = monitors
 #for i,ii in enumerate(monitors):
 #  #print monitors[ii]
@@ -36,9 +35,10 @@ json = {
 #"cuts" : ["S0","S1","S2","S3"],
 #"cuts" : ["S0","S1","S2","S3","S4","S5","S6"],
 "cuts" : [
-"S0mm","S1mm","S2mm","S3mm","S4mm","S5mm","S6mm","S7mm",
-"S0ee","S1ee","S2ee","S3ee","S4ee","S5ee","S6ee","S7ee",
-"S0em","S1em","S2em","S3em","S4em","S5em","S6em","S7em"
+#"S0mm","S1mm","S2mm","S3mm","S4mm","S5mm","S6mm","S7mm",
+#"S0ee","S1ee","S2ee","S3ee","S4ee","S5ee","S6ee","S7ee",
+#"S0em","S1em","S2em","S3em","S4em","S5em","S6em","S7em"
+"S5mm"
    ],
 #"cuts" : ["S6"],
 

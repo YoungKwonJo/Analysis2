@@ -7,6 +7,7 @@ from math import sqrt
 log = False
 #log = True
 mainlumi=2110.
+ci = 920
 
 ###################################################
 def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
@@ -30,6 +31,11 @@ def make_legend(xmin,ymin,xmax,ymax):
   leg.SetLineColor(1)
   leg.SetTextFont(62)
   leg.SetTextSize(0.03)
+
+  leg.SetBorderSize(1)
+  leg.SetLineStyle(1)
+  leg.SetLineWidth(1)
+  leg.SetLineColor(0)
 
   return leg
 
@@ -68,15 +74,16 @@ def addDecayMode(ll):
   if ll.find("mm")>-1 : ll2="#mu^{#mp}#mu^{#pm} channel"
   if ll.find("ee")>-1 : ll2="e^{#mp}e^{#pm} channel"
 
-  tex3 = TLatex(0.2315952,0.8146667,ll2)
-  tex3.SetNDC()
-  tex3.SetTextAlign(5)
-  tex3.SetTextFont(12)
-  tex3.SetTextSize(0.04466666)
-  tex3.SetLineWidth(1)
-  tex3.Draw()
+  chtitle = TLatex(-20.,50.,ll2)
+  chtitle.SetNDC()
+  chtitle.SetTextAlign(12)
+  chtitle.SetX(0.20)
+  chtitle.SetY(0.75)
+  chtitle.SetTextFont(42)
+  chtitle.SetTextSize(0.05)
+  chtitle.SetTextSizePixels(24)
 
-  return tex3
+  return chtitle
 
 
 #########################
@@ -172,7 +179,7 @@ def myDataHistSet(hdata):
 
   return hdata
 
-def myBottomDataPerMCSet(hdata):
+def myRatio(hdata):
   Ratio = hdata.Clone("ratio")
 
   Ratio.SetMarkerStyle(20)
@@ -200,7 +207,7 @@ def myBottomDataPerMCSet(hdata):
 
   return Ratio
 
-def myBottomMCsyst(hdata):
+def myRatioSyst(hdata):
   RatioSyst = hdata.Clone("ratioSyst")
 
   for b_r in range(1,RatioSyst.GetNbinsX()+1):
@@ -208,7 +215,7 @@ def myBottomMCsyst(hdata):
 
   thegraphRatioSyst = TGraphErrors(RatioSyst)
   thegraphRatioSyst.SetFillStyle(1001)
-  thegraphRatioSyst.SetFillColor(1756)
+  thegraphRatioSyst.SetFillColor(ci)
   thegraphRatioSyst.SetName("thegraphRatioSyst")
 
   return thegraphRatioSyst
@@ -232,8 +239,8 @@ def myHist2TGraphError(hist1):
 #####
   #gr.SetName("gr")
   gr.SetFillStyle(1001)
-  gr.SetFillColor(1756)
-  gr.SetLineColor(1756)
+  gr.SetFillColor(ci)
+  gr.SetLineColor(ci)
 ###	#
   #gr.SetFillColor(kBlack);
   ##gr.SetFillStyle(3144);
@@ -342,31 +349,27 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   pad1.Draw()
   pad1.cd()
 
-  leg  = make_legend(0.74,0.64, 0.89,0.88)
-  leg2 = make_legend(0.59,0.64, 0.74,0.88)
-  #leg  = make_legend(0.67,0.64, 0.89,0.88)
-  #leg2 = make_legend(0.43,0.605, 0.62,0.88)
-  #lumi = 40.028
-  #lumi = 42.0
-  #lumi = 15.478
-  #lumi = 1280.23
+  legx1 = 0.8
+  wid=0.13
+  legx2 = 0.67
+  leg  = make_legend(legx1,0.64, legx1+wid,0.88)
+  leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
   lumi = mainlumi
-  #lumi = 10.028
-  hs = THStack("hs","")
 
+  hs = THStack("hs","")
 
   hmctotName = "h1_"+mcsamples[0]['name']+"_"+mon+"_"+step
   #if log : print "hmcTotal: "+hmctotName
   hmctot = f.Get(hmctotName).Clone("hmctot")
   hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
   hmcSig = f.Get(hmctotName).Clone("hmcSig")
-  myMCHistSet(hmctot)
-  myMCHistSet(hmcmerge)
-
   hmctot.Reset()
   hmcmerge.Reset()
   hmcSig.Reset()
+
   hdata = hmctot.Clone("hdata")
+  myMCHistSet(hmctot)
+  myMCHistSet(hmcmerge)
   myDataHistSet(hdata)
 
   isStat = mon.find("Stat")>-1
@@ -488,10 +491,13 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
 
 #########################################
   h2data.GetYaxis().SetTitle("Events")
+  h2data.GetXaxis().SetTitle("")
   h2data.Draw()
   gr = myHist2TGraphError(hmctot)
   hs.Draw("same,hist")
-  gr.Draw("same,2")
+  #gr.Draw("same,2")
+  leg.AddEntry(gr,"Uncertainty","f")
+  gr.Draw("e2SAME")
   hmcSig.Draw("same")
   h2data.Draw("same")
 #  h2data.Draw("sameaxis")
@@ -519,10 +525,11 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   pad2.cd()
   hdata.Divide(hmctot)
 
-  hratio = myBottomDataPerMCSet(hdata)
+  hratio = myRatio(hdata)
   hratio.Draw()
-  hratiosyst = myBottomMCsyst(hdata)
-  hratiosyst.Draw("histSAME")
+  hratiosyst = myRatioSyst(hdata)
+  hratiosyst.Draw("e2")
+  hratio.Draw("histpSAME")
 
   pad2.Modified()
   c1.cd()
@@ -566,17 +573,15 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
 ##############
   pad1.Draw()
   pad1.cd() 
+
+  legx1 = 0.8
+  wid=0.13
+  legx2 = 0.67
+  leg  = make_legend(legx1,0.64, legx1+wid,0.88)
+  leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
  
-  leg  = make_legend(0.74,0.64, 0.89,0.88)
-  leg2 = make_legend(0.59,0.64, 0.74,0.88)
-  #leg  = make_legend(0.67,0.64, 0.89,0.88)
-  #leg2 = make_legend(0.43,0.605, 0.62,0.88)
-  #lumi = 40.028
-  #lumi = 42.0
-  #lumi = 15.478
-  #lumi = 1280.23
   lumi = mainlumi
-  #lumi = 10.028
+
   hs = THStack("hs","")
 
   hmctotName = "h1_"+mcsamples[0]['name']+"_"+mon+"_"+step+"mm"
@@ -745,10 +750,12 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
 
 #########################################
   h2data.GetYaxis().SetTitle("Events")
+  h2data.GetXaxis().SetTitle("")
   h2data.Draw()
   hs.Draw("same,hist")
   gr = myHist2TGraphError(hmctot)
-  gr.Draw("same,2")
+  #gr.Draw("same,2")
+  gr.Draw("e2SAME")
   hmcSig.Draw("same")
   h2data.Draw("same")
 #  h2data.Draw("sameaxis")
@@ -776,11 +783,11 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   pad2.cd()
   hdata.Divide(hmctot)
 
-  hratio = myBottomDataPerMCSet(hdata)
+  hratio = myRatio(hdata)
   hratio.Draw()
-  hratiosyst = myBottomMCsyst(hdata)
+  hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
-  hratio.Draw("histSAME")
+  hratio.Draw("histpSAME")
 
   pad2.Modified()
   c1.cd()
