@@ -26,101 +26,47 @@ def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
 def make_legend(xmin,ymin,xmax,ymax):
   #leg = TLegend(0.65,0.7, 0.89,0.89)
   leg = TLegend(xmin,ymin,xmax,ymax)
-  leg.SetBorderSize(1)
-  leg.SetTextFont(62)
-  leg.SetTextSize(0.04)
-  leg.SetLineStyle(1)
-  leg.SetLineWidth(1)
-  leg.SetLineColor(0)
-  #leg.SetLineColor(1)
   leg.SetFillColor(0)
-  #leg.SetFillColor(10)
-  leg.SetFillStyle(1001)
-  leg.SetMargin(0.15) #for size of the marker
+  leg.SetLineColor(1)
+  leg.SetTextFont(62)
+  leg.SetTextSize(0.03)
 
   return leg
 
-def make_banner(xmin,ymin,xmax,ymax):
-  #pt = TPaveText(0.15,0.73, 0.5, 0.89,"brNDC");
-  pt = TPaveText(xmin,ymin,xmax,ymax,"brNDC");
-  pt.SetBorderSize(1)
-  pt.SetTextFont(42)
-  pt.SetTextSize(0.04)
-  pt.SetLineColor(0)
-  pt.SetLineStyle(1)
-  pt.SetLineWidth(1)
-  pt.SetFillColor(0)
-  pt.SetFillStyle(1001)
-  pt.SetTextAlign(12)
-  pt.AddText("Work in progress")
-  #pt.AddText("TTJets_madgraphMLM-pythia8")
-  #pt.AddText("madgraphMLM-pythia8")
-  pt.AddText("#sqrt{s} = 13 TeV")
-  pt.Draw()
-
-  return pt
-
-def make_bannerLumi(xmin,ymin,xmax,ymax,lumi):
-  #pt = TPaveText(0.15,0.73, 0.5, 0.89,"brNDC");
-  pt = TPaveText(xmin,ymin,xmax,ymax,"brNDC");
-  pt.SetBorderSize(1)
-  pt.SetTextFont(42)
-  pt.SetTextSize(0.04)
-  pt.SetLineColor(0)
-  pt.SetLineStyle(1)
-  pt.SetLineWidth(1)
-  pt.SetFillColor(0)
-  pt.SetFillStyle(1001)
-  pt.SetTextAlign(12)
-  pt.AddText("Work in progress")
-  #pt.AddText("TTJets_madgraphMLM-pythia8")
-  #pt.AddText("madgraphMLM-pythia8")
-  lumi2 = str(round(lumi*10)/10)
-  pt.AddText( lumi2+" pb^{-1} at #sqrt{s} = 13 TeV")
-  pt.Draw()
-
-  return pt
 def addLegendLumi(lumi):
-  #lumi2 = str(round(lumi*10)/10)
-  lumi2 = str(round(lumi/100)/10)
-  #tex = TLatex(0.9760178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
-  #tex = TLatex(0.9380178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
-  tex = TLatex(0.9380178,0.9146667,lumi2+" fb^{-1} (13 TeV)")
-  #tex = TLatex(0.9360178,0.9146667,lumi2+" pb^{-1} (13 TeV)")
-  tex.SetNDC()
-  tex.SetTextAlign(31)
-  tex.SetTextFont(42)
-  #tex.SetTextSize(0.07466666)
-  tex.SetTextSize(0.06466666)
-  tex.SetLineWidth(2)
-  tex.Draw()
+  #lumi2 = str(round(lumi/100)/10)
+  title  = TLatex(-20.,50.,"CMS #sqrt{s} = 13TeV, L = 2.1 fb^{-1}")
+  title.SetNDC()
+  title.SetTextAlign(12)
+  title.SetX(0.20)
+  title.SetY(0.83)
+  title.SetTextFont(42)
+  title.SetTextSize(0.05)
+  title.SetTextSizePixels(24)
+  title.Draw()
 
-  return tex
+  return title
 
 def addLegendCMS():
-  tex2 = TLatex(0.3715952,0.9146667,"Work in progress")
-  #tex2 = TLatex(0.2015952,0.8620667,"CMS Work in progress")
-  #tex2 = TLatex(0.2215952,0.8620667,"Work in progress")
-  #tex2 = TLatex(0.2215952,0.8620667,"CMS Preliminary")
+  #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
+  tex2 = TLatex(-20.,50.,"Preliminary")
   tex2.SetNDC()
-  #tex2.SetTextAlign(13)
-  tex2.SetTextAlign(25)
-  #tex2.SetTextFont(61)
+  tex2.SetTextAlign(12)
+  tex2.SetX(0.25)
+  tex2.SetY(0.93)
+  tex2.SetTextColor(2)
   tex2.SetTextFont(42)
-  #tex2.SetTextSize(0.09066667) # for CMS as short length
-  tex2.SetTextSize(0.06466666)
-  #tex2.SetTextSize(0.03566667)
-  tex2.SetLineWidth(2)
+  tex2.SetTextSize(0.05)
+  tex2.SetTextSizePixels(24)
   tex2.Draw()
 
   return tex2
 
-#def addDecayMode(xmin,ymin,xmax,ymax,ll):
 def addDecayMode(ll):
-  ll2="l^{#mp}l^{#pm}"
-  if ll.find("em")>-1 : ll2="e^{#mp}#mu^{#pm}"
-  if ll.find("mm")>-1 : ll2="#mu^{#mp}#mu^{#pm}"
-  if ll.find("ee")>-1 : ll2="e^{#mp}e^{#pm}"
+  ll2="l^{#mp}l^{#pm} channel"
+  if ll.find("em")>-1 : ll2="e^{#mp}#mu^{#pm} channel"
+  if ll.find("mm")>-1 : ll2="#mu^{#mp}#mu^{#pm} channel"
+  if ll.find("ee")>-1 : ll2="e^{#mp}e^{#pm} channel"
 
   tex3 = TLatex(0.2315952,0.8146667,ll2)
   tex3.SetNDC()
@@ -132,28 +78,6 @@ def addDecayMode(ll):
 
   return tex3
 
-
-def make_banner2(xmin,ymin,xmax,ymax,bb,bb2):
-  #pt = TPaveText(0.15,0.73, 0.5, 0.89,"brNDC");
-  pt = TPaveText(xmin,ymin,xmax,ymax,"brNDC");
-  pt.SetBorderSize(1)
-  pt.SetTextFont(42)
-  pt.SetTextSize(0.04)
-  pt.SetLineColor(0)
-  pt.SetLineStyle(1)
-  pt.SetLineWidth(1)
-  pt.SetFillColor(0)
-  pt.SetFillStyle(1001)
-  pt.SetTextAlign(12)
-  pt.AddText("Work in progress")
-  #pt.AddText("TTJets_madgraphMLM-pythia8")
-  pt.AddText("madgraphMLM-pythia8")
-  pt.AddText("#sqrt{s} = 13 TeV")
-  pt.AddText( ("ttbb/ttjj : "+str("%.4f"%bb)+"")  )
-  pt.AddText( ("(ttbb+ttb+tt2b)/ttjj : "+str("%.4f"%bb2)+" ") )
-  pt.Draw()
-
-  return pt
 
 #########################
 def plotTH2F(filename,mon,step,mcsamples):
@@ -173,9 +97,7 @@ def plotTH2F(filename,mon,step,mcsamples):
     h1.SetTitle("")
     h1.SetLineColor(mc['color'])
     h1.Draw("colz")
-    #pt = make_banner(0.15,0.73, 0.5, 0.89)
-    #pts.append(copy.deepcopy(pt))
-    #pts[i].Draw()
+
     leg = make_legend(0.5,0.91, 0.75,0.99)
     leg.AddEntry(h1, ("%s : "%mc['label']) + ("%.0f"%h1.Integral()), "l");
     legs.append(copy.deepcopy(leg))
@@ -195,101 +117,101 @@ def plotTH2F(filename,mon,step,mcsamples):
 #########################
 #########################
 def myCanvas(name):
-  c1 = TCanvas( name, '', 500, 500 )
-#  gStyle.SetOptFit(1)
-#  gStyle.SetOptStat(0)
-  c1.Range(0,0,1,1)
-  c1.SetFillColor(0)
-  c1.SetBorderMode(0)
-  c1.SetBorderSize(2)
-  c1.SetTickx(1)
-  c1.SetTicky(1)
-  c1.SetLeftMargin(0.15)
-  c1.SetRightMargin(0.05)
-  c1.SetBottomMargin(0.15)
-  c1.SetFrameBorderMode(0)
-
+  c1 = TCanvas( name, '')#, 500, 500 )
   return c1
-
 def myPad1(name):
   pad1 = TPad(name, "",0,0.3,1,1)
-  pad1.Range(-1.072875,-0.39794,5.364372,5.641005)
-  pad1.SetFillColor(0)
-  pad1.SetBorderMode(0)
-  pad1.SetBorderSize(2)
-  pad1.SetLogy()
-  pad1.SetTickx(1)
-  pad1.SetTicky(1)
-  pad1.SetLeftMargin(0.1666667)
-  pad1.SetRightMargin(0.05660377)
-  pad1.SetBottomMargin(0)
-  pad1.SetFrameBorderMode(0)
-  pad1.SetFrameBorderMode(0)
+  pad1.SetPad(0.01, 0.23, 0.99, 0.99)
+  pad1.SetTopMargin(0.1)
+  pad1.SetRightMargin(0.04)
 
   return pad1
 
 def myPad2(name):
-  if log :  print "pad2() step0"
   pad2 = TPad(name, "",0,0,1,0.3)
-  if log :  print "pad2() step1"
-  pad2.Range(-1.072875,-1.321429,5.364372,2.25)
-  pad2.SetFillColor(0)
-  pad2.SetBorderMode(0)
-  pad2.SetBorderSize(2)
-  pad2.SetTickx(1)
-  pad2.SetTicky(1)
-  pad2.SetLeftMargin(0.1666667)
-  pad2.SetRightMargin(0.05660377)
-  pad2.SetTopMargin(0.07)
-  pad2.SetBottomMargin(0.37)
-  pad2.SetFrameBorderMode(0)
-  pad2.SetFrameBorderMode(0)
+  pad2.SetPad(0.01, 0.02, 0.99, 0.3)
+  #gStyle.SetGridWidth(0.5)
+  gStyle.SetGridWidth(1)
+  gStyle.SetGridColor(14)
+  pad2.SetGridx()
+  pad2.SetGridy()
+  pad2.SetTopMargin(0.05)
+  pad2.SetBottomMargin(0.4)
+  pad2.SetRightMargin(0.04)
 
   return pad2
 
 #################
+def myMCHistSet(hdata):
+  hdata.GetYaxis().SetTitle("Events")
+  hdata.GetYaxis().SetTitleOffset(1.2)
+  hdata.GetYaxis().SetTitleSize(0.07)
+  hdata.GetYaxis().SetLabelSize(0.055)
+  hdata.GetYaxis().SetNdivisions(607)
+  #hdata.GetYaxis().SetLabelSize(0.05)
+  #hYaxis = hdata.GetYaxis()
+  #hYaxis.SetMaxDigits(3)
+  hdata.GetXaxis().SetLabelSize(0.0)
+  hdata.GetXaxis().SetTitle("")
+
+
 def myDataHistSet(hdata):
-  hdata.SetTitle("")
-  hdata.SetStats(0)
-  #hdata.SetMaximum(scale*400)
-  #hdata.SetMinimum(0.005)
-  hdata.GetYaxis().SetNdivisions(505);
-  #hdata.GetYaxis().SetLabelFont(42);
-  hdata.GetYaxis().SetLabelOffset(0.007);
-  hdata.GetYaxis().SetLabelSize(0.05);
-  hdata.GetYaxis().SetTitleSize(0.05);
-  hdata.GetYaxis().SetTitleOffset(1.4);
-  hdata.SetMarkerColor(kBlack)
-  hdata.SetLineColor(kBlack)
+  hdata.GetYaxis().SetTitle("Events")
+  hdata.GetYaxis().SetTitleOffset(1.2)
+  hdata.GetYaxis().SetTitleSize(0.07)
+  hdata.GetYaxis().SetLabelSize(0.055)
+  hdata.GetYaxis().SetNdivisions(607)
+  #hdata.GetYaxis().SetLabelSize(0.05)
+  #hYaxis = hdata.GetYaxis()
+  #hYaxis.SetMaxDigits(3)
+  hdata.GetXaxis().SetLabelSize(0.0)
+  #hdata.GetXaxis().SetTitle("")
+
   hdata.SetMarkerStyle(20)
-  hdata.SetMarkerSize(1)
- 
+  hdata.SetMarkerSize(0.7)
+
   return hdata
 
 def myBottomDataPerMCSet(hdata):
-  hdataMC = hdata.Clone("hdataMC")
-  hdataMC.SetTitle("")
-  hdataMC.SetMaximum(2.0)
-  hdataMC.SetMinimum(0.0)
-  hdataMC.GetXaxis().SetLabelOffset(0.007);
-  hdataMC.GetXaxis().SetLabelSize(0.1);
-  hdataMC.GetXaxis().SetTitleSize(0.14);
-  hdataMC.GetXaxis().SetTitleOffset(1.1);
-  #hdataMC.GetXaxis().SetTitleFont(42);
-  hdataMC.GetYaxis().SetTitle("Data/MC");
-  hdataMC.GetYaxis().SetNdivisions(505);
-  #hdataMC.GetYaxis().SetLabelFont(42);
-  hdataMC.GetYaxis().SetLabelOffset(0.007);
-  hdataMC.GetYaxis().SetLabelSize(0.1);
-  hdataMC.GetYaxis().SetTitleSize(0.14);
-  hdataMC.GetYaxis().SetTitleOffset(0.4);
-  #hdataMC.GetYaxis().SetTitleFont(42);
-  hdataMC.SetMarkerColor(kBlack)
-  hdataMC.SetLineColor(kBlack)
-  hdataMC.SetMarkerStyle(20)
-  hdataMC.SetMarkerSize(1)
+  Ratio = hdata.Clone("ratio")
 
-  return hdataMC
+  Ratio.SetMarkerStyle(20)
+  Ratio.SetMarkerSize(0.5)
+  Ratio.SetMarkerColor(1)
+  Ratio.SetLineColor(1)
+  Ratio.SetLineWidth(1)
+  Ratio.SetMaximum(2)
+  Ratio.SetMinimum(0)
+  Ratio.SetTitle("")
+  
+  Ratio.GetYaxis().SetTitle("Obs/Exp")
+  Ratio.GetYaxis().CenterTitle()
+  Ratio.GetYaxis().SetTitleOffset(0.45)
+  Ratio.GetYaxis().SetTitleSize(0.16)
+  Ratio.GetYaxis().SetLabelSize(0.15)
+  Ratio.GetYaxis().SetNdivisions(402)
+  Ratio.GetXaxis().SetNdivisions(509)
+  Ratio.GetXaxis().SetTitleOffset(1.1)
+  Ratio.GetXaxis().SetLabelSize(0.20)
+  Ratio.GetXaxis().SetTitleSize(0.16)
+  
+  Ratio.SetMinimum(0.6)
+  Ratio.SetMaximum(1.4)
+
+  return Ratio
+
+def myBottomMCsyst(hdata):
+  RatioSyst = hdata.Clone("ratioSyst")
+
+  for b_r in range(1,RatioSyst.GetNbinsX()+1):
+    RatioSyst.SetBinContent(b_r,1.0)
+
+  thegraphRatioSyst = TGraphErrors(RatioSyst)
+  thegraphRatioSyst.SetFillStyle(1001)
+  thegraphRatioSyst.SetFillColor(1756)
+  thegraphRatioSyst.SetName("thegraphRatioSyst")
+
+  return thegraphRatioSyst
 
 def myHist2TGraphError(hist1):
   xx=[]
@@ -307,11 +229,17 @@ def myHist2TGraphError(hist1):
   y   = array("d",yy)
   yer = array("d",yyer)
   gr = TGraphErrors(len(x), x,y,xer,yer)
-  gr.SetFillColor(kBlack);
-  #gr.SetFillStyle(3144);
-  #gr.SetFillStyle(3005);
-  #gr.SetFillStyle(3244);
-  gr.SetFillStyle(3444);
+#####
+  #gr.SetName("gr")
+  gr.SetFillStyle(1001)
+  gr.SetFillColor(1756)
+  gr.SetLineColor(1756)
+###	#
+  #gr.SetFillColor(kBlack);
+  ##gr.SetFillStyle(3144);
+  ##gr.SetFillStyle(3005);
+  ##gr.SetFillStyle(3244);
+  #gr.SetFillStyle(3444);
 
   return gr
 #####################
@@ -401,11 +329,16 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   c1 = myCanvas(canvasname)
   #c1 = TCanvas( 'c1', '', 500, 500 )
   if log : print mon+step
-  gStyle.SetOptFit(1)
-  gStyle.SetOptStat(0)
-
-  #pad1 = TPad("pad1", "",0,0.3,1,1);
-  pad1 = myPad1(canvasname+"pad1") 
+  #gStyle.SetOptFit(1)
+  #gStyle.SetOptStat(0)
+###############
+  c1.Divide(1,2)
+  
+  #Plot Pad
+  pad1 = myPad1(canvasname+"pad1")
+  #Ratio Pad
+  pad2 = myPad2(canvasname+"pad2")
+##############
   pad1.Draw()
   pad1.cd()
 
@@ -421,15 +354,20 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   #lumi = 10.028
   hs = THStack("hs","")
 
+
   hmctotName = "h1_"+mcsamples[0]['name']+"_"+mon+"_"+step
   #if log : print "hmcTotal: "+hmctotName
   hmctot = f.Get(hmctotName).Clone("hmctot")
   hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
   hmcSig = f.Get(hmctotName).Clone("hmcSig")
+  myMCHistSet(hmctot)
+  myMCHistSet(hmcmerge)
+
   hmctot.Reset()
   hmcmerge.Reset()
   hmcSig.Reset()
   hdata = hmctot.Clone("hdata")
+  myDataHistSet(hdata)
 
   isStat = mon.find("Stat")>-1
   if isStat : 
@@ -581,9 +519,10 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   pad2.cd()
   hdata.Divide(hmctot)
 
-  hdataMC = myBottomDataPerMCSet(hdata)
-
-  hdataMC.Draw()
+  hratio = myBottomDataPerMCSet(hdata)
+  hratio.Draw()
+  hratiosyst = myBottomMCsyst(hdata)
+  hratiosyst.Draw("histSAME")
 
   pad2.Modified()
   c1.cd()
@@ -618,14 +557,16 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   c1 = myCanvas(canvasname)
   #c1 = TCanvas( 'c1', '', 500, 500 )
   if log : print mon+step
-  gStyle.SetOptFit(1)
-  gStyle.SetOptStat(0)
+  #c1.Divide(1,2)
 
-  #pad1 = TPad("pad1", "",0,0.3,1,1);
-  pad1 = myPad1(canvasname+"pad1") 
+   #Plot Pad
+  pad1 = myPad1(canvasname+"pad1")
+  #Ratio Pad
+  pad2 = myPad2(canvasname+"pad2")
+##############
   pad1.Draw()
-  pad1.cd()
-
+  pad1.cd() 
+ 
   leg  = make_legend(0.74,0.64, 0.89,0.88)
   leg2 = make_legend(0.59,0.64, 0.74,0.88)
   #leg  = make_legend(0.67,0.64, 0.89,0.88)
@@ -643,10 +584,14 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   hmctot = f.Get(hmctotName).Clone("hmctot")
   hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
   hmcSig = f.Get(hmctotName).Clone("hmcSig")
+  myMCHistSet(hmctot)
+  myMCHistSet(hmcmerge)
+
   hmctot.Reset()
   hmcmerge.Reset()
   hmcSig.Reset()
   hdata = hmctot.Clone("hdata")
+  myDataHistSet(hdata)
 
   isStat = mon.find("Stat")>-1
   if isStat : 
@@ -831,11 +776,11 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   pad2.cd()
   hdata.Divide(hmctot)
 
-  #if log : print "divide start"+str(hdata.Integral())
-  hdataMC = myBottomDataPerMCSet(hdata)
-
-  #if log : print "divide end"
-  hdataMC.Draw()
+  hratio = myBottomDataPerMCSet(hdata)
+  hratio.Draw()
+  hratiosyst = myBottomMCsyst(hdata)
+  hratiosyst.Draw("e2")
+  hratio.Draw("histSAME")
 
   pad2.Modified()
   c1.cd()

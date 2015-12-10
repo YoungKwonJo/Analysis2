@@ -6,6 +6,16 @@ from mcsample_cfi import *
 from monitors_cfi import *
 
 #import sys 
+gROOT.SetStyle("Plain")
+gStyle.SetOptFit(1000)
+gStyle.SetOptStat("emruo")
+gStyle.SetOptStat(kFALSE)
+gStyle.SetPadTickY(1)
+gStyle.SetPadTickX(1)
+
+gROOT.ProcessLine(".L tdrStyle.C")
+setTDRStyle()
+
 
 mon = monitors
 #for i,ii in enumerate(monitors):
@@ -42,9 +52,9 @@ json = {
 f = json['file'] #TFile.Open(json['file'],"read")
 #singleplotStack2(f,"MET","S2em",json['mcsamples'],json['datasamples'],False)
 ######
-#for step in json['cuts']:
-#  for mon in json['monitors']:
-#    singleplotStack2(f,mon['name'],step,json['mcsamples'],json['datasamples'],False)
+for step in json['cuts']:
+  for mon in json['monitors']:
+    singleplotStack2(f,mon['name'],step,json['mcsamples'],json['datasamples'],False)
 
 
 #########

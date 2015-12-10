@@ -42,7 +42,7 @@ def getEntries(mypath):
 
 #loc = "../"
 #loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
-loc = "/store/user/youngjo/Cattools/v7-4-6v2/"
+loc = "/store/user/youngjo/Cattools/v7-4-6v3/"
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
@@ -83,7 +83,7 @@ ttothers = mAND2(ttotheslist)
 CS = [kOrange, kOrange-1, kRed-7, kRed+2, kMagenta,kMagenta+2, kRed ]
 BCS = [kBlue,kGreen+2,kGray,kViolet,kCyan]
 
-z="v5"
+z="v7"
 zz="v6"
 mcsamples=[
 
