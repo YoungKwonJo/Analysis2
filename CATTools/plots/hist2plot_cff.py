@@ -529,7 +529,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   hratio.Draw()
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
-  hratio.Draw("histpSAME")
+  hratio.Draw("e1SAME")
 
   pad2.Modified()
   c1.cd()
@@ -756,6 +756,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   gr = myHist2TGraphError(hmctot)
   #gr.Draw("same,2")
   gr.Draw("e2SAME")
+  leg.AddEntry(gr,"Uncertainty","f")
   hmcSig.Draw("same")
   h2data.Draw("same")
 #  h2data.Draw("sameaxis")
@@ -787,7 +788,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   hratio.Draw()
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
-  hratio.Draw("histpSAME")
+  hratio.Draw("e1SAME")
 
   pad2.Modified()
   c1.cd()
