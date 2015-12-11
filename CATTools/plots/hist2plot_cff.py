@@ -179,6 +179,29 @@ def myDataHistSet(hdata):
 
   return hdata
 
+def myAmcNLOHistSet(hdata):
+  hdata.SetLineColor(6)
+  hdata.SetLineStyle(2)
+  hdata.SetFillColor(0)
+
+def myMG5HistSet(hdata):
+  hdata.SetLineColor(8)
+  hdata.SetLineStyle(4)
+  hdata.SetFillColor(0)
+
+def myAmcNLORatioSet(hdata):
+  hdata.SetLineColor(6)
+  hdata.SetLineStyle(2)
+  hdata.SetLineWidth(2)
+  hdata.SetFillColor(0)
+
+def myMG5RatioSet(hdata):
+  hdata.SetLineColor(8)
+  hdata.SetLineStyle(4)
+  hdata.SetLineWidth(2)
+  hdata.SetFillColor(0)
+
+
 def myRatio(hdata):
   Ratio = hdata.Clone("ratio")
 
@@ -354,6 +377,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   legx2 = 0.67
   leg  = make_legend(legx1,0.64, legx1+wid,0.88)
   leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
+  leg3 = make_legend(legx1,0.57, legx1+wid,0.63)
   lumi = mainlumi
 
   hs = THStack("hs","")
@@ -363,10 +387,13 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   hmctot = f.Get(hmctotName).Clone("hmctot")
   hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
   hmcSig = f.Get(hmctotName).Clone("hmcSig")
+
   hmctot.Reset()
   hmcmerge.Reset()
   hmcSig.Reset()
 
+  hmcAmcNLO = hmctot.Clone("hmcAmcNLO")
+  hmcMG5   = hmctot.Clone("hmcMG5")
   hdata = hmctot.Clone("hdata")
   myMCHistSet(hmctot)
   myMCHistSet(hmcmerge)
@@ -401,7 +428,23 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
         h2.Scale(dyest[1])
 
     isTTH = mc['name'].find("ttH")>-1
-    if not isTTH:
+    isPowheg = mc['name'].find("POW")>-1
+    isAmcNLO = mc['name'].find("AMC")>-1
+    isMG5 = mc['name'].find("MG5")>-1
+    if not isPowheg and not isTTH and not isMG5:
+      hmcAmcNLO.Add(h2)
+      if isStat:
+        if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*100)/100)+" \pm "+str(round(h2.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)))+" \pm "+str(round(h2.GetBinError(1)))+" $"
+      continue
+    if not isPowheg and not isTTH and not isAmcNLO:
+      hmcMG5.Add(h2)
+      if isStat:
+        if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*100)/100)+" \pm "+str(round(h2.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)))+" \pm "+str(round(h2.GetBinError(1)))+" $"
+      continue
+
+    if not isTTH and not isMG5 and not isAmcNLO:
       hmctot.Add( h2 )
     hmcmerge.Add(h2)
     #hs.Add(h2)
@@ -411,7 +454,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
     if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
-    if  (not isSameNext) and i<7: 
+    if  (not isSameNext) and isPowheg: 
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(mc['color'])
       h3.SetLineColor(kBlack)
@@ -496,15 +539,22 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   gr = myHist2TGraphError(hmctot)
   hs.Draw("same,hist")
   #gr.Draw("same,2")
-  leg.AddEntry(gr,"Uncertainty","f")
+  #leg.AddEntry(gr,"Uncertainty","f")
   gr.Draw("e2SAME")
+  myAmcNLOHistSet(hmcAmcNLO)
+  hmcAmcNLO.Draw("histoSAME")
+  myMG5HistSet(hmcMG5)
+  hmcMG5.Draw("histoSAME")
+  leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
+  leg3.AddEntry(hmcMG5,"Madgraph","l")
+
   hmcSig.Draw("same")
   h2data.Draw("same")
 #  h2data.Draw("sameaxis")
 
-
   leg.Draw()
   leg2.Draw()
+  leg3.Draw()
   pad1.SetLogy()
   pt = addLegendLumi(lumi)
   pt2 = addLegendCMS()
@@ -523,14 +573,22 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   if log :  print "pad2 step1"
   pad2.Draw()
   pad2.cd()
+  hdataAMC=hdata.Clone("hdataAMC")
+  hdataMG5=hdata.Clone("hdataMG5")
   hdata.Divide(hmctot)
+  hdataAMC.Divide(hmcAmcNLO)
+  hdataMG5.Divide(hmcMG5)
+  myAmcNLORatioSet(hdataAMC)
+  myMG5RatioSet(hdataMG5)
 
   hratio = myRatio(hdata)
   hratio.Draw()
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
   hratio.Draw("e1SAME")
-
+  hdataAMC.Draw("histSAME")
+  hdataMG5.Draw("histSAME")
+ 
   pad2.Modified()
   c1.cd()
   c1.Modified()
@@ -579,6 +637,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   legx2 = 0.67
   leg  = make_legend(legx1,0.64, legx1+wid,0.88)
   leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
+  leg3 = make_legend(legx1,0.57, legx1+wid,0.63)
  
   lumi = mainlumi
 
@@ -589,13 +648,15 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   hmctot = f.Get(hmctotName).Clone("hmctot")
   hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
   hmcSig = f.Get(hmctotName).Clone("hmcSig")
-  myMCHistSet(hmctot)
-  myMCHistSet(hmcmerge)
-
   hmctot.Reset()
   hmcmerge.Reset()
   hmcSig.Reset()
+
+  hmcAmcNLO = hmctot.Clone("hmcAmcNLO")
+  hmcMG5   = hmctot.Clone("hmcMG5")
   hdata = hmctot.Clone("hdata")
+  myMCHistSet(hmctot)
+  myMCHistSet(hmcmerge)
   myDataHistSet(hdata)
 
   isStat = mon.find("Stat")>-1
@@ -637,9 +698,27 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     ###############
     h2ll.SetFillColor(mc['color'])
     h2ll.SetLineColor(kBlack)
+
     isTTH = mc['name'].find("ttH")>-1
-    if not isTTH:
-      hmctot.Add( h2ll )
+    isPowheg = mc['name'].find("POW")>-1
+    isAmcNLO = mc['name'].find("AMC")>-1
+    isMG5 = mc['name'].find("MG5")>-1
+    if not isPowheg and not isTTH and not isMG5:
+      hmcAmcNLO.Add(h2ll)
+      if isStat:
+        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*100)/100)+" \pm "+str(round(h2ll.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
+      continue
+    if not isPowheg and not isTTH and not isAmcNLO:
+      hmcMG5.Add(h2ll)
+      if isStat:
+        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*100)/100)+" \pm "+str(round(h2ll.GetBinError(1)*100)/100)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
+      continue
+
+    if not isTTH and not isMG5 and not isAmcNLO:
+      hmctot.Add(h2ll)
+
     hmcmerge.Add(h2ll)
     #hs.Add( h2ll )
 
@@ -648,7 +727,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
     if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
-    if  (not isSameNext) and i<7:
+    if  (not isSameNext) and isPowheg:
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(mc['color'])
       h3.SetLineColor(kBlack)
@@ -756,7 +835,13 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   gr = myHist2TGraphError(hmctot)
   #gr.Draw("same,2")
   gr.Draw("e2SAME")
-  leg.AddEntry(gr,"Uncertainty","f")
+  #leg.AddEntry(gr,"Uncertainty","f")
+  myAmcNLOHistSet(hmcAmcNLO)
+  hmcAmcNLO.Draw("histoSAME")
+  myMG5HistSet(hmcMG5)
+  hmcMG5.Draw("histoSAME")
+  leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
+  leg3.AddEntry(hmcMG5,"Madgraph","l")
   hmcSig.Draw("same")
   h2data.Draw("same")
 #  h2data.Draw("sameaxis")
@@ -782,13 +867,22 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   if log :  print "pad2 step1"
   pad2.Draw()
   pad2.cd()
+  hdataAMC=hdata.Clone("hdataAMC")
+  hdataMG5=hdata.Clone("hdataMG5")
   hdata.Divide(hmctot)
+  hdataAMC.Divide(hmcAmcNLO)
+  hdataMG5.Divide(hmcMG5)
+  myAmcNLORatioSet(hdataAMC)
+  myMG5RatioSet(hdataMG5)
 
   hratio = myRatio(hdata)
   hratio.Draw()
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
   hratio.Draw("e1SAME")
+  hdataAMC.Draw("histSAME")
+  hdataMG5.Draw("histSAME")
+  
 
   pad2.Modified()
   c1.cd()

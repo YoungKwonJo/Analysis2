@@ -3,8 +3,8 @@ import copy
 from array import array
 from math import sqrt
 
-#log = False
-log = True
+log = False
+#log = True
 
 def h1_maker(tree, mon, cut):
   h1 =  TH1F( mon['name'], mon['title'], mon['xbin_set'][0],mon['xbin_set'][1],mon['xbin_set'][2])
@@ -29,6 +29,9 @@ def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
     for i,ii in enumerate(monitors):
       mon = h1_set(mc['name'],monitors[i],cutname+cuts["channel"])
       cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
+      #if int(cutname[1:2])==6 : cut = cut+"*(csvm_sf)"
+      #if int(cutname[1:2])==7 : cut = cut+"*(csvt_sf)"
+
       if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
         h1 = h1_maker(tree,mon,cut)
         h.append(copy.deepcopy(h1))
@@ -135,8 +138,8 @@ def ntuple2hist(json,cuts):
     tree = chain
     tree2 = chain2
 
-    htemp = TH1F("htemp","",1,-2,2)
-    tree.Project("htemp","1","weight")
+    htemp = TH1F("htemp"+mcsamples[i]['name'],"",1,-2,2)
+    tree.Project("htemp"+mcsamples[i]['name'],"1","weight")
     Ntot = htemp.GetBinContent(1)
     #htot = f.Get("hNEvent")
     #htot = f.Get("hsumWeight")
@@ -144,7 +147,7 @@ def ntuple2hist(json,cuts):
     #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
     h= h+h_all_maker(tree,tree2,mcsamples[i],monitors,cuts,mceventweight,Ntot)
-    f.Close()
+    #f.Close()
   for i,mc in enumerate(datasamples):
     chain = TChain("cattree/nom")
     chain2 = TChain("cattree/nom2")
@@ -163,7 +166,7 @@ def ntuple2hist(json,cuts):
     #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
     h= h+h_all_maker(tree,tree2,datasamples[i],monitors,cuts,1,1)
-    f.Close()
+    #f.Close()
 
   return h
 

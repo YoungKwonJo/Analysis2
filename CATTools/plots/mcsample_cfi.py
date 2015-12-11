@@ -9,11 +9,11 @@ import os,commands
 import subprocess
 
 def files(path):
-    import socket
-    hostname = socket.gethostname()
-    if hostname.find("home")>-1:
-      llll = [""]
-      return llll
+    #import socket
+    #hostname = socket.gethostname()
+    #if hostname.find("home")>-1:
+    #  llll = [""]
+    #  return llll
 
     cmd, xrdbase = "xrd cms-xrdr.sdfarm.kr ls ","/xrd"
     size = 0
@@ -49,7 +49,7 @@ def getEntries(mypath):
 
 #loc = "../"
 #loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
-loc = "/store/user/youngjo/Cattools/v7-4-6v3/"
+loc = "/store/user/youngjo/Cattools/v7-4-6v2/"
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
@@ -68,8 +68,9 @@ def mAND2(aaa):
 
 ll = " (partonInPhaseLep==1 && NgenJet>=4 )"
 ttbb = mAND(" (genTtbarId%100>52) ", ll)
-ttb  = mAND(" (genTtbarId%100==51) ", ll)
-tt2b = mAND(" (genTtbarId%100==52) ", ll)
+ttb  = mAND(" (genTtbarId%100>50 && genTtbarId%100<53) ", ll)
+#ttb = mAND(" (genTtbarId%100==51) ", ll)
+#tt2b = mAND(" (genTtbarId%100==52) ", ll)
 ttc  = mAND(" (genTtbarId%100==41) ", ll)
 ttcc = mAND(" (genTtbarId%100>41 && genTtbarId%100<49) ", ll)
 ttlf = mAND(" (genTtbarId%100 ==0) ", ll)
@@ -84,7 +85,8 @@ def GW(sel="1"):
 def GW2(sel="1"):
   return "(("+sel+"))"#*(puweight)*(csvweight))"
 
-ttotheslist = [op_(ttbb), op_(ttb), op_(tt2b),op_(ttc), op_(ttcc),op_(ttlf) ]
+#ttotheslist = [op_(ttbb), op_(ttb), op_(tt2b),op_(ttc), op_(ttcc),op_(ttlf) ]
+ttotheslist = [op_(ttbb), op_(ttb), op_(ttc), op_(ttcc),op_(ttlf) ]
 ttothers = mAND2(ttotheslist)
 
 CS = [kOrange, kOrange-1, kRed-7, kRed+2, kMagenta,kMagenta+2, kRed ]
@@ -94,34 +96,34 @@ z="v7"
 zz="v6"
 mcsamples=[
 
-#{"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
+{"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
 #{"name":"MG5tt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[2],   "label":"t#bar{t}+2b      "       },
-#{"name":"MG5ttb",   "selection": GW(ttb),      "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
-#{"name":"MG5ttc",   "selection": GW(ttc),      "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
-#{"name":"MG5ttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
-#{"name":"MG5ttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
-#{"name":"MG5ttot",  "selection": GW(ttothers), "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
+{"name":"MG5ttb",   "selection": GW(ttb),      "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
+{"name":"MG5ttc",   "selection": GW(ttc),      "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
+{"name":"MG5ttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
+{"name":"MG5ttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
+{"name":"MG5ttot",  "selection": GW(ttothers), "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
 
-#{"name":"AMCttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
+{"name":"AMCttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
 #{"name":"AMCtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[2],   "label":"t#bar{t}+2b      "       },
-#{"name":"AMCttb",   "selection": GW(ttb),      "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
-#{"name":"AMCttc",   "selection": GW(ttc),      "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
-#{"name":"AMCttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
-#{"name":"AMCttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
-#{"name":"AMCttot",  "selection": GW(ttothers), "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
+{"name":"AMCttb",   "selection": GW(ttb),      "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[1],   "label":"t#bar{t}+b        "      },
+{"name":"AMCttc",   "selection": GW(ttc),      "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[3],   "label":"t#bar{t}+c        " },
+{"name":"AMCttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[4],   "label":"t#bar{t}+c#bar{c}      " },
+{"name":"AMCttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[5],   "label":"t#bar{t}+lf       "      },
+{"name":"AMCttot",  "selection": GW(ttothers), "file": files(loc + ttbarAMC+z), "cx":ttcx, "color": CS[6],   "label":"t#bar{t} others"         },
 
 {"name":"POWttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[0],  "label":"t#bar{t}+b#bar{b}      " },
-{"name":"POWtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[2],  "label":"t#bar{t}+2b      "       },
+#{"name":"POWtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[2],  "label":"t#bar{t}+2b      "       },
 {"name":"POWttb",   "selection": GW(ttb),      "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[1],  "label":"t#bar{t}+b        "      },
 {"name":"POWttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[3],  "label":"t#bar{t}+c#bar{c}      " },
 {"name":"POWttc",   "selection": GW(ttc),      "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[4],  "label":"t#bar{t}+c        " },
 {"name":"POWttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[5],  "label":"t#bar{t}+lf        "      },
 {"name":"POWttot",  "selection": GW(ttothers), "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[6],  "label":"t#bar{t} others"         },
 
-{"name":"TTWlNu", "selection": GW(), "file": files(loc + "ttWJetsToLNu"+z),  "cx":1.152,  "color": BCS[0],   "label":"t#bar{t}W          "    },
-{"name":"TTWqq",  "selection": GW(), "file": files(loc + "ttWJetsToQQ"+z),   "cx":1.152,  "color": BCS[0],   "label":"t#bar{t}W          "    },
-{"name":"TTZll",  "selection": GW(), "file": files(loc + "ttZToLLNuNu"+z),   "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}Z          "    },
-{"name":"TTZqq",  "selection": GW(), "file": files(loc + "ttZToQQ"+z),       "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}Z          "    },
+{"name":"TTWlNu", "selection": GW(), "file": files(loc + "ttWJetsToLNu"+z),  "cx":1.152,  "color": BCS[0],   "label":"t#bar{t}V          "    },
+{"name":"TTWqq",  "selection": GW(), "file": files(loc + "ttWJetsToQQ"+z),   "cx":1.152,  "color": BCS[0],   "label":"t#bar{t}V          "    },
+{"name":"TTZll",  "selection": GW(), "file": files(loc + "ttZToLLNuNu"+z),   "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}V          "    },
+{"name":"TTZqq",  "selection": GW(), "file": files(loc + "ttZToQQ"+z),       "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}V          "    },
 
 {"name":"STbt",   "selection": GW(), "file": files(loc + "SingleTbar_t"+z),  "cx":80.95,  "color": BCS[3],   "label":"Single t"    },
 {"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"+z),   "cx":136.02, "color": BCS[3],   "label":"Single t"    },

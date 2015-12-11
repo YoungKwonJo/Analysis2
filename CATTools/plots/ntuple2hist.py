@@ -30,7 +30,7 @@ for mon22 in monitors2d.keys():
     mon2+=monitors2d["Mon" +str(iii)]
 
 #mceventweight="puWeight"
-mceventweight="((weight)*(puweight)*(csvweight))"
+mceventweight="((weight)*(puweight)*(csvt_sf))"#*(csvweight))"
 
 jsonMM = {
 "mcsamples" : mcsamples,
