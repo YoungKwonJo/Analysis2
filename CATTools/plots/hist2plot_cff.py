@@ -373,11 +373,11 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   pad1.cd()
 
   legx1 = 0.8
-  wid=0.13
+  wid=0.12
   legx2 = 0.67
   leg  = make_legend(legx1,0.64, legx1+wid,0.88)
   leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
-  leg3 = make_legend(legx1,0.57, legx1+wid,0.63)
+  leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
   lumi = mainlumi
 
   hs = THStack("hs","")
@@ -433,16 +433,16 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     isMG5 = mc['name'].find("MG5")>-1
     if not isPowheg and not isTTH and not isMG5:
       hmcAmcNLO.Add(h2)
-      if isStat:
+      if isStat and isAmcNLO:
         if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*100)/100)+" \pm "+str(round(h2.GetBinError(1)*100)/100)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)))+" \pm "+str(round(h2.GetBinError(1)))+" $"
-      continue
+      if isAmcNLO:  continue
     if not isPowheg and not isTTH and not isAmcNLO:
       hmcMG5.Add(h2)
-      if isStat:
+      if isStat and isMG5:
         if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*100)/100)+" \pm "+str(round(h2.GetBinError(1)*100)/100)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)))+" \pm "+str(round(h2.GetBinError(1)))+" $"
-      continue
+      if isMG5:  continue
 
     if not isTTH and not isMG5 and not isAmcNLO:
       hmctot.Add( h2 )
@@ -522,7 +522,6 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     else                           : print " Stat: "+("MC Total").rjust(10)+" & $ "+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
  
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
-  if(hmcSig.Integral()>0) : leg2.AddEntry(hmcSig, label, "l")
   if isStat and (hmcSig.Integral()>0):
     if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)*100)/100)+" \pm "+str(round(hmcSig.GetBinError(1)*100)/100)+" $"
     else                           : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
@@ -547,6 +546,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   hmcMG5.Draw("histoSAME")
   leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
   leg3.AddEntry(hmcMG5,"Madgraph","l")
+  leg3.AddEntry(hmcSig, label, "l")
 
   hmcSig.Draw("same")
   h2data.Draw("same")
@@ -633,11 +633,11 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   pad1.cd() 
 
   legx1 = 0.8
-  wid=0.13
+  wid=0.12
   legx2 = 0.67
   leg  = make_legend(legx1,0.64, legx1+wid,0.88)
   leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
-  leg3 = make_legend(legx1,0.57, legx1+wid,0.63)
+  leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
  
   lumi = mainlumi
 
@@ -705,16 +705,16 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     isMG5 = mc['name'].find("MG5")>-1
     if not isPowheg and not isTTH and not isMG5:
       hmcAmcNLO.Add(h2ll)
-      if isStat:
+      if isStat and isAmcNLO:
         if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*100)/100)+" \pm "+str(round(h2ll.GetBinError(1)*100)/100)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
-      continue
+      if isAmcNLO : continue
     if not isPowheg and not isTTH and not isAmcNLO:
       hmcMG5.Add(h2ll)
-      if isStat:
+      if isStat and isMG5:
         if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*100)/100)+" \pm "+str(round(h2ll.GetBinError(1)*100)/100)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
-      continue
+      if isMG5 : continue
 
     if not isTTH and not isMG5 and not isAmcNLO:
       hmctot.Add(h2ll)
@@ -816,7 +816,6 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     else                           : print " Stat: "+("MC Totlal").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
  
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
-  if(hmcSig.Integral()>0) : leg2.AddEntry(hmcSig, label, "l")
   if isStat and (hmcSig.Integral()>0):
     if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)*100)/100)+" \pm "+str(round(hmcSig.GetBinError(1)*100)/100)+" $"
     else                       : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
@@ -842,6 +841,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   hmcMG5.Draw("histoSAME")
   leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
   leg3.AddEntry(hmcMG5,"Madgraph","l")
+  leg3.AddEntry(hmcSig, label, "l")
   hmcSig.Draw("same")
   h2data.Draw("same")
 #  h2data.Draw("sameaxis")
@@ -849,6 +849,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
 
   leg.Draw()
   leg2.Draw()
+  leg3.Draw()
   pad1.SetLogy()
   pt = addLegendLumi(lumi)
   pt2 = addLegendCMS()

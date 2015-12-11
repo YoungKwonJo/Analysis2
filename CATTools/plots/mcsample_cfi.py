@@ -9,11 +9,11 @@ import os,commands
 import subprocess
 
 def files(path):
-    #import socket
-    #hostname = socket.gethostname()
-    #if hostname.find("home")>-1:
-    #  llll = [""]
-    #  return llll
+    import socket
+    hostname = socket.gethostname()
+    if hostname.find("home")>-1:
+      llll = [""]
+      return llll
 
     cmd, xrdbase = "xrd cms-xrdr.sdfarm.kr ls ","/xrd"
     size = 0
@@ -89,8 +89,12 @@ def GW2(sel="1"):
 ttotheslist = [op_(ttbb), op_(ttb), op_(ttc), op_(ttcc),op_(ttlf) ]
 ttothers = mAND2(ttotheslist)
 
-CS = [kOrange, kOrange-1, kRed-7, kRed+2, kMagenta,kMagenta+2, kRed ]
-BCS = [kBlue,kGreen+2,kGray,kViolet,kCyan]
+CS = [kOrange, kOrange-1, kRed-7, kRed+2, kMagenta, kMagenta+2, kRed ]
+#BCS = [kBlue,kGreen+2,kGray,kBlue-7,kCyan, kBlue-2]
+BCS = [kBlue,kGreen+2,kTeal+2,kAzure-2,kCyan,kGray+2]
+
+#CS = [kOrange, kOrange-1, kRed-7, kRed+2, kMagenta,kMagenta+2, kRed ]
+#BCS = [kBlue, kGreen+2, kGreen, kBlue-7, kCyan, kBlue-2]
 
 z="v7"
 zz="v6"
@@ -125,15 +129,15 @@ mcsamples=[
 {"name":"TTZll",  "selection": GW(), "file": files(loc + "ttZToLLNuNu"+z),   "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}V          "    },
 {"name":"TTZqq",  "selection": GW(), "file": files(loc + "ttZToQQ"+z),       "cx":2.232,  "color": BCS[0],   "label":"t#bar{t}V          "    },
 
-{"name":"STbt",   "selection": GW(), "file": files(loc + "SingleTbar_t"+z),  "cx":80.95,  "color": BCS[3],   "label":"Single t"    },
-{"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"+z),   "cx":136.02, "color": BCS[3],   "label":"Single t"    },
-{"name":"STbtW",  "selection": GW(), "file": files(loc + "SingleTbar_tW"+z), "cx":35.6,   "color": BCS[3],   "label":"Single t"      },
-{"name":"STtW",   "selection": GW(), "file": files(loc + "SingleTop_tW"+z),  "cx":35.6,   "color": BCS[3],   "label":"Single t"      },
-{"name":"WW",     "selection": GW(), "file": files(loc + "WW"+z),            "cx":110.8,  "color": BCS[2],   "label":"VV            "    },
-{"name":"WZ",     "selection": GW(), "file": files(loc + "WZ"+z),            "cx":66.1,   "color": BCS[2],   "label":"VV            "   },
-{"name":"ZZ",     "selection": GW(), "file": files(loc + "ZZ"+z),            "cx":15.4,   "color": BCS[2],   "label":"VV            "   },
+{"name":"STbt",   "selection": GW(), "file": files(loc + "SingleTbar_t"+z),  "cx":80.95,  "color": BCS[4],   "label":"Single t"    },
+{"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"+z),   "cx":136.02, "color": BCS[4],   "label":"Single t"    },
+{"name":"STbtW",  "selection": GW(), "file": files(loc + "SingleTbar_tW"+z), "cx":35.6,   "color": BCS[4],   "label":"Single t"      },
+{"name":"STtW",   "selection": GW(), "file": files(loc + "SingleTop_tW"+z),  "cx":35.6,   "color": BCS[4],   "label":"Single t"      },
+{"name":"WW",     "selection": GW(), "file": files(loc + "WW"+z),            "cx":110.8,  "color": BCS[3],   "label":"VV            "    },
+{"name":"WZ",     "selection": GW(), "file": files(loc + "WZ"+z),            "cx":66.1,   "color": BCS[3],   "label":"VV            "   },
+{"name":"ZZ",     "selection": GW(), "file": files(loc + "ZZ"+z),            "cx":15.4,   "color": BCS[3],   "label":"VV            "   },
 
-{"name":"WJets",  "selection": GW(), "file": files(loc + "WJets"+z),         "cx":61526.7,"color": BCS[1],   "label":"WJets      "       },
+{"name":"WJets",  "selection": GW(), "file": files(loc + "WJets"+z),         "cx":61526.7,"color": BCS[2],   "label":"WJets      "       },
 {"name":"DYJets", "selection": GW(), "file": files(loc + "DYJets"+z),        "cx":6025.2, "color": BCS[1], "label":"DYJets    "      },
 {"name":"DYJets10", "selection": GW(), "file": files(loc + "DYJets_10to50"+z),"cx":18271.92, "color": BCS[1], "label":"DYJets    "      },
 
@@ -142,8 +146,8 @@ mcsamples=[
 #{"name":"DYRout", "selection": GW(), "file": files(loc + "DYJets_10to50"+z),"cx":18271.92, "color": BCS[1], "label":"DYJets    "      },
 
 
-{"name":"ttH2non", "selection": GW(), "file": files(loc + "ttH_nonbb"+z),  "cx":0.5058,   "color": BCS[2],   "label":"t#bar{t}H         " ,"isStack":False   },
-{"name":"ttH2bb",  "selection": GW(), "file": files(loc + "ttH_bb"+z),     "cx":0.5058,   "color": BCS[2],   "label":"t#bar{t}H         " ,"isStack":False   },
+{"name":"ttH2non", "selection": GW(), "file": files(loc + "ttH_nonbb"+z),  "cx":0.5058,   "color": BCS[5],   "label":"t#bar{t}H         " ,"isStack":False   },
+{"name":"ttH2bb",  "selection": GW(), "file": files(loc + "ttH_bb"+z),     "cx":0.5058,   "color": BCS[5],   "label":"t#bar{t}H         " ,"isStack":False   },
 ]
 
 datasamples=[
