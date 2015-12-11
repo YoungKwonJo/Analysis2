@@ -201,7 +201,7 @@ def ntuple2hist2d(json,cuts):
 
 
 def makeoutput(outputname, h):
-  fout = TFile(outputname,"RECREATE")
+  fout = TFile("root/"+outputname,"RECREATE")
   for a in h:
     a.Write()
   fout.Write()

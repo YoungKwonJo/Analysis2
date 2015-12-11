@@ -71,8 +71,8 @@ ttbb = mAND(" (genTtbarId%100>52) ", ll)
 ttb  = mAND(" (genTtbarId%100>50 && genTtbarId%100<53) ", ll)
 #ttb = mAND(" (genTtbarId%100==51) ", ll)
 #tt2b = mAND(" (genTtbarId%100==52) ", ll)
-ttc  = mAND(" (genTtbarId%100==41) ", ll)
-ttcc = mAND(" (genTtbarId%100>41 && genTtbarId%100<49) ", ll)
+ttc  = mAND(" (genTtbarId%100>40 && genTtbarId%100<43) ", ll)
+ttcc = mAND(" (genTtbarId%100>42 && genTtbarId%100<49) ", ll)
 ttlf = mAND(" (genTtbarId%100 ==0) ", ll)
 
 def op_(aaa):

@@ -124,7 +124,7 @@ def plotTH2F(filename,mon,step,mcsamples):
 #########################
 #########################
 def myCanvas(name):
-  c1 = TCanvas( name, '')#, 500, 500 )
+  c1 = TCanvas( name, '',1)#, 500, 500 )
   return c1
 def myPad1(name):
   pad1 = TPad(name, "",0,0.3,1,1)
