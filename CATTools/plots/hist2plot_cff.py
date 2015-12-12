@@ -285,16 +285,16 @@ def drellYanEstimationRun(f,step): #,mcsamples,datasamples):
   mcxs = [6025.2,18271.92]
   datas = ["1","2","3"]
 
-  hmceein = TH1F("mc_ee_in","",60,0,300)
-  hmcmmin = TH1F("mc_mm_in","",60,0,300)
-  hmcemin = TH1F("mc_em_in","",60,0,300)
+  hmceein = TH1D("mc_ee_in","",60,0,300)
+  hmcmmin = TH1D("mc_mm_in","",60,0,300)
+  hmcemin = TH1D("mc_em_in","",60,0,300)
 
-  hmceeout = TH1F("mc_ee_out","",60,0,300)
-  hmcmmout = TH1F("mc_mm_out","",60,0,300)
+  hmceeout = TH1D("mc_ee_out","",60,0,300)
+  hmcmmout = TH1D("mc_mm_out","",60,0,300)
 
-  hrdeein = TH1F("rd_ee_in","",60,0,300)
-  hrdmmin = TH1F("rd_mm_in","",60,0,300)
-  hrdemin = TH1F("rd_em_in","",60,0,300)
+  hrdeein = TH1D("rd_ee_in","",60,0,300)
+  hrdmmin = TH1D("rd_mm_in","",60,0,300)
+  hrdemin = TH1D("rd_em_in","",60,0,300)
 
   for i,mc in enumerate(mcs) :
     inee = "h1_"+mc+"_ZMass_"+step+"ee_in"
@@ -410,7 +410,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
     channel = step[2:4]
     h2 = f.Get(histnameS).Clone("h"+histnameS)
-    if type(h2) is not TH1F :
+    if type(h2) is not TH1D :
       continue
     h2.GetYaxis().SetTitle("Events")
 
@@ -494,7 +494,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
     channel = step[2:4]
     h1 = f.Get(histnameS).Clone("h"+histnameS)
-    if type(h1) is not TH1F :
+    if type(h1) is not TH1D :
       continue
     h1.GetYaxis().SetTitle("Events")
 
@@ -674,7 +674,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     h2ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
     h2ee = f.Get(histnameSee).Clone("h"+histnameSee)
     h2em = f.Get(histnameSem).Clone("h"+histnameSem)
-    if type(h2ll) is not TH1F :
+    if type(h2ll) is not TH1D :
       continue
 
 
@@ -770,7 +770,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     h1ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
     h1ee = f.Get(histnameSee).Clone("h"+histnameSee)
     h1em = f.Get(histnameSem).Clone("h"+histnameSem)
-    if type(h1ll) is not TH1F :
+    if type(h1ll) is not TH1D :
       continue
     h1ll.GetYaxis().SetTitle("Events")
 

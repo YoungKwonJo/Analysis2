@@ -5,9 +5,10 @@ from math import sqrt
 
 log = False
 #log = True
+#aMC=["AMCttbb","AMCttb","AMCttc","AMCttcc","AMCttlf","AMCttot","TTWlNu","TTWqq","TTZll","TTZqq","DYJets","DYJets10","WJets"]
 
 def h1_maker(tree, mon, cut):
-  h1 =  TH1F( mon['name'], mon['title'], mon['xbin_set'][0],mon['xbin_set'][1],mon['xbin_set'][2])
+  h1 =  TH1D( mon['name'], mon['title'], mon['xbin_set'][0],mon['xbin_set'][1],mon['xbin_set'][2])
   h1.GetXaxis().SetTitle(mon['x_name'])
   h1.GetYaxis().SetTitle(mon['y_name'])
   h1.Sumw2()
@@ -25,10 +26,13 @@ def h1_set(name,monitor,cutname):
 
 def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
   h = []
+  weight = "(1)"
+  #if mc['name'] in aMC : weight = "(weight)"
+
   for cutname in cuts["cut"]:
     for i,ii in enumerate(monitors):
       mon = h1_set(mc['name'],monitors[i],cutname+cuts["channel"])
-      cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
+      cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight)+"*"+weight+"/"+str(Ntot)+")"
       #if int(cutname[1:2])==6 : cut = cut+"*(csvm_sf)"
       #if int(cutname[1:2])==7 : cut = cut+"*(csvt_sf)"
 
@@ -45,8 +49,8 @@ def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
         monIN = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+"_in")
         monOUT = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+"_out")
         newCut = cuts["cut"][cutname].replace("* (step2==1)","")
-        cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
-        cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+str(eventweight)+"/"+str(Ntot)+")"
+        cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+str(eventweight)+"*"+weight+"/"+str(Ntot)+")"
+        cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+str(eventweight)+"*"+weight+"/"+str(Ntot)+")"
         if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
           h1 = h1_maker(tree,monIN,cutIN)
           h.append(copy.deepcopy(h1))
@@ -138,9 +142,10 @@ def ntuple2hist(json,cuts):
     tree = chain
     tree2 = chain2
 
-    htemp = TH1F("htemp"+mcsamples[i]['name'],"",1,-2,2)
-    tree.Project("htemp"+mcsamples[i]['name'],"1","weight")
+    htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
+    tree.Project("htemp"+mcsamples[i]['name'],"1","weight/abs(weight)")
     Ntot = htemp.GetBinContent(1)
+    #if not mc['name'] in aMC : Ntot = htemp.GetEntries()
     #htot = f.Get("hNEvent")
     #htot = f.Get("hsumWeight")
     #Ntot = htot.GetBinContent(1)

@@ -4,9 +4,9 @@ from mcsample_cfi import *
 
 def ntuple2entries(files,name):
   vvv = "1"#"(weight)/abs(weight)"
-  tt="(1)"
-  #tt="(weight)"
-  if name.find("aMC")>-1 :   tt ="(weight)"
+  #tt="(1)"
+  tt="(weight/abs(weight))"
+  #if name.find("aMC")>-1 :   tt ="(weight/abs(weight))"
   ttjj = "(partonInPhaseLep==1 && NgenJet>=4 )"
   ttbb = "("+ttjj+"&&"+"(genTtbarId%100>52))"
   ttb  = "("+ttjj+"&&"+"(genTtbarId%100>50 && genTtbarId%100<53))"
@@ -21,14 +21,14 @@ def ntuple2entries(files,name):
     chain.Add(afile)
   tree = chain
 
-  htemp = TH1F("htemp"+name,"",1,-20,20)
+  htemp = TH1D("htemp"+name,"",1,-20,20)
   tree.Project("htemp"+name,vvv,tt) 
   print name+"  "+tt
   print "total events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
   tree.Project("htemp"+name,vvv,ttjj+"*"+tt)
   print "ttjj events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  
+  #ddd=""" 
   tree.Project("htemp"+name,vvv,ttbb+"*"+tt)
   print "ttbb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
@@ -43,7 +43,7 @@ def ntuple2entries(files,name):
   
   tree.Project("htemp"+name,vvv,ttlf+"*"+tt)
   print "ttlf events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-
+  #"""
 
 
 ttbarMG5 = "TTJets_MG5"
