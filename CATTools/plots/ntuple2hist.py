@@ -10,6 +10,12 @@ if len(sys.argv) is 1:
   print "> python  ntuple2hist.py [1,2,3, or 4] \n"
   sys.exit()
 
+gROOT.ProcessLine(".L MuonSF.C")
+mumusf ="((channel==3)*(MuonSF(lep1_pt,lep1_eta)*MuonSF(lep2_pt,lep2_eta)))"
+emusf ="((channel==1)*(MuonSF(lep2_pt,lep2_eta)))"
+eesf = "((channel==2)*(1.0))"
+lepsf = "("+mumusf+"+"+emusf+"+"+eesf+")"
+
 arg = sys.argv[1]
 ii=int(arg)
 #if ii>len(monitors)+2 : sys.exit()
@@ -30,7 +36,7 @@ for mon22 in monitors2d.keys():
     mon2+=monitors2d["Mon" +str(iii)]
 
 #mceventweight="puWeight"
-mceventweight="((weight/abs(weight))*(puweight)*(csvt_sf))"#*(csvweight))"
+mceventweight="((weight/abs(weight))*(puweight)*(csvt_sf)*"+lepsf+")"#*(csvweight))"
 
 jsonMM = {
 "mcsamples" : mcsamples,
