@@ -222,7 +222,8 @@ bkgpdf       = RooHistPdf("bkgpdf",      "bkgpdf",       RooArgSet(RooArgList(x,
 #model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, tt2bpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2,fsigcc))
 #for merge ttcc+ttlf
 model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
-model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,knbkg))
+#model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,knbkg)) # k*bkg
+model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,nbkg)) # fixing bkg
 model2.fitTo(data)
 #model2.fitTo(ttlf)
 
