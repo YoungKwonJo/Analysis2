@@ -7,6 +7,48 @@ from ROOT import *
 from array import array
 import copy
 
+def addLegendCMS():
+  #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
+  tex2 = TLatex(-20.,50.,"Preliminary")
+  tex2.SetNDC()
+  tex2.SetTextAlign(12)
+  tex2.SetX(0.25)
+  tex2.SetY(0.968)
+  tex2.SetTextColor(2)
+  tex2.SetTextFont(42)
+  tex2.SetTextSize(0.05)
+  tex2.SetTextSizePixels(24)
+  tex2.Draw()
+
+  return tex2
+
+def addDecayMode(ll):
+  ll2="l^{#mp}l^{#pm} channel"
+  if ll.find("em")>-1 : ll2="e^{#mp}#mu^{#pm} channel"
+  if ll.find("mm")>-1 : ll2="#mu^{#mp}#mu^{#pm} channel"
+  if ll.find("ee")>-1 : ll2="e^{#mp}e^{#pm} channel"
+
+  chtitle = TLatex(-20.,50.,ll2)
+  chtitle.SetNDC()
+  chtitle.SetTextAlign(12)
+  chtitle.SetX(0.20)
+  chtitle.SetY(0.91)
+  chtitle.SetTextFont(42)
+  chtitle.SetTextSize(0.05)
+  chtitle.SetTextSizePixels(24)
+
+  return chtitle
+
+gROOT.SetStyle("Plain")
+gStyle.SetOptFit(1000)
+gStyle.SetOptStat("emruo")
+gStyle.SetOptStat(kFALSE)
+gStyle.SetPadTickY(1)
+gStyle.SetPadTickX(1)
+
+gROOT.ProcessLine(".L tdrStyle.C")
+setTDRStyle()
+
 
 #ROOT.gROOT.Macro("rootlogon.C")
 #h1_DYJets_MET_S4mm
@@ -178,12 +220,13 @@ kValerror = k.getError()
 print "FINAL: ttbb Rreco = "+ str(recoR)+" +- "+str(recoRerror)
 print "FINAL: k = "+str(kVal)+" +- "+str(kValerror) 
 
+cR10 = TCanvas("R10", "R", 500, 500)
 nll = model2.createNLL(data)
 #nll = model2.createNLL(ttlf)
 #RooMinuit(nk1).migrad() 
 RFrame = fsig.frame()
 nll.plotOn(RFrame,RooFit.ShiftToZero()) 
-c1 = TCanvas("c1", "c1", 500, 500)
+c1 = TCanvas("c1", "c1",1)# 500, 500)
 RFrame.SetMaximum(4.);RFrame.SetMinimum(0)
 RFrame.GetXaxis().SetTitle("nttbb/nttjj")
 RFrame.SetTitle("")
@@ -209,9 +252,17 @@ l1.SetFillColor(0)
 l1.SetLineColor(0)
 l1.Draw()
 
+pt = addLegendCMS()
+pt2 = addDecayMode("LL")
+pt.Draw()
+pt2.Draw()
+
+cR10.Print("R.eps")
+cR10.Print("R.png")
 
 
-cR11 = TCanvas("R11", "R", 500, 500)
+
+cR11 = TCanvas("R11", "R", 1)# 500, 500)
 xframe = x.frame()
 data.plotOn(xframe, RooFit.DataError(RooAbsData.SumW2) ) 
 model2.paramOn(xframe, RooFit.Layout(0.65,0.9,0.9) )
@@ -222,7 +273,15 @@ print "chi2 = "+ str(chi2)
 print "ndof = "+ str(ndof)
 xframe.Draw()
 
-cR12 = TCanvas("R12", "R", 500, 500)
+pt3 = addLegendCMS()
+pt4 = addDecayMode("LL")
+pt3.Draw()
+pt4.Draw()
+
+cR11.Print("jet3CSV.eps")
+cR11.Print("jet3CSV.png")
+
+cR12 = TCanvas("R12", "R", 1)#500, 500)
 yframe = y.frame()
 data.plotOn(yframe, RooFit.DataError(RooAbsData.SumW2) ) 
 model2.paramOn(yframe, RooFit.Layout(0.65,0.9,0.9) )
@@ -232,6 +291,14 @@ ndof2 = yframe.GetNbinsX()
 print "chi2 = "+ str(chi22)
 print "ndof = "+ str(ndof2)
 yframe.Draw()
+
+pt5=addLegendCMS()
+pt6=addDecayMode("LL")
+pt5.Draw()
+pt6.Draw()
+
+cR12.Print("jet4CSV.eps")
+cR12.Print("jet4CSV.eps")
 
 
 
