@@ -107,27 +107,27 @@ for i in range(1):
   histograms[name_]={"h1":copy.deepcopy(h1),"color":kBlack,"exp":h1.Integral()}
 
 print str(type(histograms))
-print str(histograms["POWttbb"]["color"])
-print str(histograms["POWttbb"]["exp"])
+print str(histograms["MG5ttbb"]["color"])
+print str(histograms["MG5ttbb"]["exp"])
 print ""
 print str(histograms["DATA"]["color"])
 print str(histograms["DATA"]["exp"])
 
-signals1= ['POWttbb', 'POWttb']
-signals2= ['POWttcc','POWttc', 'POWttlf']#, 'POWttot']
-backgrounds1= ["POWttot"]
+signals1= ['MG5ttbb', 'MG5ttb']
+signals2= ['MG5ttcc','MG5ttc', 'MG5ttlf']#, 'MG5ttot']
+backgrounds1= ["MG5ttot"]
 backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ', 'DYJets']
 higgs= ['ttH2non', 'ttH2bb']
 
-bkghist = histograms['POWttot']["h1"].Clone("bkghist")
+bkghist = histograms['MG5ttot']["h1"].Clone("bkghist")
 bkghist.Reset()
 
-ttcclfhist = histograms['POWttot']["h1"].Clone("ttcclfhist")
+ttcclfhist = histograms['MG5ttot']["h1"].Clone("ttcclfhist")
 ttcclfhist.Reset()
 for hh in signals2:
   h = histograms[hh]["h1"]
   ttcclfhist.Add(h)
-histograms["POWttcclf"]={"h1":copy.deepcopy(ttcclfhist),"color":kOrange,"exp":ttcclfhist.Integral()}
+histograms["MG5ttcclf"]={"h1":copy.deepcopy(ttcclfhist),"color":kOrange,"exp":ttcclfhist.Integral()}
 
 for hh in backgrounds2:
   h = histograms[hh]["h1"]
@@ -136,16 +136,16 @@ for hh in backgrounds2:
 histograms["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
 
 
-histograms["POWttcc"]["h1"].Add(histograms["POWttc"]["h1"])
+histograms["MG5ttcc"]["h1"].Add(histograms["MG5ttc"]["h1"])
 
-n_ttbb = histograms["POWttbb"]["exp"]
-n_ttb  = histograms["POWttb"]["exp"]
-#n_tt2b = histograms["POWtt2b"]["exp"]
-n_ttcc = histograms["POWttcc"]["exp"]+histograms["POWttc"]["exp"]
-#n_ttc = histograms["POWttc"]["exp"]
-n_ttlf = histograms["POWttlf"]["exp"]
-n_ttcclf = histograms["POWttcclf"]["exp"]
-n_ttot = histograms["POWttot"]["exp"]
+n_ttbb = histograms["MG5ttbb"]["exp"]
+n_ttb  = histograms["MG5ttb"]["exp"]
+#n_tt2b = histograms["MG5tt2b"]["exp"]
+n_ttcc = histograms["MG5ttcc"]["exp"]+histograms["MG5ttc"]["exp"]
+#n_ttc = histograms["MG5ttc"]["exp"]
+n_ttlf = histograms["MG5ttlf"]["exp"]
+n_ttcclf = histograms["MG5ttcclf"]["exp"]
+n_ttot = histograms["MG5ttot"]["exp"]
 n_bkg = histograms["bkg"]["exp"]
 n_data = histograms["DATA"]["exp"]
 
@@ -177,9 +177,9 @@ RttbReco =RooRealVar("RttbReco", "RttbReco", rttb, rttb, rttb);
 RttccReco=RooRealVar("RttccReco","RttccReco",rttcc,rttcc,rttcc);
 
 fsig   =RooRealVar(    "fsig",                "fsig",           rttbb, 0.0, 0.2) 
-fsig2  =RooFormulaVar("fsig2",               "fsig2","@0/@1*@2",RooArgList(fsig,RttbbReco,RttbReco) )
-#fsig3  =RooFormulaVar("fsig3",               "fsig3","@0/@1*@2",RooArgList(fsig2,RttbbReco,RttbReco,Rtt2bReco) )
-fsigcc =RooRealVar(  "fsigcc",              "fsigcc",           rttcc, 0.0, 0.5) 
+#fsig2  =RooFormulaVar("fsig2",               "fsig2","@0/@1*@2",RooArgList(fsig,RttbbReco,RttbReco) )  # constraint fsig2 with fsig
+fsig2  =RooRealVar(   "fsig2",                "fsig2",           rttb, 0.0, 0.2)  # free fsig2
+fsigcc =RooRealVar(  "fsigcc",              "fsigcc",           rttcc, 0.0, 0.5)  # free fsigcc
 k      =RooRealVar(       "k","normalization factor",           1, 0.5, 1.5) 
 
 nttjj =RooRealVar(    "nttjj","number of ttjj events",                            n_ttjj , n_ttjj, n_ttjj)
@@ -196,13 +196,13 @@ nttcc  =RooRealVar(     "nttcc","number of ttcc events",                        
 
 #histogram
 data    = RooDataHist("data",    "data set with (x)",   RooArgList(x, y), histograms["DATA"]["h1"])
-ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), histograms["POWttbb"]["h1"])
-ttb     = RooDataHist("ttb",     "ttb  set with (x)",   RooArgList(x, y), histograms["POWttb"]["h1"])
-#tt2b    = RooDataHist("tt2b",    "tt2b set with (x)",  RooArgList(x, y), histograms["POWtt2b"]["h1"])
-ttcc    = RooDataHist("ttcc",    "ttcc set with (x)",   RooArgList(x, y), histograms["POWttcc"]["h1"] )
-ttlf    = RooDataHist("ttlf",    "ttlf set with (x)",   RooArgList(x, y), histograms["POWttlf"]["h1"])
-ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", RooArgList(x, y), histograms["POWttcclf"]["h1"])
-ttot    = RooDataHist("ttot",    "ttot set with (x)",   RooArgList(x, y), histograms["POWttot"]["h1"])
+ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), histograms["MG5ttbb"]["h1"])
+ttb     = RooDataHist("ttb",     "ttb  set with (x)",   RooArgList(x, y), histograms["MG5ttb"]["h1"])
+#tt2b    = RooDataHist("tt2b",    "tt2b set with (x)",  RooArgList(x, y), histograms["MG5tt2b"]["h1"])
+ttcc    = RooDataHist("ttcc",    "ttcc set with (x)",   RooArgList(x, y), histograms["MG5ttcc"]["h1"] )
+ttlf    = RooDataHist("ttlf",    "ttlf set with (x)",   RooArgList(x, y), histograms["MG5ttlf"]["h1"])
+ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", RooArgList(x, y), histograms["MG5ttcclf"]["h1"])
+ttot    = RooDataHist("ttot",    "ttot set with (x)",   RooArgList(x, y), histograms["MG5ttot"]["h1"])
 bkg     = RooDataHist("bkg",     "bkg  set with (x)",   RooArgList(x, y), histograms["bkg"]["h1"])
 
 #print "ttbar type: "+str(type(ttbar))
@@ -227,6 +227,15 @@ model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),      
 model2.fitTo(data)
 #model2.fitTo(ttlf)
 
+
+
+
+################
+################
+################
+################
+################
+################
 recoR      = fsig.getVal()
 recoRerror = fsig.getError()
 
@@ -236,6 +245,11 @@ kValerror = k.getError()
 print "FINAL: ttbb Rreco = "+ str(recoR)+" +- "+str(recoRerror)
 print "FINAL: k = "+str(kVal)+" +- "+str(kValerror) 
 
+
+################
+################
+################
+################
 cR10 = TCanvas("R10", "R", 1)#500, 500)
 nll = model2.createNLL(data)
 #nll = model2.createNLL(ttlf)
@@ -243,7 +257,7 @@ nll = model2.createNLL(data)
 RFrame = fsig.frame()
 nll.plotOn(RFrame,RooFit.ShiftToZero()) 
 RFrame.SetMaximum(4.);RFrame.SetMinimum(0)
-RFrame.GetXaxis().SetTitle("nttbb/nttjj as r")
+RFrame.GetXaxis().SetTitle("Rreco as ttbb/ttjj")
 RFrame.SetTitle("")
 RFrame.Draw()
 
@@ -255,13 +269,9 @@ lineTbb = TLine(rttbb,RFrame.GetMaximum(),rttbb,0)
 lineTbb.SetLineStyle(2)
 lineTbb.Draw()
 
-#lineTbb2 = TLine(0.0652239,RFrame.GetMaximum(),0.0652239,0)
-#lineTbb2.SetLineStyle(3)
-#lineTbb2.Draw()
-
 l1 = make_legend(0.49,0.76,0.93,0.88)
-l1.AddEntry(lineTbb,"prefit: r="+str(round(rttbb*10000)/10000),"l")
-l1.AddEntry(RFrame,"fit: r="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","l")
+l1.AddEntry(lineTbb,"prefit: R="+str(round(rttbb*10000)/10000),"l")
+l1.AddEntry(RFrame,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","l")
 l1.SetTextSize(0.04)
 l1.SetFillColor(0)
 l1.SetLineColor(0)
@@ -317,7 +327,6 @@ pt2K.Draw()
 cR00.Print("K.eps")
 cR00.Print("K.png")
 
-
 ################
 ################
 ################
@@ -341,6 +350,11 @@ pt4.Draw()
 cR11.Print("jet3CSV.eps")
 cR11.Print("jet3CSV.png")
 
+################
+################
+################
+################
+################
 cR12 = TCanvas("R12", "R", 1)#500, 500)
 yframe = y.frame()
 data.plotOn(yframe, RooFit.DataError(RooAbsData.SumW2) ) 
@@ -360,5 +374,29 @@ pt6.Draw()
 cR12.Print("jet4CSV.eps")
 cR12.Print("jet4CSV.eps")
 
+###########################
+###########################
+###########################
+###########################
+###########################
+###########################
+  
+nll22 = model2.createNLL(data)
+m=RooMinuit(nll22)
+frameNLLContour = m.contour(fsig, fsig2,1,2,3)
+cNLLContour = TCanvas("cNLLContour", "cNLLContour", 1)
 
+frameNLLContour.GetXaxis().SetTitle("R as ttbb/ttjj")
+frameNLLContour.GetYaxis().SetTitle("R2 as ttb/ttjj")
+frameNLLContour.Draw()
 
+cNLLContour.Print("NLL_fsigVSfsig2.eps");
+
+###########################
+###########################
+###########################
+###########################
+###########################
+###########################
+###########################
+###########################
