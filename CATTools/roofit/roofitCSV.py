@@ -7,6 +7,21 @@ from ROOT import *
 from array import array
 import copy
 
+def make_legend(xmin,ymin,xmax,ymax):
+  #leg = TLegend(0.65,0.7, 0.89,0.89)
+  leg = TLegend(xmin,ymin,xmax,ymax)
+  leg.SetFillColor(0)
+  leg.SetLineColor(1)
+  leg.SetTextFont(62)
+  leg.SetTextSize(0.03)
+
+  leg.SetBorderSize(1)
+  leg.SetLineStyle(1)
+  leg.SetLineWidth(1)
+  leg.SetLineColor(0)
+
+  return leg
+
 def addLegendCMS():
   #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
   tex2 = TLatex(-20.,50.,"Preliminary")
@@ -220,15 +235,14 @@ kValerror = k.getError()
 print "FINAL: ttbb Rreco = "+ str(recoR)+" +- "+str(recoRerror)
 print "FINAL: k = "+str(kVal)+" +- "+str(kValerror) 
 
-cR10 = TCanvas("R10", "R", 500, 500)
+cR10 = TCanvas("R10", "R", 1)#500, 500)
 nll = model2.createNLL(data)
 #nll = model2.createNLL(ttlf)
 #RooMinuit(nk1).migrad() 
 RFrame = fsig.frame()
 nll.plotOn(RFrame,RooFit.ShiftToZero()) 
-c1 = TCanvas("c1", "c1",1)# 500, 500)
 RFrame.SetMaximum(4.);RFrame.SetMinimum(0)
-RFrame.GetXaxis().SetTitle("nttbb/nttjj")
+RFrame.GetXaxis().SetTitle("nttbb/nttjj as r")
 RFrame.SetTitle("")
 RFrame.Draw()
 
@@ -244,9 +258,9 @@ lineTbb.Draw()
 #lineTbb2.SetLineStyle(3)
 #lineTbb2.Draw()
 
-l1 = TLegend(0.59,0.76,0.89,0.88)
-l1.AddEntry(lineTbb,"prefit","l")
-#l1.AddEntry(lineTbb2,"no-constraint","l")
+l1 = make_legend(0.49,0.76,0.93,0.88)
+l1.AddEntry(lineTbb,"prefit: r="+str(round(rttbb*10000)/10000),"l")
+l1.AddEntry(RFrame,"fit: r="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","l")
 l1.SetTextSize(0.04)
 l1.SetFillColor(0)
 l1.SetLineColor(0)
@@ -259,9 +273,54 @@ pt2.Draw()
 
 cR10.Print("R.eps")
 cR10.Print("R.png")
+################
+################
+################
+################
+cR00 = TCanvas("R00", "R", 1)#500, 500)
+nllK = model2.createNLL(data)
+#nll = model2.createNLL(ttlf)
+#RooMinuit(nk1).migrad() 
+RFrameK = k.frame()
+nllK.plotOn(RFrameK,RooFit.ShiftToZero()) 
+RFrameK.SetMaximum(4.);RFrameK.SetMinimum(0)
+RFrameK.GetXaxis().SetTitle("k")
+RFrameK.SetTitle("")
+RFrameK.Draw()
+
+lineK = TLine(RFrameK.GetXaxis().GetXmin() ,0.5,RFrameK.GetXaxis().GetXmax(),0.5)
+lineK.SetLineColor(kRed)
+lineK.Draw()
+
+lineTbbK = TLine(1,RFrameK.GetMaximum(),1,0)
+lineTbbK.SetLineStyle(2)
+lineTbbK.Draw()
+
+#lineTbb2 = TLine(0.0652239,RFrame.GetMaximum(),0.0652239,0)
+#lineTbb2.SetLineStyle(3)
+#lineTbb2.Draw()
+
+l1K = make_legend(0.49,0.76,0.93,0.88)
+l1K.AddEntry(lineTbbK,"prefit: k=1.0","l")
+l1K.AddEntry(RFrameK,"fit: k="+str(round(kVal*10000)/10000)+" #pm "+str(round(kValerror*10000)/10000)+"","l")
+l1K.SetTextSize(0.04)
+l1K.SetFillColor(0)
+l1K.SetLineColor(0)
+l1K.Draw()
+
+ptK = addLegendCMS()
+pt2K = addDecayMode("LL")
+ptK.Draw()
+pt2K.Draw()
+
+cR00.Print("K.eps")
+cR00.Print("K.png")
 
 
-
+################
+################
+################
+###########
 cR11 = TCanvas("R11", "R", 1)# 500, 500)
 xframe = x.frame()
 data.plotOn(xframe, RooFit.DataError(RooAbsData.SumW2) ) 
