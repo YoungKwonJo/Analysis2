@@ -49,7 +49,7 @@ def getEntries(mypath):
 
 #loc = "../"
 #loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
-loc = "/store/user/youngjo/Cattools/v7-4-6v2/"
+loc = "/store/user/youngjo/Cattools/v7-4-6v4/"
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
@@ -90,14 +90,16 @@ ttotheslist = [op_(ttbb), op_(ttb), op_(ttc), op_(ttcc),op_(ttlf) ]
 ttothers = mAND2(ttotheslist)
 
 #    [ ttbb,   ttb,    ttcc,   ttc,    ttlf,  tt others ]
-CS = [kRed-10, kRed+5, kRed-7, kRed+3, kRed+1,kViolet-3]
+#CS = [kRed-10, kRed+4, kRed-7, kRed+3, kRed+1,kViolet-3]
+CS = ["#660000", "#ffcc00", "#cc6600", "#cc6600", "#ff0000","#ff6565"]
 #     [ Single t, VV,        WJets,   Z+Jets ,  ttV
-BCS = [kPink-3,   kYellow-3, kGreen-3,kOrange-3, kAzure-2 ]
+#BCS = [kPink-3,   kYellow-3, kGreen-3,kOrange-3, kAzure-2 ]
+BCS = ["#ff00ff",   "#ffffff", "#33cc33","#3366ff", "#cccccc" ]
 #syst_col =TColor(1756, 0.3, 0.5, 0.5, "", 0.45)
 
 
-z="v7"
-zz="v6"
+z="v1"
+zz="v1"
 mcsamples=[
 
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+z), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
@@ -124,6 +126,11 @@ mcsamples=[
 {"name":"POWttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[4],  "label":"t#bar{t}+lf        "      },
 {"name":"POWttot",  "selection": GW(ttothers), "file": files(loc + ttbarPOW+z), "cx":ttcx, "color": CS[5],  "label":"t#bar{t} others"         },
 
+{"name":"TTWlNu", "selection": GW(), "file": files(loc + "ttWJetsToLNu"+z),  "cx":1.152,  "color": BCS[4],   "label":"t#bar{t}V          "    },
+{"name":"TTWqq",  "selection": GW(), "file": files(loc + "ttWJetsToQQ"+z),   "cx":1.152,  "color": BCS[4],   "label":"t#bar{t}V          "    },
+{"name":"TTZll",  "selection": GW(), "file": files(loc + "ttZToLLNuNu"+z),   "cx":2.232,  "color": BCS[4],   "label":"t#bar{t}V          "    },
+{"name":"TTZqq",  "selection": GW(), "file": files(loc + "ttZToQQ"+z),       "cx":2.232,  "color": BCS[4],   "label":"t#bar{t}V          "    },
+
 {"name":"STbt",   "selection": GW(), "file": files(loc + "SingleTbar_t"+z),  "cx":80.95,  "color": BCS[0],   "label":"Single t"    },
 {"name":"STt",    "selection": GW(), "file": files(loc + "SingleTop_t"+z),   "cx":136.02, "color": BCS[0],   "label":"Single t"    },
 {"name":"STbtW",  "selection": GW(), "file": files(loc + "SingleTbar_tW"+z), "cx":35.6,   "color": BCS[0],   "label":"Single t"      },
@@ -135,11 +142,6 @@ mcsamples=[
 {"name":"WJets",  "selection": GW(), "file": files(loc + "WJets"+z),         "cx":61526.7,"color": BCS[2],    "label":"WJets      "       },
 {"name":"DYJets", "selection": GW(), "file": files(loc + "DYJets"+z),        "cx":6025.2, "color": BCS[3],    "label":"DYJets    "      },
 {"name":"DYJets10", "selection": GW(), "file": files(loc + "DYJets_10to50"+z),"cx":18271.92, "color": BCS[3], "label":"DYJets    "      },
-
-{"name":"TTWlNu", "selection": GW(), "file": files(loc + "ttWJetsToLNu"+z),  "cx":1.152,  "color": BCS[4],   "label":"t#bar{t}V          "    },
-{"name":"TTWqq",  "selection": GW(), "file": files(loc + "ttWJetsToQQ"+z),   "cx":1.152,  "color": BCS[4],   "label":"t#bar{t}V          "    },
-{"name":"TTZll",  "selection": GW(), "file": files(loc + "ttZToLLNuNu"+z),   "cx":2.232,  "color": BCS[4],   "label":"t#bar{t}V          "    },
-{"name":"TTZqq",  "selection": GW(), "file": files(loc + "ttZToQQ"+z),       "cx":2.232,  "color": BCS[4],   "label":"t#bar{t}V          "    },
 
 
 {"name":"ttH2non", "selection": GW(), "file": files(loc + "ttH_nonbb"+z),  "cx":0.5058,   "color": BCS[4],   "label":"t#bar{t}H         " ,"isStack":False   },

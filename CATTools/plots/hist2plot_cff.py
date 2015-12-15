@@ -102,15 +102,18 @@ def plotTH2F(filename,mon,step,mcsamples):
     if type(h1) is not TH2F :  
       return
     h1.SetTitle("")
-    h1.SetLineColor(mc['color'])
+    ci = TColor.GetColor(mc['color']);
+    h1.SetLineColor(ci)
     h1.Draw("colz")
 
     leg = make_legend(0.5,0.91, 0.75,0.99)
     leg.AddEntry(h1, ("%s : "%mc['label']) + ("%.0f"%h1.Integral()), "l");
     legs.append(copy.deepcopy(leg))
     legs[i].Draw()
-  output = "plots/TH2_"+mon+"_"+step+".eps"
+  output = "plots/eps/TH2_"+mon+"_"+step+".eps"
+  output2 = "plots/png/TH2_"+mon+"_"+step+".png"
   c1.Print(output)
+  c1.Print(output2)
   f.Close()
   c1.Close()
 
@@ -401,7 +404,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
 
   isStat = mon.find("Stat")>-1
   if isStat : 
-    print "step: "+step
+    print "Stat step: "+step
 
   for i,mc in enumerate(mcsamples):
     isMC = mc['label'].find("DATA")==-1
@@ -448,6 +451,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       hmctot.Add( h2 )
     hmcmerge.Add(h2)
     #hs.Add(h2)
+    ci = TColor.GetColor(mc['color']);
 
     selEvet=h2.Integral() 
     selEnts=h2.GetEntries()
@@ -456,7 +460,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
     if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
     if  (not isSameNext) and isPowheg: 
       h3=hmcmerge.Clone("h"+mc['name'])
-      h3.SetFillColor(mc['color'])
+      h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       if isStat:
@@ -467,7 +471,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       hmcmerge.Reset()
     elif not isSameNext and not isTTH : 
       h3=hmcmerge.Clone("h"+mc['name'])
-      h3.SetFillColor(mc['color'])
+      h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
 
       label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
@@ -483,7 +487,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       #h3.SetLineColor(kBlack)
       hmcSig.Add(h3)
-      hmcSig.SetLineColor(mc['color'])
+      hmcSig.SetLineColor(ci)
       hmcSig.SetTitle(mc['label'])
 #      label = ("%s"%mc['label']) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
 #      leg2.AddEntry(hmcSig, label, "l")
@@ -594,8 +598,10 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   c1.Modified()
   c1.cd()
 
-  output = "plots/TH1_"+mon+"_"+step+".eps"
+  output = "plots/eps/TH1_"+mon+"_"+step+".eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step+".png"
   c1.Print(output)
+  c1.Print(output2)
 
   #f.Close()
   #c1.Close()
@@ -661,7 +667,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
 
   isStat = mon.find("Stat")>-1
   if isStat : 
-    print "step: "+step
+    print "Stat step: "+step
 
   for i,mc in enumerate(mcsamples):
     isMC = mc['label'].find("DATA")==-1
@@ -696,7 +702,8 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     #if h2ll.Integral()>0 :  h2ll.Scale(lumi)
 
     ###############
-    h2ll.SetFillColor(mc['color'])
+    ci = TColor.GetColor(mc['color']);
+    h2ll.SetFillColor(ci)
     h2ll.SetLineColor(kBlack)
 
     isTTH = mc['name'].find("ttH")>-1
@@ -729,7 +736,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
     if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
     if  (not isSameNext) and isPowheg:
       h3=hmcmerge.Clone("h"+mc['name'])
-      h3.SetFillColor(mc['color'])
+      h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg.AddEntry(h3, label, "f")
@@ -741,7 +748,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
       hmcmerge.Reset()
     elif not isSameNext and not isTTH :
       h3=hmcmerge.Clone("h"+mc['name'])
-      h3.SetFillColor(mc['color'])
+      h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg2.AddEntry(h3, label, "f")
@@ -755,7 +762,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       #h3.SetLineColor(kBlack)
       hmcSig.Add(h3)
-      hmcSig.SetLineColor(mc['color'])
+      hmcSig.SetLineColor(ci)
       hmcSig.SetTitle(mc['label'])
       #label = ("%s"%mc['label']) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
       #leg2.AddEntry(hmcSig, label, "l")
@@ -890,8 +897,10 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   c1.Modified()
   c1.cd()
 
-  output = "plots/TH1_"+mon+"_"+step+"LL.eps"
+  output = "plots/eps/TH1_"+mon+"_"+step+"LL.eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step+"LL.png"
   c1.Print(output)
+  c1.Print(output2)
 
   #f.Close()
   #c1.Close()

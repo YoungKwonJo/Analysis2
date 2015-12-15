@@ -184,24 +184,43 @@ def ntuple2hist2d(json,cuts):
   monitors2=json['monitors2']
   datasamples = json['datasamples']
   for i,mc in enumerate(mcsamples):
-    f = TFile.Open(mcsamples[i]['file'],"read")
+    chain = TChain("cattree/nom")
+    chain2 = TChain("cattree/nom2")
+    for afile in mcsamples[i]['file']:
+      f = TFile.Open(afile)
+      if None == f: continue
+      chain.Add(afile)
+      chain2.Add(afile)
+    #f = TFile.Open(mcsamples[i]['file'],"read")
     #tree = f.ntuple
-    tree = f.myresult2
+    tree = chain
+    tree2 = chain2
 
-    #htot = f.Get("hNEvent")
-    htot = f.Get("hsumWeight")
-    Ntot = htot.GetBinContent(1)
-    #if log : print "mc:"+mc['name']+":"+str(round(Ntot))
+    htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
+    tree.Project("htemp"+mcsamples[i]['name'],"1","weight/abs(weight)")
+    Ntot = htemp.GetBinContent(1)
 
-    h= h+h2_all_maker(tree,mcsamples[i],monitors2,cuts,mceventweight,Ntot)
-    f.Close()
+
+    h= h+h2_all_maker(tree2,mcsamples[i],monitors2,cuts,mceventweight,Ntot)
+   # f.Close()
 
   for i,mc in enumerate(datasamples):
-    f = TFile.Open(mcsamples[i]['file'],"read")
+    chain = TChain("cattree/nom")
+    chain2 = TChain("cattree/nom2")
+    for afile in datasamples[i]['file']:
+      f = TFile.Open(afile)
+      if None == f: continue
+      chain.Add(afile)
+      chain2.Add(afile)
+    #f = TFile.Open(datasamples[i]['file'],"read")
     #tree = f.ntuple
-    tree = f.myresult2
-    h= h+h2_all_maker(tree,datasamples[i],monitors2,cuts,1,1)
-    f.Close()
+    tree = chain
+    tree2 = chain2
+    #htot = f.Get("hNEvent")
+    #htot = f.Get("hsumWeight")
+    Ntot = 1 #htot.GetBinContent(1)
+
+    h= h+h2_all_maker(tree2,datasamples[i],monitors2,cuts,1,1)
   return h
 
 

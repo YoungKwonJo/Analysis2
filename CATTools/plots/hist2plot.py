@@ -17,9 +17,6 @@ gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
 mon = monitors
-#for i,ii in enumerate(monitors):
-#  #print monitors[ii]
-#  mon+=monitors[ii]
 
 mon2 = []
 for i,ii in enumerate(monitors2d):
@@ -28,20 +25,13 @@ for i,ii in enumerate(monitors2d):
 
 json = {
 "file": "hist_all.root",
-#"file": "hist_all2.root",
 "mcsamples" : mcsamples,
 "datasamples" : datasamples,
-#"cuts" : ["S0","S1","S2","S3","S4","S5"],
-#"cuts" : ["S0","S1","S2","S3"],
-#"cuts" : ["S0","S1","S2","S3","S4","S5","S6"],
 "cuts" : [
 "S0mm","S1mm","S2mm","S3mm","S4mm","S5mm","S6mm","S7mm",
 "S0ee","S1ee","S2ee","S3ee","S4ee","S5ee","S6ee","S7ee",
 "S0em","S1em","S2em","S3em","S4em","S5em","S6em","S7em"
    ],
-#"cuts" : ["S6"],
-
-#"monitors" : monitors["jetMon3"]
 "monitors" : mon,
 "monitors2" : mon2
 }
@@ -68,18 +58,11 @@ for step in json['cuts']:
 
 jsonLL = {
 "file": "hist_all.root",
-#"file": "hist_all2.root",
 "mcsamples" : mcsamples,
 "datasamples" : datasamples,
-#"cuts" : ["S0","S1","S2","S3","S4","S5"],
-#"cuts" : ["S0","S1","S2","S3"],
-#"cuts" : ["S0","S1","S2","S3","S4","S5","S6"],
 "cuts" : [
 "S0","S1","S2","S3","S4","S5","S6","S7"
    ],
-#"cuts" : ["S6"],
-
-#"monitors" : monitors["jetMon3"]
 "monitors" : mon,
 "monitors2" : mon2
 }
