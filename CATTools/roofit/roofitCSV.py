@@ -14,6 +14,7 @@ import copy
 HN = "jet3CSV_jet4CSV"
 from mcsample_cfi import mcsamples,datasamples 
 lumi = 2110. 
+Step = "S6"
 
 #histograms = ["name":"name","hist": ]
 histograms = {}
@@ -22,9 +23,9 @@ f= TFile.Open("hist_roofit.root")
 for mc in mcsamples:
   name = mc['name']
   color = mc['color'] 
-  h1 = f.Get("h2_"+name+"_"+HN+"_S6mm").Clone("h2_"+name+"_S6LL")
-  h2 = f.Get("h2_"+name+"_"+HN+"_S6ee")
-  h3 = f.Get("h2_"+name+"_"+HN+"_S6em")
+  h1 = f.Get("h2_"+name+"_"+HN+"_"+Step+"mm").Clone("h2_"+name+"_"+Step+"LL")
+  h2 = f.Get("h2_"+name+"_"+HN+"_"+Step+"ee")
+  h3 = f.Get("h2_"+name+"_"+HN+"_"+Step+"em")
   if h1.Integral()>0 :  h1.Scale(mc['cx']*lumi)
   if h2.Integral()>0 :  h2.Scale(mc['cx']*lumi)
   if h3.Integral()>0 :  h3.Scale(mc['cx']*lumi)
@@ -37,12 +38,12 @@ for mc in mcsamples:
 for i in range(1):
   name_ = "DATA"
   color = mc['color'] 
-  h1 = f.Get("h2_MuMu1_"+HN+"_S6mm").Clone("h2_"+name_+"_S6LL")
+  h1 = f.Get("h2_MuMu1_"+HN+"_"+Step+"mm").Clone("h2_"+name_+"_"+Step+"LL")
   h1.Reset()
   for j in range(1,4):
-    h11 = f.Get("h2_MuMu"+str(j)+"_"+HN+"_S6mm")
-    h2 = f.Get("h2_ElEl"+str(j)+"_"+HN+"_S6ee")
-    h3 = f.Get("h2_MuEl"+str(j)+"_"+HN+"_S6em")
+    h11 = f.Get("h2_MuMu"+str(j)+"_"+HN+"_"+Step+"mm")
+    h2 = f.Get("h2_ElEl"+str(j)+"_"+HN+"_"+Step+"ee")
+    h3 = f.Get("h2_MuEl"+str(j)+"_"+HN+"_"+Step+"em")
     h1.Add(h11)
     h1.Add(h2)
     h1.Add(h3)
