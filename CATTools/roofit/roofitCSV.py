@@ -33,9 +33,26 @@ def addLegendCMS():
   tex2.SetTextFont(42)
   tex2.SetTextSize(0.05)
   tex2.SetTextSizePixels(24)
-  tex2.Draw()
+  #tex2.Draw()
 
   return tex2
+
+def addLegend(GEN):
+  #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
+  tex2 = TLatex(-20.,50.,GEN)
+  tex2.SetNDC()
+  tex2.SetTextAlign(12)
+  tex2.SetX(0.70)
+  tex2.SetY(0.968)
+  #tex2.SetTextColor(2)
+  tex2.SetTextFont(42)
+  tex2.SetTextSize(0.05)
+  tex2.SetTextSizePixels(24)
+  #tex2.Draw()
+
+  return tex2
+
+
 
 def addDecayMode(ll):
   ll2="l^{#mp}l^{#pm} channel"
@@ -65,13 +82,34 @@ gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
 
-#ROOT.gROOT.Macro("rootlogon.C")
-#h1_DYJets_MET_S4mm
-#HN = "nBJet30M"
 HN = "jet3CSV_jet4CSV"
 from mcsample_cfi import mcsamples,datasamples 
 lumi = 2110. 
 Step = "S6"
+
+import sys
+if len(sys.argv) < 3:
+  sys.exit()
+
+arg1 = sys.argv[1]
+arg2 = sys.argv[2]
+
+
+freeTTB  = False
+freeTTCC = False
+if int(arg1)==1 : freeTTB=True
+if int(arg1)==2 : freeTTCC=True
+
+GEN="MG5"
+if int(arg2)==1 : GEN="POW"
+if int(arg2)==2 : GEN="AMC"
+
+pt = addLegendCMS()
+pt2 = addDecayMode("LL")
+pt3 = addLegend("Madgraph")
+if GEN == "POW": pt3=addLegend("Powheg")
+if GEN == "AMC": pt3=addLegend("aMC@NLO")
+
 
 #histograms = ["name":"name","hist": ]
 histograms = {}
@@ -107,27 +145,27 @@ for i in range(1):
   histograms[name_]={"h1":copy.deepcopy(h1),"color":kBlack,"exp":h1.Integral()}
 
 print str(type(histograms))
-print str(histograms["MG5ttbb"]["color"])
-print str(histograms["MG5ttbb"]["exp"])
+print str(histograms[GEN+"ttbb"]["color"])
+print str(histograms[GEN+"ttbb"]["exp"])
 print ""
 print str(histograms["DATA"]["color"])
 print str(histograms["DATA"]["exp"])
 
-signals1= ['MG5ttbb', 'MG5ttb']
-signals2= ['MG5ttcc','MG5ttc', 'MG5ttlf']#, 'MG5ttot']
-backgrounds1= ["MG5ttot"]
+signals1= [GEN+'ttbb', GEN+'ttb']
+signals2= [GEN+'ttcc',GEN+'ttc', GEN+'ttlf']#, GEN+'ttot']
+backgrounds1= [GEN+"ttot"]
 backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ', 'DYJets']
 higgs= ['ttH2non', 'ttH2bb']
 
-bkghist = histograms['MG5ttot']["h1"].Clone("bkghist")
+bkghist = histograms[GEN+'ttot']["h1"].Clone("bkghist")
 bkghist.Reset()
 
-ttcclfhist = histograms['MG5ttot']["h1"].Clone("ttcclfhist")
+ttcclfhist = histograms[GEN+'ttot']["h1"].Clone("ttcclfhist")
 ttcclfhist.Reset()
 for hh in signals2:
   h = histograms[hh]["h1"]
   ttcclfhist.Add(h)
-histograms["MG5ttcclf"]={"h1":copy.deepcopy(ttcclfhist),"color":kOrange,"exp":ttcclfhist.Integral()}
+histograms[GEN+"ttcclf"]={"h1":copy.deepcopy(ttcclfhist),"color":kOrange,"exp":ttcclfhist.Integral()}
 
 for hh in backgrounds2:
   h = histograms[hh]["h1"]
@@ -136,16 +174,16 @@ for hh in backgrounds2:
 histograms["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
 
 
-histograms["MG5ttcc"]["h1"].Add(histograms["MG5ttc"]["h1"])
+histograms[GEN+"ttcc"]["h1"].Add(histograms[GEN+"ttc"]["h1"])
 
-n_ttbb = histograms["MG5ttbb"]["exp"]
-n_ttb  = histograms["MG5ttb"]["exp"]
-#n_tt2b = histograms["MG5tt2b"]["exp"]
-n_ttcc = histograms["MG5ttcc"]["exp"]+histograms["MG5ttc"]["exp"]
-#n_ttc = histograms["MG5ttc"]["exp"]
-n_ttlf = histograms["MG5ttlf"]["exp"]
-n_ttcclf = histograms["MG5ttcclf"]["exp"]
-n_ttot = histograms["MG5ttot"]["exp"]
+n_ttbb = histograms[GEN+"ttbb"]["exp"]
+n_ttb  = histograms[GEN+"ttb"]["exp"]
+#n_tt2b = histograms[GEN+"tt2b"]["exp"]
+n_ttcc = histograms[GEN+"ttcc"]["exp"]+histograms[GEN+"ttc"]["exp"]
+#n_ttc = histograms[GEN+"ttc"]["exp"]
+n_ttlf = histograms[GEN+"ttlf"]["exp"]
+n_ttcclf = histograms[GEN+"ttcclf"]["exp"]
+n_ttot = histograms[GEN+"ttot"]["exp"]
 n_bkg = histograms["bkg"]["exp"]
 n_data = histograms["DATA"]["exp"]
 
@@ -176,10 +214,10 @@ RttbReco =RooRealVar("RttbReco", "RttbReco", rttb, rttb, rttb);
 #Rtt2bReco=RooRealVar("Rtt2bReco","Rtt2bReco",rtt2b,rtt2b,rtt2b);
 RttccReco=RooRealVar("RttccReco","RttccReco",rttcc,rttcc,rttcc);
 
-fsig   =RooRealVar(    "fsig",                "fsig",           rttbb, 0.0, 0.2) 
-#fsig2  =RooFormulaVar("fsig2",               "fsig2","@0/@1*@2",RooArgList(fsig,RttbbReco,RttbReco) )  # constraint fsig2 with fsig
-fsig2  =RooRealVar(   "fsig2",                "fsig2",           rttb, 0.0, 0.2)  # free fsig2
-fsigcc =RooRealVar(  "fsigcc",              "fsigcc",           rttcc, 0.0, 0.5)  # free fsigcc
+fsig   =RooRealVar(    "fsig",                "fsig",           rttbb, 0.0, 0.18) 
+fsig2con  =RooFormulaVar("fsig2con",               "fsig2","@0/@1*@2",RooArgList(fsig,RttbbReco,RttbReco) )  # constraint fsig2 with fsig
+fsig2  =RooRealVar(   "fsig2",                "fsig2",          rttb, 0.0, 0.2)  # free fsig2
+fsigcc =RooRealVar(  "fsigcc",              "fsigcc",           rttcc, 0.0, 0.4)  # free fsigcc
 k      =RooRealVar(       "k","normalization factor",           1, 0.5, 1.5) 
 
 nttjj =RooRealVar(    "nttjj","number of ttjj events",                            n_ttjj , n_ttjj, n_ttjj)
@@ -189,20 +227,21 @@ knttot=RooFormulaVar("knttot","number of ttot events after fitting","k*nttot",  
 nbkg  =RooRealVar(     "nbkg","number of background events",                      n_bkg , n_bkg, n_bkg)
 knbkg=RooFormulaVar("knbkg","number of background events after fitting","k*nbkg", RooArgList(k,nbkg) )
 
-nttcc  =RooRealVar(     "nttcc","number of ttcc events",                            n_ttcc , n_ttcc, n_ttcc)
-#nttbar =RooRealVar(    "nttbar","number of ttbar events",                           n_ttbar , n_ttbar, n_ttbar)
-#knttbar=RooFormulaVar("knttbar","number of ttbar events after fitting","k*nttbar",  RooArgList(k,nttbar) )
+######
+nttcc =RooRealVar(   "nttcc","number of ttcc events",                         n_ttcc , n_ttcc, n_ttcc)
+knttcc=RooFormulaVar("knttcc","number of ttcc events after fitting","k*nttcc",RooArgList(k,nttcc) )
+
 
 
 #histogram
 data    = RooDataHist("data",    "data set with (x)",   RooArgList(x, y), histograms["DATA"]["h1"])
-ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), histograms["MG5ttbb"]["h1"])
-ttb     = RooDataHist("ttb",     "ttb  set with (x)",   RooArgList(x, y), histograms["MG5ttb"]["h1"])
-#tt2b    = RooDataHist("tt2b",    "tt2b set with (x)",  RooArgList(x, y), histograms["MG5tt2b"]["h1"])
-ttcc    = RooDataHist("ttcc",    "ttcc set with (x)",   RooArgList(x, y), histograms["MG5ttcc"]["h1"] )
-ttlf    = RooDataHist("ttlf",    "ttlf set with (x)",   RooArgList(x, y), histograms["MG5ttlf"]["h1"])
-ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", RooArgList(x, y), histograms["MG5ttcclf"]["h1"])
-ttot    = RooDataHist("ttot",    "ttot set with (x)",   RooArgList(x, y), histograms["MG5ttot"]["h1"])
+ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), histograms[GEN+"ttbb"]["h1"])
+ttb     = RooDataHist("ttb",     "ttb  set with (x)",   RooArgList(x, y), histograms[GEN+"ttb"]["h1"])
+#tt2b    = RooDataHist("tt2b",    "tt2b set with (x)",  RooArgList(x, y), histograms[GEN+"tt2b"]["h1"])
+ttcc    = RooDataHist("ttcc",    "ttcc set with (x)",   RooArgList(x, y), histograms[GEN+"ttcc"]["h1"] )
+ttlf    = RooDataHist("ttlf",    "ttlf set with (x)",   RooArgList(x, y), histograms[GEN+"ttlf"]["h1"])
+ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", RooArgList(x, y), histograms[GEN+"ttcclf"]["h1"])
+ttot    = RooDataHist("ttot",    "ttot set with (x)",   RooArgList(x, y), histograms[GEN+"ttot"]["h1"])
 bkg     = RooDataHist("bkg",     "bkg  set with (x)",   RooArgList(x, y), histograms["bkg"]["h1"])
 
 #print "ttbar type: "+str(type(ttbar))
@@ -219,9 +258,10 @@ ttotpdf      = RooHistPdf("ttotpdf",     "ttotpdf",      RooArgSet(RooArgList(x,
 bkgpdf       = RooHistPdf("bkgpdf",      "bkgpdf",       RooArgSet(RooArgList(x,y)), bkg)
 
 #for separate ttcc
-#model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, tt2bpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2,fsigcc))
-#for merge ttcc+ttlf
-model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
+model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf,  ttcclfpdf), RooArgList(fsig,fsig2con))
+if freeTTB      : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
+elif freeTTCC: model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2con, fsigcc))
+
 #model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,knbkg)) # k*bkg
 model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,nbkg)) # fixing bkg
 model2.fitTo(data)
@@ -238,6 +278,19 @@ model2.fitTo(data)
 ################
 recoR      = fsig.getVal()
 recoRerror = fsig.getError()
+
+recoR2=1.
+recoR2error=0.0
+if freeTTB:
+  recoR2      = fsig2.getVal()
+  recoR2error = fsig2.getError()
+
+recoRcc=1.
+recoRccerror=0.0
+if freeTTCC:
+  recoRcc      = fsigcc.getVal()
+  recoRccerror = fsigcc.getError()
+
 
 kVal      = k.getVal()
 kValerror = k.getError()
@@ -277,13 +330,21 @@ l1.SetFillColor(0)
 l1.SetLineColor(0)
 l1.Draw()
 
-pt = addLegendCMS()
-pt2 = addDecayMode("LL")
 pt.Draw()
 pt2.Draw()
+pt3.Draw()
 
-cR10.Print("R.eps")
-cR10.Print("R.png")
+if freeTTB:
+  cR10.Print("plots/"+GEN+"_R_freeTTB.eps")
+  cR10.Print("plots/"+GEN+"_R_freeTTB.eps")
+elif freeTTCC:              
+  cR10.Print("plots/"+GEN+"_R_freeTTCC.eps")
+  cR10.Print("plots/"+GEN+"_R_freeTTCC.eps")
+else :                      
+  cR10.Print("plots/"+GEN+"_R_constraintTTB.eps")
+  cR10.Print("plots/"+GEN+"_R_constraintTTB.eps")
+
+
 ################
 ################
 ################
@@ -319,18 +380,25 @@ l1K.SetFillColor(0)
 l1K.SetLineColor(0)
 l1K.Draw()
 
-ptK = addLegendCMS()
-pt2K = addDecayMode("LL")
-ptK.Draw()
-pt2K.Draw()
+pt.Draw()
+pt2.Draw()
+pt3.Draw()
 
-cR00.Print("K.eps")
-cR00.Print("K.png")
+if freeTTB:
+  cR00.Print("plots/"+GEN+"_K_freeTTB.eps")
+  cR00.Print("plots/"+GEN+"_K_freeTTB.eps")
+elif freeTTCC:              
+  cR00.Print("plots/"+GEN+"_K_freeTTCC.eps")
+  cR00.Print("plots/"+GEN+"_K_freeTTCC.eps")
+else :                      
+  cR00.Print("plots/"+GEN+"_K_constraintTTB.eps")
+  cR00.Print("plots/"+GEN+"_K_constraintTTB.eps")
+
 
 ################
 ################
 ################
-###########
+################
 cR11 = TCanvas("R11", "R", 1)# 500, 500)
 xframe = x.frame()
 data.plotOn(xframe, RooFit.DataError(RooAbsData.SumW2) ) 
@@ -342,13 +410,19 @@ print "chi2 = "+ str(chi2)
 print "ndof = "+ str(ndof)
 xframe.Draw()
 
-pt3 = addLegendCMS()
-pt4 = addDecayMode("LL")
+pt.Draw()
+pt2.Draw()
 pt3.Draw()
-pt4.Draw()
 
-cR11.Print("jet3CSV.eps")
-cR11.Print("jet3CSV.png")
+if freeTTB:
+  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.eps")
+  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.eps")
+elif freeTTCC:              
+  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTCC.eps")
+  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTCC.eps")
+else :                      
+  cR11.Print("plots/"+GEN+"_jet3CSV_constraintTTB.eps")
+  cR11.Print("plots/"+GEN+"_jet3CSV_constraintTTB.eps")
 
 ################
 ################
@@ -366,37 +440,77 @@ print "chi2 = "+ str(chi22)
 print "ndof = "+ str(ndof2)
 yframe.Draw()
 
-pt5=addLegendCMS()
-pt6=addDecayMode("LL")
-pt5.Draw()
-pt6.Draw()
+pt.Draw()
+pt2.Draw()
+pt3.Draw()
 
-cR12.Print("jet4CSV.eps")
-cR12.Print("jet4CSV.eps")
+if freeTTB:
+  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.eps")
+  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.eps")
+elif freeTTCC:
+  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTCC.eps")
+  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTCC.eps")
+else :
+  cR12.Print("plots/"+GEN+"_jet4CSV_constraintTTB.eps")
+  cR12.Print("plots/"+GEN+"_jet4CSV_constraintTTB.eps")
+###########################
+###########################
+###########################
+###########################
+###########################
+###########################
+if freeTTB:  
+  nll22 = model2.createNLL(data)
+  m=RooMinuit(nll22)
+  frameNLLContour = m.contour(fsig, fsig2,1,2,3)
+  cNLLContour = TCanvas("cNLLContour", "cNLLContour", 1)
+
+  frameNLLContour.GetXaxis().SetTitle("R as ttbb/ttjj")
+  frameNLLContour.GetYaxis().SetTitle("R2 as ttb/ttjj")
+  frameNLLContour.Draw()
+
+  pt.Draw()
+  pt2.Draw()
+  pt3.Draw()
+
+  l2 = make_legend(0.49,0.76,0.93,0.88)
+  l2.AddEntry(RFrame,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","p")
+  l2.AddEntry(RFrame,"fit: R2="+str(round(recoR2*10000)/10000)+" #pm "+str(round(recoR2error*10000)/10000)+"","p")
+  l2.SetTextSize(0.04)
+  l2.SetFillColor(0)
+  l2.SetLineColor(0)
+  l2.Draw()
+
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.eps");
 
 ###########################
 ###########################
 ###########################
 ###########################
-###########################
-###########################
-  
-nll22 = model2.createNLL(data)
-m=RooMinuit(nll22)
-frameNLLContour = m.contour(fsig, fsig2,1,2,3)
-cNLLContour = TCanvas("cNLLContour", "cNLLContour", 1)
+if freeTTCC:  
+  nll22 = model2.createNLL(data)
+  m=RooMinuit(nll22)
+  frameNLLContour = m.contour(fsig, fsigcc,1,2,3)
+  cNLLContour = TCanvas("cNLLContour", "cNLLContour", 1)
 
-frameNLLContour.GetXaxis().SetTitle("R as ttbb/ttjj")
-frameNLLContour.GetYaxis().SetTitle("R2 as ttb/ttjj")
-frameNLLContour.Draw()
+  frameNLLContour.GetXaxis().SetTitle("R as ttbb/ttjj")
+  frameNLLContour.GetYaxis().SetTitle("R3 as ttcc/ttjj")
+  frameNLLContour.Draw()
 
-cNLLContour.Print("NLL_fsigVSfsig2.eps");
+  pt.Draw()
+  pt2.Draw()
+  pt3.Draw()
 
-###########################
-###########################
-###########################
-###########################
-###########################
+  l2 = make_legend(0.49,0.76,0.93,0.88)
+  l2.AddEntry(RFrame,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","p")
+  l2.AddEntry(RFrame,"fit: Rcc="+str(round(recoRcc*10000)/10000)+" #pm "+str(round(recoRccerror*10000)/10000)+"","p")
+  l2.SetTextSize(0.04)
+  l2.SetFillColor(0)
+  l2.SetLineColor(0)
+  l2.Draw()
+
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.eps");
+
 ###########################
 ###########################
 ###########################
