@@ -28,7 +28,7 @@ def addLegendCMS():
   tex2.SetNDC()
   tex2.SetTextAlign(12)
   tex2.SetX(0.25)
-  tex2.SetY(0.968)
+  tex2.SetY(0.97)
   tex2.SetTextColor(2)
   tex2.SetTextFont(42)
   tex2.SetTextSize(0.05)
@@ -43,7 +43,7 @@ def addLegend(GEN):
   tex2.SetNDC()
   tex2.SetTextAlign(12)
   tex2.SetX(0.70)
-  tex2.SetY(0.968)
+  tex2.SetY(0.97)
   #tex2.SetTextColor(2)
   tex2.SetTextFont(42)
   tex2.SetTextSize(0.05)
@@ -64,7 +64,7 @@ def addDecayMode(ll):
   chtitle.SetNDC()
   chtitle.SetTextAlign(12)
   chtitle.SetX(0.20)
-  chtitle.SetY(0.91)
+  chtitle.SetY(0.85)
   chtitle.SetTextFont(42)
   chtitle.SetTextSize(0.05)
   chtitle.SetTextSizePixels(24)
@@ -216,7 +216,7 @@ RttccReco=RooRealVar("RttccReco","RttccReco",rttcc,rttcc,rttcc);
 
 fsig   =RooRealVar(    "fsig",                "fsig",           rttbb, 0.0, 0.18) 
 fsig2con  =RooFormulaVar("fsig2con",               "fsig2","@0/@1*@2",RooArgList(fsig,RttbbReco,RttbReco) )  # constraint fsig2 with fsig
-fsig2  =RooRealVar(   "fsig2",                "fsig2",          rttb, 0.0, 0.2)  # free fsig2
+fsig2  =RooRealVar(   "fsig2",                "fsig2",          rttb, 0.0, 0.3)  # free fsig2
 fsigcc =RooRealVar(  "fsigcc",              "fsigcc",           rttcc, 0.0, 0.4)  # free fsigcc
 k      =RooRealVar(       "k","normalization factor",           1, 0.5, 1.5) 
 
@@ -301,6 +301,9 @@ print "FINAL: k = "+str(kVal)+" +- "+str(kValerror)
 
 ################
 ################
+lineKKK = TLine(0,0,0,0)
+lineKKK.SetLineColor(kBlue)
+lineKKK.SetLineWidth(3)
 ################
 ################
 cR10 = TCanvas("R10", "R", 1)#500, 500)
@@ -324,7 +327,7 @@ lineTbb.Draw()
 
 l1 = make_legend(0.49,0.76,0.93,0.88)
 l1.AddEntry(lineTbb,"prefit: R="+str(round(rttbb*10000)/10000),"l")
-l1.AddEntry(RFrame,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","l")
+l1.AddEntry(lineKKK,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","l")
 l1.SetTextSize(0.04)
 l1.SetFillColor(0)
 l1.SetLineColor(0)
@@ -336,13 +339,13 @@ pt3.Draw()
 
 if freeTTB:
   cR10.Print("plots/"+GEN+"_R_freeTTB.eps")
-  cR10.Print("plots/"+GEN+"_R_freeTTB.eps")
+  cR10.Print("plots/"+GEN+"_R_freeTTB.png")
 elif freeTTCC:              
   cR10.Print("plots/"+GEN+"_R_freeTTCC.eps")
-  cR10.Print("plots/"+GEN+"_R_freeTTCC.eps")
+  cR10.Print("plots/"+GEN+"_R_freeTTCC.png")
 else :                      
   cR10.Print("plots/"+GEN+"_R_constraintTTB.eps")
-  cR10.Print("plots/"+GEN+"_R_constraintTTB.eps")
+  cR10.Print("plots/"+GEN+"_R_constraintTTB.png")
 
 
 ################
@@ -358,8 +361,9 @@ nllK.plotOn(RFrameK,RooFit.ShiftToZero())
 RFrameK.SetMaximum(4.);RFrameK.SetMinimum(0)
 RFrameK.GetXaxis().SetTitle("k")
 RFrameK.SetTitle("")
+#RFrameK.SetLineColor(kBlue)
 RFrameK.Draw()
-
+print "RFameK: "+str(type(RFrameK))
 lineK = TLine(RFrameK.GetXaxis().GetXmin() ,0.5,RFrameK.GetXaxis().GetXmax(),0.5)
 lineK.SetLineColor(kRed)
 lineK.Draw()
@@ -374,7 +378,7 @@ lineTbbK.Draw()
 
 l1K = make_legend(0.49,0.76,0.93,0.88)
 l1K.AddEntry(lineTbbK,"prefit: k=1.0","l")
-l1K.AddEntry(RFrameK,"fit: k="+str(round(kVal*10000)/10000)+" #pm "+str(round(kValerror*10000)/10000)+"","l")
+l1K.AddEntry(lineKKK,"fit: k="+str(round(kVal*10000)/10000)+" #pm "+str(round(kValerror*10000)/10000)+"","l")
 l1K.SetTextSize(0.04)
 l1K.SetFillColor(0)
 l1K.SetLineColor(0)
@@ -386,13 +390,13 @@ pt3.Draw()
 
 if freeTTB:
   cR00.Print("plots/"+GEN+"_K_freeTTB.eps")
-  cR00.Print("plots/"+GEN+"_K_freeTTB.eps")
+  cR00.Print("plots/"+GEN+"_K_freeTTB.png")
 elif freeTTCC:              
   cR00.Print("plots/"+GEN+"_K_freeTTCC.eps")
-  cR00.Print("plots/"+GEN+"_K_freeTTCC.eps")
+  cR00.Print("plots/"+GEN+"_K_freeTTCC.png")
 else :                      
   cR00.Print("plots/"+GEN+"_K_constraintTTB.eps")
-  cR00.Print("plots/"+GEN+"_K_constraintTTB.eps")
+  cR00.Print("plots/"+GEN+"_K_constraintTTB.png")
 
 
 ################
@@ -408,6 +412,7 @@ chi2 = xframe.chiSquare(2)
 ndof = xframe.GetNbinsX()
 print "chi2 = "+ str(chi2)
 print "ndof = "+ str(ndof)
+xframe.SetMaximum(xframe.GetMaximum()*1.5)
 xframe.Draw()
 
 pt.Draw()
@@ -416,13 +421,13 @@ pt3.Draw()
 
 if freeTTB:
   cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.eps")
-  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.eps")
+  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.png")
 elif freeTTCC:              
   cR11.Print("plots/"+GEN+"_jet3CSV_freeTTCC.eps")
-  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTCC.eps")
+  cR11.Print("plots/"+GEN+"_jet3CSV_freeTTCC.png")
 else :                      
   cR11.Print("plots/"+GEN+"_jet3CSV_constraintTTB.eps")
-  cR11.Print("plots/"+GEN+"_jet3CSV_constraintTTB.eps")
+  cR11.Print("plots/"+GEN+"_jet3CSV_constraintTTB.png")
 
 ################
 ################
@@ -438,6 +443,7 @@ chi22 = yframe.chiSquare(2)
 ndof2 = yframe.GetNbinsX()
 print "chi2 = "+ str(chi22)
 print "ndof = "+ str(ndof2)
+yframe.SetMaximum(yframe.GetMaximum()*1.5)
 yframe.Draw()
 
 pt.Draw()
@@ -446,13 +452,13 @@ pt3.Draw()
 
 if freeTTB:
   cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.eps")
-  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.eps")
+  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.png")
 elif freeTTCC:
   cR12.Print("plots/"+GEN+"_jet4CSV_freeTTCC.eps")
-  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTCC.eps")
+  cR12.Print("plots/"+GEN+"_jet4CSV_freeTTCC.png")
 else :
   cR12.Print("plots/"+GEN+"_jet4CSV_constraintTTB.eps")
-  cR12.Print("plots/"+GEN+"_jet4CSV_constraintTTB.eps")
+  cR12.Print("plots/"+GEN+"_jet4CSV_constraintTTB.png")
 ###########################
 ###########################
 ###########################
@@ -467,21 +473,32 @@ if freeTTB:
 
   frameNLLContour.GetXaxis().SetTitle("R as ttbb/ttjj")
   frameNLLContour.GetYaxis().SetTitle("R2 as ttb/ttjj")
+  frameNLLContour.SetMarkerStyle(21)
   frameNLLContour.Draw()
+
+  preM = TMarker(rttbb,rttb,20)
+  preM.SetMarkerColor(kRed)
+  preM.Draw()
+  preM2 = TMarker(rttbb,rttb,20)
+  preM2.SetMarkerColor(kBlack)
 
   pt.Draw()
   pt2.Draw()
   pt3.Draw()
 
-  l2 = make_legend(0.49,0.76,0.93,0.88)
-  l2.AddEntry(RFrame,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","p")
-  l2.AddEntry(RFrame,"fit: R2="+str(round(recoR2*10000)/10000)+" #pm "+str(round(recoR2error*10000)/10000)+"","p")
+  l2 = make_legend(0.49,0.7,0.93,0.88)
+  l2.AddEntry(preM,"prefit: R="+str(round(rttbb*10000)/10000),"p")
+  l2.AddEntry(preM,"prefit: R2="+str(round(rttb*10000)/10000),"p")
+
+  l2.AddEntry(preM2,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","p")
+  l2.AddEntry(preM2,"fit: R2="+str(round(recoR2*10000)/10000)+" #pm "+str(round(recoR2error*10000)/10000)+"","p")
   l2.SetTextSize(0.04)
   l2.SetFillColor(0)
   l2.SetLineColor(0)
   l2.Draw()
 
   cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.eps");
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.png");
 
 ###########################
 ###########################
@@ -495,21 +512,32 @@ if freeTTCC:
 
   frameNLLContour.GetXaxis().SetTitle("R as ttbb/ttjj")
   frameNLLContour.GetYaxis().SetTitle("R3 as ttcc/ttjj")
+  frameNLLContour.SetMarkerStyle(21)
   frameNLLContour.Draw()
+
+  preM = TMarker(rttbb,rttcc,20)
+  preM.SetMarkerColor(kRed)
+  preM.Draw()
+  preM2 = TMarker(rttbb,rttcc,20)
+  preM2.SetMarkerColor(kBlack)
+ 
 
   pt.Draw()
   pt2.Draw()
   pt3.Draw()
 
-  l2 = make_legend(0.49,0.76,0.93,0.88)
-  l2.AddEntry(RFrame,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","p")
-  l2.AddEntry(RFrame,"fit: Rcc="+str(round(recoRcc*10000)/10000)+" #pm "+str(round(recoRccerror*10000)/10000)+"","p")
+  l2 = make_legend(0.49,0.7,0.93,0.88)
+  l2.AddEntry(preM,"prefit: R="+str(round(rttbb*10000)/10000),"p")
+  l2.AddEntry(preM,"prefit: Rcc="+str(round(rttcc*10000)/10000),"p")
+  l2.AddEntry(preM2,"fit: R="+str(round(recoR*10000)/10000)+" #pm "+str(round(recoRerror*10000)/10000)+"","p")
+  l2.AddEntry(preM2,"fit: Rcc="+str(round(recoRcc*10000)/10000)+" #pm "+str(round(recoRccerror*10000)/10000)+"","p")
   l2.SetTextSize(0.04)
   l2.SetFillColor(0)
   l2.SetLineColor(0)
   l2.Draw()
 
   cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.eps");
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.png");
 
 ###########################
 ###########################
