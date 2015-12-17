@@ -1,0 +1,46 @@
+nohup: ignoring input
+TTJets_MG5  (weight/abs(weight))
+total events,(sumweights): 11344206, 11344206
+total events,(sumweights) S6: 52286, 52286
+ttjj events,(sumweights): 1414673, 1414673
+ttjj events,(sumweights) S6: 48187, 48187
+ttbb events,(sumweights): 8492, 8492
+ttbb events,(sumweights) S6: 595, 595
+ttb events,(sumweights): 38422, 38422
+ttb events,(sumweights) S6: 1988, 1988
+ttcc events,(sumweights): 47155, 47155
+ttcc events,(sumweights) S6: 632, 632
+ttc events,(sumweights): 410524, 410524
+ttc events,(sumweights) S6: 3834, 3834
+ttlf events,(sumweights): 910080, 910080
+ttlf events,(sumweights) S6: 41138, 41138
+TTJets_aMC  (weight/abs(weight))
+total events,(sumweights): 42735141, 14171921
+total events,(sumweights) S6: 184237, 184237
+ttjj events,(sumweights): 5527598, 1751470
+ttjj events,(sumweights) S6: 170179, 170179
+ttbb events,(sumweights): 44726, 10570
+ttbb events,(sumweights) S6: 2942, 2942
+ttb events,(sumweights): 191892, 48176
+ttb events,(sumweights) S6: 9383, 9383
+ttcc events,(sumweights): 228479, 58841
+ttcc events,(sumweights) S6: 2935, 2935
+ttc events,(sumweights): 1590311, 502603
+ttc events,(sumweights) S6: 16128, 16128
+ttlf events,(sumweights): 3472190, 1131280
+ttlf events,(sumweights) S6: 138791, 138791
+TT_powheg  (weight/abs(weight))
+total events,(sumweights): 19757190, 19757190
+total events,(sumweights) S6: 84245, 84245
+ttjj events,(sumweights): 2350210, 2350210
+ttjj events,(sumweights) S6: 77756, 77756
+ttbb events,(sumweights): 13598, 13598
+ttbb events,(sumweights) S6: 933, 933
+ttb events,(sumweights): 61088, 61088
+ttb events,(sumweights) S6: 2980, 2980
+ttcc events,(sumweights): 74944, 74944
+ttcc events,(sumweights) S6: 889, 889
+ttc events,(sumweights): 687157, 687157
+ttc events,(sumweights) S6: 5683, 5683
+ttlf events,(sumweights): 1513423, 1513423
+ttlf events,(sumweights) S6: 67271, 67271
