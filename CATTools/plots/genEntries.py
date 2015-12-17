@@ -14,6 +14,10 @@ def ntuple2entries(files,name):
   ttc  = "("+ttjj+"&&"+"(genTtbarId%100>40 && genTtbarId%100<43))"
   ttlf = "("+ttjj+"&&"+"(genTtbarId%100 ==0))"
 
+  trigger = "((channel==3||(channel==2)||(channel==1)) && (tri==1)&&(filtered==1))"
+  S1 = trigger+"&&( (step1==1) &&((channel==3)&&(lep1_RelIso<0.15 && lep2_RelIso<0.15)) ||((channel==2)&&(lep1_RelIso<0.12 && lep2_RelIso<0.12)) ||((channel==1)&&(lep1_RelIso<0.12 && lep2_RelIso<0.15)) )"
+  S6 = S1+"&&(step5==1)"
+
   chain = TChain("cattree/nom")
   for afile in files:
     f = TFile.Open(afile)
@@ -25,24 +29,39 @@ def ntuple2entries(files,name):
   tree.Project("htemp"+name,vvv,tt) 
   print name+"  "+tt
   print "total events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,tt+"*"+S6) 
+  print "total events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
   tree.Project("htemp"+name,vvv,ttjj+"*"+tt)
   print "ttjj events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,ttjj+"*"+tt+"*"+S6)
+  print "ttjj events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+
   #ddd=""" 
   tree.Project("htemp"+name,vvv,ttbb+"*"+tt)
   print "ttbb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,ttbb+"*"+tt+"*"+S6)
+  print "ttbb events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
   tree.Project("htemp"+name,vvv,ttb+"*"+tt)
   print "ttb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,ttb+"*"+tt+"*"+S6)
+  print "ttb events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
   tree.Project("htemp"+name,vvv,ttcc+"*"+tt)
   print "ttcc events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,ttcc+"*"+tt+"*"+S6)
+  print "ttcc events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
   tree.Project("htemp"+name,vvv,ttc+"*"+tt)
   print "ttc events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,ttc+"*"+tt+"*"+S6)
+  print "ttc events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   
   tree.Project("htemp"+name,vvv,ttlf+"*"+tt)
   print "ttlf events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tree.Project("htemp"+name,vvv,ttlf+"*"+tt+"*"+S6)
+  print "ttlf events,(sumweights) S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
   #"""
 
 
