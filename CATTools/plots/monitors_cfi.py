@@ -1,6 +1,7 @@
 
 monitors = [
-  { "name":"MET",          "unit":"Missing E_{T} without HF (GeV)","var":"met",   "xbin_set":[30,0,300]  },
+#ddd="""
+  { "name":"MET",          "unit":"Missing E_{T} (GeV)","var":"met",   "xbin_set":[30,0,300]  },
 #  { "name":"METpf",        "unit":"Missing E_{T}  (GeV)",          "var":"met",       "xbin_set":[60,0,300]  },
   { "name":"ZMass",        "unit":"Dilepton mass (GeV/c^{2}) ",    "var":"ll_m",  "xbin_set":[60,0,300]  },
   { "name":"nGoodPV",      "unit":"# of vertex ",             "var":"nvertex",   "xbin_set":[70,0,70]    },
@@ -77,16 +78,17 @@ monitors = [
 #  { "name":"Nel",         "unit":"number of electron ",          "var":"Nel",          "xbin_set":[5,0,5]    },
 #  { "name":"NelIso",      "unit":"number of electron ",          "var":"NelIso",       "xbin_set":[5,0,5]    },
 ]
+#"""
 
 monitors2d = {
 #"Mon1" : [
 #  { "name":"jet1CSV",     "unit":"CSV2 of 1st leading Jet ",     "var":"jets_bDiscriminatorCSV[0]",   "xbin_set":[20,0,1]     },
 #  { "name":"jet2CSV",     "unit":"CSV2 of 2nd leading Jet ",     "var":"jets_bDiscriminatorCSV[1]",   "xbin_set":[20,0,1]     },
 #],
-#"Mon2" : [
-#  { "name":"jet3CSV",     "unit":"CSV2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[2]",   "xbin_set":[20,0,1]     },
-#  { "name":"jet4CSV",     "unit":"CSV2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[3]",   "xbin_set":[20,0,1]     },
-#],
+"Mon39" : [
+  { "name":"jet3CSV",     "unit":"CSV2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[2]]",   "xbin_set":[10,0,1]     },
+  { "name":"jet4CSV",     "unit":"CSV2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[3]]",   "xbin_set":[10,0,1]     },
+],
 #"Mon27" : [
 #  { "name":"NJet",        "unit":"Jet multiplicity ",             "var":"nJet",     "xbin_set":[10,0,10]    },
 #  { "name":"nBJetL",      "unit":"b-Jet multiplicity loose ",     "var":"nBJetL",   "xbin_set":[8,0,8]      },

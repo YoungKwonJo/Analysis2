@@ -28,9 +28,12 @@ json = {
 "mcsamples" : mcsamples,
 "datasamples" : datasamples,
 "cuts" : [
-"S0mm","S1mm","S2mm","S3mm","S4mm","S5mm","S6mm","S7mm",
-"S0ee","S1ee","S2ee","S3ee","S4ee","S5ee","S6ee","S7ee",
-"S0em","S1em","S2em","S3em","S4em","S5em","S6em","S7em"
+#"S0mm","S1mm",
+"S2mm","S3mm","S4mm","S5mm","S6mm","S7mm",
+#"S0ee","S1ee",
+"S2ee","S3ee","S4ee","S5ee","S6ee","S7ee",
+#"S0em","S1em",
+"S2em","S3em","S4em","S5em","S6em","S7em"
    ],
 "monitors" : mon,
 "monitors2" : mon2
@@ -41,9 +44,10 @@ json = {
 f = json['file'] #TFile.Open(json['file'],"read")
 #singleplotStack2(f,"MET","S2em",json['mcsamples'],json['datasamples'],False)
 ######
-for step in json['cuts']:
-  for mon in json['monitors']:
-    singleplotStack2(f,mon['name'],step,json['mcsamples'],json['datasamples'],False)
+#for step in json['cuts']:
+#  for mon in json['monitors']:
+#    #singleplotStack2(f,mon['name'],step,json['mcsamples'],json['datasamples'],False)
+#    singleplotStack2(f,mon,step,json['mcsamples'],json['datasamples'],False)
 
 
 #########
@@ -61,7 +65,8 @@ jsonLL = {
 "mcsamples" : mcsamples,
 "datasamples" : datasamples,
 "cuts" : [
-"S0","S1","S2","S3","S4","S5","S6","S7"
+#"S0","S1","S2","S3","S4","S5","S6","S7"
+"S2","S3","S4","S5","S6","S7"
    ],
 "monitors" : mon,
 "monitors2" : mon2
@@ -70,6 +75,7 @@ jsonLL = {
 f1 = jsonLL['file'] #TFile.Open(json['file'],"read")
 for step1 in jsonLL['cuts']:
   for mon1 in jsonLL['monitors']:
-    singleplotStackLL2(f1,mon1['name'],step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
+    #singleplotStackLL2(f1,mon1['name'],step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
+    singleplotStackLL2(f1,mon1,step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
 
 

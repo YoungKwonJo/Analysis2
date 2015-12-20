@@ -10,17 +10,34 @@ mainlumi=2110.
 ci = 920
 
 ###################################################
+DYsf = {
+  "kMM":0.590181280767,
+  "kEE":0.423598660525,
+  "S2":(1.0,1.0),#1.0194253625808358, 0.9766208586103542), 
+  "S3":(1.0194253625808358, 0.9766208586103542),
+  "S4":(0.94906712888678, 0.8806332424629074),
+  "S5":(1.465552097262144, 1.805117143799252),
+  "S6":(1.465552097262144, 1.805117143799252),
+  "S7":(1.465552097262144, 1.805117143799252)
+}
+
 def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
                        rd_ee_in, rd_mm_in, rd_em_in):    
     kMM = sqrt(rd_mm_in/rd_ee_in)/2.
     kEE = sqrt(rd_ee_in/rd_mm_in)/2.
-    print "kMM: "+str(kMM)+", KEE:"+str(kEE)
+    #kMM: 0.590181280767, KEE:0.423598660525
+    #kMM=0.590181280767
+    #kEE=0.423598660525
+    kMM=0.590181280767
+    kEE=0.423598660525
+    print "    kMM="+str(kMM)
+    print "    kEE="+str(kEE)
 
     rMC_mm = mc_mm_out/mc_mm_in
     rMC_ee = mc_ee_out/mc_ee_in
-    
     nOutEst_mm = rMC_mm*(rd_mm_in - rd_em_in*kMM)
     nOutEst_ee = rMC_ee*(rd_ee_in - rd_em_in*kEE)
+    print "Rin/out MM: "+str(nOutEst_mm/mc_mm_out)+", EE:"+str(nOutEst_ee/mc_ee_out)
     return nOutEst_ee/mc_ee_out,nOutEst_mm/mc_mm_out
 
 ###################################################
@@ -285,7 +302,7 @@ def drellYanEstimationRun(f,step): #,mcsamples,datasamples):
   step=step.replace("ee","")
   step=step.replace("em","")
   mcs = ["DYJets","DYJets10"]
-  mcxs = [6025.2,18271.92]
+  mcxs = [6025.2,23914.65]
   datas = ["1","2","3"]
 
   hmceein = TH1D("mc_ee_in","",60,0,300)
@@ -353,9 +370,11 @@ def singleplotStack2(filename,mon,step,mcsamples,datasamples,useReturn):
   singleplotStack(f,mon,step,mcsamples,datasamples,useReturn)
   f.Close()
 
-def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
+def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
 
-  dyest = drellYanEstimationRun(f,step)
+  #dyest = drellYanEstimationRun(f,step)
+  dyest = DYsf[step[0:2]]
+  mon = mon1["name"]
 
   #f = TFile.Open(filename,"read")
   canvasname = mon+step
@@ -517,7 +536,14 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   h1data = hdata.Clone("h1data")
   h2data = myDataHistSet(h1data)
 
-  h2data.SetMaximum(scale*40)
+  maxY=0.
+  for i in range(int(h1data.GetNbinsX()*0.7)+1, h1data.GetNbinsX()+2):
+     if maxY<h1data.GetBinContent(i): maxY=h1data.GetBinContent(i)
+
+  h2data.SetMaximum(maxY*10000)
+
+  if maxY*10000 < scale*140 : h2data.SetMaximum(scale*140)
+  #h2data.SetMaximum(scale*40)
   h2data.SetMinimum(minimum)
   labeltot = ("MC Total") #+ (" %.0f"%hmctot.Integral()).rjust(8)
   #leg2.AddEntry(hmctot,labeltot,"")
@@ -586,6 +612,7 @@ def singleplotStack(f,mon,step,mcsamples,datasamples,useReturn):
   myMG5RatioSet(hdataMG5)
 
   hratio = myRatio(hdata)
+  hratio.GetXaxis().SetTitle(mon1['unit'])
   hratio.Draw()
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
@@ -619,11 +646,13 @@ def singleplotStackLL2(filename,mon,step,mcsamples,datasamples,useReturn):
   singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn)
   f.Close()
 
-def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
+def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
 
-  dyest = drellYanEstimationRun(f,step)
+  #dyest = drellYanEstimationRun(f,step)
+  dyest = DYsf[step[0:2]]
   print "step : "+step+":"+str(dyest)
   #f = TFile.Open(filename,"read")
+  mon = mon1["name"]
   canvasname = mon+step
   c1 = myCanvas(canvasname)
   #c1 = TCanvas( 'c1', '', 500, 500 )
@@ -813,7 +842,15 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   h1data = hdata.Clone("h1data")
   h2data = myDataHistSet(h1data)
 
-  h2data.SetMaximum(scale*40)
+  maxY=0.
+  for i in range(int(h1data.GetNbinsX()*0.7)+1, h1data.GetNbinsX()+2):
+     if maxY<h1data.GetBinContent(i): maxY=h1data.GetBinContent(i)
+
+  h2data.SetMaximum(maxY*10000)
+  #if maxY is 0. : h2data.SetMaximum(scale*100)
+  if maxY*10000 < scale*140 : h2data.SetMaximum(scale*140)
+
+  #h2data.SetMaximum(scale*40)
   h2data.SetMinimum(minimum)
   #if log :  print "dddd"+str(type(hmctot))+("bbbb: %f"%hmctot.Integral())
   labeltot = ("MC Total") + (" %.0f"%hmctot.Integral()).rjust(8)
@@ -884,6 +921,7 @@ def singleplotStackLL(f,mon,step,mcsamples,datasamples,useReturn):
   myMG5RatioSet(hdataMG5)
 
   hratio = myRatio(hdata)
+  hratio.GetXaxis().SetTitle(mon1['unit'])
   hratio.Draw()
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")

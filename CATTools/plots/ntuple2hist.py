@@ -10,33 +10,31 @@ if len(sys.argv) is 1:
   print "> python  ntuple2hist.py [1,2,3, or 4] \n"
   sys.exit()
 
-gROOT.ProcessLine(".L MuonSF.C")
-mumusf ="((channel==3)*(MuonSF(lep1_pt,lep1_eta)*MuonSF(lep2_pt,lep2_eta)))"
-emusf ="((channel==1)*(MuonSF(lep2_pt,lep2_eta)))"
-eesf = "((channel==2)*(1.0))"
-lepsf = "("+mumusf+"+"+emusf+"+"+eesf+")"
+#gROOT.ProcessLine(".L MuonSF.C")
+#mumusf ="((channel==3)*(MuonSF(lep1_pt,lep1_eta)*MuonSF(lep2_pt,lep2_eta)))"
+#emusf ="((channel==1)*(MuonSF(lep2_pt,lep2_eta)))"
+#eesf = "((channel==2)*(1.0))"
+#lepsf = "("+mumusf+"+"+emusf+"+"+eesf+")"
 
 arg = sys.argv[1]
 ii=int(arg)
-#if ii>len(monitors)+2 : sys.exit()
-if ii>len(monitors) : sys.exit()
+if ii>len(monitors)+1 : sys.exit()
+#if ii>len(monitors) : sys.exit()
 
 mon1=[]
 if ii<len(monitors) :
   mon1 = [monitors[ii]]
   #print monitors[ii]
 
-#print str(mon1)
-#sys.exit()
-
 mon2=[]
 iii = ii-len(monitors)+1
 for mon22 in monitors2d.keys():
   if mon22 == ("Mon"+str(iii)) :
     mon2+=monitors2d["Mon" +str(iii)]
+    print "++"+str(mon2)+"++"
 
 #mceventweight="puWeight"
-mceventweight="((weight/abs(weight))*(puweight)*(csvt_sf)*"+lepsf+")"#*(csvweight))"
+mceventweight="((weight/abs(weight))*(puweight)*(csvt_sf)*(lepweight))"#*(csvweight))"
 
 jsonMM = {
 "mcsamples" : mcsamples,
