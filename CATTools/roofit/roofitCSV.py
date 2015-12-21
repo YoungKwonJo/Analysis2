@@ -113,7 +113,7 @@ if GEN == "AMC": pt3=addLegend("aMC@NLO")
 
 #histograms = ["name":"name","hist": ]
 histograms = {}
-f= TFile.Open("hist_roofit.root")
+f= TFile.Open("hist_all.root")
 #for name in mcnames:
 for mc in mcsamples:
   name = mc['name']
@@ -276,27 +276,29 @@ model2.fitTo(data)
 ################
 ################
 ################
+print "FINAL: MC:"+ str(GEN)
 recoR      = fsig.getVal()
 recoRerror = fsig.getError()
+print "FINAL: $R = "+ str(round(recoR*10000)/10000)+" \pm "+str(round(recoRerror*10000)/10000)+"$"
 
 recoR2=1.
 recoR2error=0.0
 if freeTTB:
   recoR2      = fsig2.getVal()
   recoR2error = fsig2.getError()
+  print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)+" \pm "+str(round(recoR2error*10000)/10000)+"$"
 
 recoRcc=1.
 recoRccerror=0.0
 if freeTTCC:
   recoRcc      = fsigcc.getVal()
   recoRccerror = fsigcc.getError()
+  print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
 
 
 kVal      = k.getVal()
 kValerror = k.getError()
-  
-print "FINAL: ttbb Rreco = "+ str(recoR)+" +- "+str(recoRerror)
-print "FINAL: k = "+str(kVal)+" +- "+str(kValerror) 
+print "FINAL: $k = "+str(round(kVal*10000)/10000)+" \m "+str(round(kValerror*10000)/10000)+"$"
 
 
 ################
