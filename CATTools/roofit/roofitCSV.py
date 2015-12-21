@@ -279,6 +279,7 @@ model2.fitTo(data)
 print "FINAL: MC:"+ str(GEN)
 recoR      = fsig.getVal()
 recoRerror = fsig.getError()
+print "FINAL: prefit: R="+str(round(rttbb*10000)/10000)
 print "FINAL: $R = "+ str(round(recoR*10000)/10000)+" \pm "+str(round(recoRerror*10000)/10000)+"$"
 
 recoR2=1.
@@ -286,6 +287,7 @@ recoR2error=0.0
 if freeTTB:
   recoR2      = fsig2.getVal()
   recoR2error = fsig2.getError()
+  print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
   print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)+" \pm "+str(round(recoR2error*10000)/10000)+"$"
 
 recoRcc=1.
@@ -293,12 +295,13 @@ recoRccerror=0.0
 if freeTTCC:
   recoRcc      = fsigcc.getVal()
   recoRccerror = fsigcc.getError()
+  print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
   print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
 
 
 kVal      = k.getVal()
 kValerror = k.getError()
-print "FINAL: $k = "+str(round(kVal*10000)/10000)+" \m "+str(round(kValerror*10000)/10000)+"$"
+print "FINAL: $k = "+str(round(kVal*10000)/10000)+" \pm "+str(round(kValerror*10000)/10000)+"$"
 
 
 ################
