@@ -13,21 +13,20 @@ ci = 920
 DYsf = {
   "kMM":0.590181280767,
   "kEE":0.423598660525,
-  "S2":(1.0,1.0),#1.0194253625808358, 0.9766208586103542), 
-  "S3":(1.0194253625808358, 0.9766208586103542),
-  "S4":(0.94906712888678, 0.8806332424629074),
-  "S5":(1.465552097262144, 1.805117143799252),
-  "S6":(1.465552097262144, 1.805117143799252),
-  "S7":(1.465552097262144, 1.805117143799252)
+ "S2":(1.0,1.0),#,(1.0194253625808745, 0.9761723128684477)
+ "S3":(1.0194253625808745, 0.9761723128684477),
+ "S4":(0.9490671288867788, 0.880210249155921),
+ "S5":(1.4655520972621454, 1.7982692259874904),
+ "S6":(1.4655520972621454, 1.7982692259874904),
+ "S7":(1.4655520972621454, 1.7982692259874904)
+# "S6":(0.7244044498623947, -2.2453439355301055),
+# "S7":(1.5347787622277453, 140.52894541739607),
 }
 
 def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
                        rd_ee_in, rd_mm_in, rd_em_in):    
     kMM = sqrt(rd_mm_in/rd_ee_in)/2.
     kEE = sqrt(rd_ee_in/rd_mm_in)/2.
-    #kMM: 0.590181280767, KEE:0.423598660525
-    #kMM=0.590181280767
-    #kEE=0.423598660525
     kMM=0.590181280767
     kEE=0.423598660525
     print "    kMM="+str(kMM)
@@ -35,9 +34,10 @@ def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
 
     rMC_mm = mc_mm_out/mc_mm_in
     rMC_ee = mc_ee_out/mc_ee_in
+    print "Rout/in MM: "+str(rMC_mm)+", EE:"+str(rMC_ee)
     nOutEst_mm = rMC_mm*(rd_mm_in - rd_em_in*kMM)
     nOutEst_ee = rMC_ee*(rd_ee_in - rd_em_in*kEE)
-    print "Rin/out MM: "+str(nOutEst_mm/mc_mm_out)+", EE:"+str(nOutEst_ee/mc_ee_out)
+    print "SF MM: "+str(nOutEst_mm/mc_mm_out)+", EE:"+str(nOutEst_ee/mc_ee_out)
     return nOutEst_ee/mc_ee_out,nOutEst_mm/mc_mm_out
 
 ###################################################
@@ -398,7 +398,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
   wid=0.12
   legx2 = 0.67
   leg  = make_legend(legx1,0.64, legx1+wid,0.88)
-  leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
+  leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
   leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
   lumi = mainlumi
 
@@ -557,7 +557,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
     else                           : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
  
   labeldata = ("DATA     ")# + (" %.0f"%h2data.Integral()).rjust(8)
-  leg2.AddEntry(h2data,labeldata,"p")
+  leg.AddEntry(h2data,labeldata,"p")
   if isStat :
     print " Stat: "+("DATA ").rjust(10)+" & $ "+str(round(h2data.GetBinContent(1)))+" $" # +" +- "+str(h2data.GetBinError(1))
 
@@ -671,7 +671,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
   wid=0.12
   legx2 = 0.67
   leg  = make_legend(legx1,0.64, legx1+wid,0.88)
-  leg2 = make_legend(legx2,0.64, legx2+wid,0.88)
+  leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
   leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
  
   lumi = mainlumi
@@ -865,7 +865,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     else                       : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
  
   labeldata = ("DATA     ") #+ (" %.0f"%h2data.Integral()).rjust(8)
-  leg2.AddEntry(h2data,labeldata,"p")
+  leg.AddEntry(h2data,labeldata,"p")
   if isStat:
     print " Stat: "+("DATA").rjust(10)+" & $ "+str(round(h2data.GetBinContent(1)))+" $" #+" +- "+str(h2data.GetBinError(1))
  
