@@ -35,34 +35,49 @@ def ntuple2entries(files,name):
     if None == f: continue
     chain.Add(afile)
   tree = chain
-
+  summary = {}
   htemp = TH1D("htemp"+name,"",1,-20,20)
   tree.Project("htemp"+name,vvv,tt) 
   print name+"  "+tt
   aaaa="total events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  tot_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
   tree.Project("htemp"+name,vvv,tt+"*"+S6) 
   print aaaa+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  
+  totS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
+  summary['total']={"GEN":tot_,"S6":totS6_, "eff1":totS6_["events"]/tot_["events"], "eff2":totS6_["integral"]/tot_["integral"]}  
+
   tree.Project("htemp"+name,vvv,ttjj+"*"+tt)
   bbbb="ttjj events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttjj_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
   tree.Project("htemp"+name,vvv,ttjj+"*"+tt+"*"+S6)
   print bbbb+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttjjS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
+  summary['ttjj']={"GEN":ttjj_,"S6":ttjjS6_, "eff1":ttjjS6_["events"]/ttjj_["events"], "eff2":ttjjS6_["integral"]/ttjj_["integral"]}  
 
   #ddd=""" 
   tree.Project("htemp"+name,vvv,ttbb+"*"+tt)
   cccc="ttbb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttbb_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
   tree.Project("htemp"+name,vvv,ttbb+"*"+tt+"*"+S6)
   print cccc+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttbbS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
+  summary['ttbb']={"GEN":ttbb_,"S6":ttbbS6_, "eff1":ttbbS6_["events"]/ttbb_["events"], "eff2":ttbbS6_["integral"]/ttbb_["integral"]}  
   
   tree.Project("htemp"+name,vvv,ttb+"*"+tt)
   dddd="ttb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttb_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
   tree.Project("htemp"+name,vvv,ttb+"*"+tt+"*"+S6)
   print dddd+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttbS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
+  summary['ttb']={"GEN":ttb_,"S6":ttbS6_, "eff1":ttbS6_["events"]/ttb_["events"], "eff2":ttbS6_["integral"]/ttb_["integral"]}  
   
   tree.Project("htemp"+name,vvv,ttcc+"*"+tt)
   eeee="ttcc events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttcc_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
   tree.Project("htemp"+name,vvv,ttcc+"*"+tt+"*"+S6)
   print eeee+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttccS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
+  summary['ttcc']={"GEN":ttcc_,"S6":ttccS6_, "eff1":ttccS6_["events"]/ttcc_["events"], "eff2":ttccS6_["integral"]/ttcc_["integral"]}  
   
   #tree.Project("htemp"+name,vvv,ttc+"*"+tt)
   #ffff="ttc events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
@@ -71,10 +86,14 @@ def ntuple2entries(files,name):
   
   tree.Project("htemp"+name,vvv,ttlf+"*"+tt)
   gggg="ttlf events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttlf_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
   tree.Project("htemp"+name,vvv,ttlf+"*"+tt+"*"+S6)
   print gggg+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
+  ttlfS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
+  summary['ttlf']={"GEN":ttlf_,"S6":ttlfS6_, "eff1":ttlfS6_["events"]/ttlf_["events"], "eff2":ttlfS6_["integral"]/ttlf_["integral"] }  
+  summary["ratio"]={"events":ttbb_["events"]/ttjj_["events"],"integral":ttbb_["integral"]/ttjj_["integral"],"eventsS6":ttbbS6_["events"]/ttjjS6_["events"],"integralS6":ttbbS6_["integral"]/ttjjS6_["integral"]}
   #"""
-
+  return summary
 
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
@@ -82,11 +101,30 @@ ttbarPOW = "TT_powheg"
 loc = "/store/user/youngjo/Cattools/v7-4-6v4/"
 z="v3GenTopTest"
 
-ntuple2entries(files(loc + ttbarMG5+z),ttbarMG5)
-ntuple2entries(files(loc + ttbarAMC+z),ttbarAMC)
-ntuple2entries(files(loc + ttbarPOW+z),ttbarPOW)
+mg5=ntuple2entries(files(loc + ttbarMG5+z),ttbarMG5)
+amc=ntuple2entries(files(loc + ttbarAMC+z),ttbarAMC)
+pow=ntuple2entries(files(loc + ttbarPOW+z),ttbarPOW)
 
+allsummary={}
+allsummary["MG5"]=mg5
+allsummary["AMC"]=amc
+allsummary["POW"]=pow
 
+print str(allsummary)
+
+for j  in allsummary.keys():
+  print j
+  for i  in allsummary[j].keys():
+    if i.find("ratio")==-1:
+      print i+"  &  "+str(int(allsummary[j][i]["GEN"]["events"]))+"  &  "+str(int(allsummary[j][i]["S6"]["events"]))+" & "+str(round(allsummary[j][i]["eff1"]*100000)/1000)+"\%  \\\\ "
+  print " &"+str(round(allsummary[j]["ratio"]["events"]*100000)/1000)+" \% &  "+str(round(allsummary[j]["ratio"]["eventsS6"]*100000)/1000)+" \% &  \\\\ "
+
+for j  in allsummary.keys():
+  print j
+  for i  in allsummary[j].keys():
+    if i.find("ratio")==-1:
+      print i+"  &  "+str(int(allsummary[j][i]["GEN"]["integral"]))+"  &  "+str(int(allsummary[j][i]["S6"]["integral"]))+" & "+str(round(allsummary[j][i]["eff2"]*100000)/1000)+"\%  \\\\ "
+  print " &"+str(round(allsummary[j]["ratio"]["integral"]*100000)/1000)+" \%  &  "+str(round(allsummary[j]["ratio"]["integralS6"]*100000)/1000)+" \% &  \\\\ "
 
 
 

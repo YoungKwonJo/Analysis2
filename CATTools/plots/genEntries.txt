@@ -1,25 +1,70 @@
-nohup: ignoring input
 TTJets_MG5  (weight/abs(weight))
-total events,(sumweights): 11344206, 11344206, S6: 9731, 9731
-ttjj events,(sumweights): 1414673, 1414673, S6: 8946, 8946
-ttbb events,(sumweights): 8492, 8492, S6: 362, 362
-ttb events,(sumweights): 38422, 38422 S6: 751, 751
-ttcc events,(sumweights): 47155, 47155 S6: 391, 391
-ttc events,(sumweights): 410524, 410524 S6: 1366, 1366
-ttlf events,(sumweights): 910080, 910080 S6: 6076, 6076
+total events,(sumweights): 11344206, 11344206, S6: 9209, 9209
+ttjj events,(sumweights): 81283, 81283, S6: 8425, 8425
+ttbb events,(sumweights): 1068, 1068, S6: 280, 280
+ttb events,(sumweights): 4255, 4255 S6: 728, 728
+ttcc events,(sumweights): 2109, 2109 S6: 324, 324
+ttlf events,(sumweights): 73851, 73851 S6: 7093, 7093
 TTJets_aMC  (weight/abs(weight))
-total events,(sumweights): 42735141, 14171921, S6: 44092, 10188
-ttjj events,(sumweights): 5527598, 1751470, S6: 40605, 9359
-ttbb events,(sumweights): 44726, 10570, S6: 1657, 389
-ttb events,(sumweights): 191892, 48176 S6: 3536, 738
-ttcc events,(sumweights): 228479, 58841 S6: 1741, 427
-ttc events,(sumweights): 1590311, 502603 S6: 6123, 1323
-ttlf events,(sumweights): 3472190, 1131280 S6: 27548, 6482
+total events,(sumweights): 42546191, 14109821, S6: 42058, 9704
+ttjj events,(sumweights): 404665, 97569, S6: 38264, 8720
+ttbb events,(sumweights): 5481, 1269, S6: 1258, 266
+ttb events,(sumweights): 21555, 4903 S6: 3254, 616
+ttcc events,(sumweights): 10153, 2163 S6: 1434, 302
+ttlf events,(sumweights): 367476, 89234 S6: 32318, 7536
 TT_powheg  (weight/abs(weight))
-total events,(sumweights): 19757190, 19757190, S6: 13722, 13722
-ttjj events,(sumweights): 2350210, 2350210, S6: 12685, 12685
-ttbb events,(sumweights): 13598, 13598, S6: 553, 553
-ttb events,(sumweights): 61088, 61088 S6: 1132, 1132
-ttcc events,(sumweights): 74944, 74944 S6: 522, 522
-ttc events,(sumweights): 687157, 687157 S6: 1876, 1876
-ttlf events,(sumweights): 1513423, 1513423 S6: 8602, 8602
+total events,(sumweights): 19396968, 19396968, S6: 12718, 12718
+ttjj events,(sumweights): 118789, 118789, S6: 11629, 11629
+ttbb events,(sumweights): 1582, 1582, S6: 395, 395
+ttb events,(sumweights): 6210, 6210 S6: 1053, 1053
+ttcc events,(sumweights): 3037, 3037 S6: 431, 431
+ttlf events,(sumweights): 107960, 107960 S6: 9750, 9750
+{'POW': {'ratio': {'eventsS6': 0.033966807120130706, 'integralS6': 0.033966807120130706, 'integral': 0.013317731439779778, 'events': 0.013317731439779778}, 'ttbb': {'eff2': 0.24968394437420985, 'eff1': 0.24968394437420985, 'GEN': {'integral': 1582.0, 'events': 1582.0}, 'S6': {'integral': 395.0, 'events': 395.0}}, 'ttcc': {'eff2': 0.14191636483371747, 'eff1': 0.14191636483371747, 'GEN': {'integral': 3037.0, 'events': 3037.0}, 'S6': {'integral': 431.0, 'events': 431.0}}, 'ttjj': {'eff2': 0.09789626985663656, 'eff1': 0.09789626985663656, 'GEN': {'integral': 118789.0, 'events': 118789.0}, 'S6': {'integral': 11629.0, 'events': 11629.0}}, 'ttb': {'eff2': 0.16956521739130434, 'eff1': 0.16956521739130434, 'GEN': {'integral': 6210.0, 'events': 6210.0}, 'S6': {'integral': 1053.0, 'events': 1053.0}}, 'total': {'eff2': 0.0006556694840142026, 'eff1': 0.0006556694840142026, 'GEN': {'integral': 19396968.0, 'events': 19396968.0}, 'S6': {'integral': 12718.0, 'events': 12718.0}}, 'ttlf': {'eff2': 0.09031122638014079, 'eff1': 0.09031122638014079, 'GEN': {'integral': 107960.0, 'events': 107960.0}, 'S6': {'integral': 9750.0, 'events': 9750.0}}}, 'AMC': {'ratio': {'eventsS6': 0.03287685553000209, 'integralS6': 0.030504587155963304, 'integral': 0.013006180241675122, 'events': 0.013544536839113835}, 'ttbb': {'eff2': 0.20961386918833727, 'eff1': 0.2295201605546433, 'GEN': {'integral': 1269.0, 'events': 5481.0}, 'S6': {'integral': 266.0, 'events': 1258.0}}, 'ttcc': {'eff2': 0.1396208969024503, 'eff1': 0.14123904264749335, 'GEN': {'integral': 2163.0, 'events': 10153.0}, 'S6': {'integral': 302.0, 'events': 1434.0}}, 'ttjj': {'eff2': 0.08937264909961155, 'eff1': 0.09455722634771972, 'GEN': {'integral': 97569.0, 'events': 404665.0}, 'S6': {'integral': 8720.0, 'events': 38264.0}}, 'ttb': {'eff2': 0.12563736487864574, 'eff1': 0.15096265367664116, 'GEN': {'integral': 4903.0, 'events': 21555.0}, 'S6': {'integral': 616.0, 'events': 3254.0}}, 'total': {'eff2': 0.000687747916858761, 'eff1': 0.0009885256238331653, 'GEN': {'integral': 14109821.0, 'events': 42546191.0}, 'S6': {'integral': 9704.0, 'events': 42058.0}}, 'ttlf': {'eff2': 0.08445211466481387, 'eff1': 0.08794587945879459, 'GEN': {'integral': 89234.0, 'events': 367476.0}, 'S6': {'integral': 7536.0, 'events': 32318.0}}}, 'MG5': {'ratio': {'eventsS6': 0.03323442136498516, 'integralS6': 0.03323442136498516, 'integral': 0.013139278815988583, 'events': 0.013139278815988583}, 'ttbb': {'eff2': 0.26217228464419473, 'eff1': 0.26217228464419473, 'GEN': {'integral': 1068.0, 'events': 1068.0}, 'S6': {'integral': 280.0, 'events': 280.0}}, 'ttcc': {'eff2': 0.15362731152204837, 'eff1': 0.15362731152204837, 'GEN': {'integral': 2109.0, 'events': 2109.0}, 'S6': {'integral': 324.0, 'events': 324.0}}, 'ttjj': {'eff2': 0.10365020976095862, 'eff1': 0.10365020976095862, 'GEN': {'integral': 81283.0, 'events': 81283.0}, 'S6': {'integral': 8425.0, 'events': 8425.0}}, 'ttb': {'eff2': 0.1710928319623972, 'eff1': 0.1710928319623972, 'GEN': {'integral': 4255.0, 'events': 4255.0}, 'S6': {'integral': 728.0, 'events': 728.0}}, 'total': {'eff2': 0.0008117800399604873, 'eff1': 0.0008117800399604873, 'GEN': {'integral': 11344206.0, 'events': 11344206.0}, 'S6': {'integral': 9209.0, 'events': 9209.0}}, 'ttlf': {'eff2': 0.09604473873068746, 'eff1': 0.09604473873068746, 'GEN': {'integral': 73851.0, 'events': 73851.0}, 'S6': {'integral': 7093.0, 'events': 7093.0}}}}
+POW
+ttbb  &  1582  &  395 & 24.968\%  \\ 
+ttcc  &  3037  &  431 & 14.192\%  \\ 
+ttjj  &  118789  &  11629 & 9.79\%  \\ 
+ttb  &  6210  &  1053 & 16.957\%  \\ 
+total  &  19396968  &  12718 & 0.066\%  \\ 
+ttlf  &  107960  &  9750 & 9.031\%  \\ 
+ &1.332 \% &  3.397 \% &  \\ 
+AMC
+ttbb  &  5481  &  1258 & 22.952\%  \\ 
+ttcc  &  10153  &  1434 & 14.124\%  \\ 
+ttjj  &  404665  &  38264 & 9.456\%  \\ 
+ttb  &  21555  &  3254 & 15.096\%  \\ 
+total  &  42546191  &  42058 & 0.099\%  \\ 
+ttlf  &  367476  &  32318 & 8.795\%  \\ 
+ &1.354 \% &  3.288 \% &  \\ 
+MG5
+ttbb  &  1068  &  280 & 26.217\%  \\ 
+ttcc  &  2109  &  324 & 15.363\%  \\ 
+ttjj  &  81283  &  8425 & 10.365\%  \\ 
+ttb  &  4255  &  728 & 17.109\%  \\ 
+total  &  11344206  &  9209 & 0.081\%  \\ 
+ttlf  &  73851  &  7093 & 9.604\%  \\ 
+ &1.314 \% &  3.323 \% &  \\ 
+POW
+ttbb  &  1582  &  395 & 24.968\%  \\ 
+ttcc  &  3037  &  431 & 14.192\%  \\ 
+ttjj  &  118789  &  11629 & 9.79\%  \\ 
+ttb  &  6210  &  1053 & 16.957\%  \\ 
+total  &  19396968  &  12718 & 0.066\%  \\ 
+ttlf  &  107960  &  9750 & 9.031\%  \\ 
+ &1.332 \%  &  3.397 \% &  \\ 
+AMC
+ttbb  &  1269  &  266 & 20.961\%  \\ 
+ttcc  &  2163  &  302 & 13.962\%  \\ 
+ttjj  &  97569  &  8720 & 8.937\%  \\ 
+ttb  &  4903  &  616 & 12.564\%  \\ 
+total  &  14109821  &  9704 & 0.069\%  \\ 
+ttlf  &  89234  &  7536 & 8.445\%  \\ 
+ &1.301 \%  &  3.05 \% &  \\ 
+MG5
+ttbb  &  1068  &  280 & 26.217\%  \\ 
+ttcc  &  2109  &  324 & 15.363\%  \\ 
+ttjj  &  81283  &  8425 & 10.365\%  \\ 
+ttb  &  4255  &  728 & 17.109\%  \\ 
+total  &  11344206  &  9209 & 0.081\%  \\ 
+ttlf  &  73851  &  7093 & 9.604\%  \\ 
+ &1.314 \%  &  3.323 \% &  \\ 
