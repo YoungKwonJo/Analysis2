@@ -99,7 +99,7 @@ ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
 loc = "/store/user/youngjo/Cattools/v7-4-6v4/"
-z="v3GenTopTest"
+z="v4GenTop"
 
 mg5=ntuple2entries(files(loc + ttbarMG5+z),ttbarMG5)
 amc=ntuple2entries(files(loc + ttbarAMC+z),ttbarAMC)

@@ -27,7 +27,7 @@ if ii<len(monitors) :
   #print monitors[ii]
 
 mon2=[]
-iii = ii-len(monitors)+1
+iii = ii#-len(monitors)+1
 for mon22 in monitors2d.keys():
   if mon22 == ("Mon"+str(iii)) :
     mon2+=monitors2d["Mon" +str(iii)]

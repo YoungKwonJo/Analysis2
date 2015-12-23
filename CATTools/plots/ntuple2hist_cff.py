@@ -183,6 +183,7 @@ def ntuple2hist2d(json,cuts):
   mceventweight = json['mceventweight']
   monitors2=json['monitors2']
   datasamples = json['datasamples']
+  print "2d plot ...."
   for i,mc in enumerate(mcsamples):
     chain = TChain("cattree/nom")
     chain2 = TChain("cattree/nom2")

@@ -108,7 +108,7 @@ BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,66.1,31
 
 z="v2"
 zz="v2"
-zzz="v3GenTopTest"
+zzz="v4GenTop"
 mcsamples=[
 
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+zzz), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
