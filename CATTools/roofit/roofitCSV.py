@@ -83,6 +83,8 @@ setTDRStyle()
 
 
 HN = "jet3CSV_jet4CSV"
+HN1 = "jet3CSV"
+HN2 = "jet4CSV"
 from mcsample_cfi import mcsamples,datasamples 
 lumi = 2110. 
 Step = "S6"
@@ -99,6 +101,9 @@ freeTTB  = False
 freeTTCC = False
 if int(arg1)==1 : freeTTB=True
 if int(arg1)==2 : freeTTCC=True
+if int(arg1)==3 : 
+  freeTTCC=True
+  freeTTB=True
 
 GEN="MG5"
 if int(arg2)==1 : GEN="POW"
@@ -126,7 +131,26 @@ for mc in mcsamples:
   if h3.Integral()>0 :  h3.Scale(mc['cx']*lumi)
   h1.Add(h2)
   h1.Add(h3)
-  histograms[name]={"h1":copy.deepcopy(h1),"color":color,"exp":h1.Integral()}
+
+  h11 = f.Get("h1_"+name+"_"+HN1+"_"+Step+"mm").Clone("h11_"+name+"_"+Step+"LL")
+  h21 = f.Get("h1_"+name+"_"+HN1+"_"+Step+"ee")
+  h31 = f.Get("h1_"+name+"_"+HN1+"_"+Step+"em")
+  h11.Add(h21)
+  h11.Add(h31)
+
+  ci = TColor.GetColor(mc['color'])  
+  h11.SetLineColor(ci)
+
+  h12 = f.Get("h1_"+name+"_"+HN2+"_"+Step+"mm").Clone("h12_"+name+"_"+Step+"LL")
+  h22 = f.Get("h1_"+name+"_"+HN2+"_"+Step+"ee")
+  h32 = f.Get("h1_"+name+"_"+HN2+"_"+Step+"em")
+  h12.Add(h21)
+  h12.Add(h31)
+
+  ci = TColor.GetColor(mc['color'])  
+  h12.SetLineColor(ci)
+
+  histograms[name]={"h1":copy.deepcopy(h1),"color":color,"exp":h1.Integral(),"h11":copy.deepcopy(h11),"h12":copy.deepcopy(h12)}
   #print "FINAL "+name
 
 #for datesmaples
@@ -152,7 +176,7 @@ print str(histograms["DATA"]["color"])
 print str(histograms["DATA"]["exp"])
 
 signals1= [GEN+'ttbb', GEN+'ttb']
-signals2= [GEN+'ttcc',GEN+'ttc', GEN+'ttlf']#, GEN+'ttot']
+signals2= [GEN+'ttcc', GEN+'ttlf']#, GEN+'ttot']
 backgrounds1= [GEN+"ttot"]
 backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ', 'DYJets']
 higgs= ['ttH2non', 'ttH2bb']
@@ -174,12 +198,12 @@ for hh in backgrounds2:
 histograms["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
 
 
-histograms[GEN+"ttcc"]["h1"].Add(histograms[GEN+"ttc"]["h1"])
+#histograms[GEN+"ttcc"]["h1"].Add(histograms[GEN+"ttc"]["h1"])
 
 n_ttbb = histograms[GEN+"ttbb"]["exp"]
 n_ttb  = histograms[GEN+"ttb"]["exp"]
 #n_tt2b = histograms[GEN+"tt2b"]["exp"]
-n_ttcc = histograms[GEN+"ttcc"]["exp"]+histograms[GEN+"ttc"]["exp"]
+n_ttcc = histograms[GEN+"ttcc"]["exp"]#+histograms[GEN+"ttc"]["exp"]
 #n_ttc = histograms[GEN+"ttc"]["exp"]
 n_ttlf = histograms[GEN+"ttlf"]["exp"]
 n_ttcclf = histograms[GEN+"ttcclf"]["exp"]
@@ -258,9 +282,10 @@ ttotpdf      = RooHistPdf("ttotpdf",     "ttotpdf",      RooArgSet(RooArgList(x,
 bkgpdf       = RooHistPdf("bkgpdf",      "bkgpdf",       RooArgSet(RooArgList(x,y)), bkg)
 
 #for separate ttcc
-model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf,  ttcclfpdf), RooArgList(fsig,fsig2con))
-if freeTTB      : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
-elif freeTTCC: model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2con, fsigcc))
+if freeTTB and not freeTTCC  : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
+elif not freeTTB and freeTTCC: model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2con, fsigcc))
+elif freeTTB and freeTTCC    : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2, fsigcc))
+else                         : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2con, fsigcc))
 
 #model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,knbkg)) # k*bkg
 model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,nbkg)) # fixing bkg
@@ -276,6 +301,7 @@ model2.fitTo(data)
 ################
 ################
 ################
+print "FINAL: ----------------------   "
 print "FINAL: MC:"+ str(GEN)
 recoR      = fsig.getVal()
 recoRerror = fsig.getError()
@@ -285,14 +311,28 @@ print "FINAL: $R = "+ str(round(recoR*10000)/10000)+" \pm "+str(round(recoRerror
 recoR2=1.
 recoR2error=0.0
 if freeTTB:
+  print "FINAL: freeTTB : "+str(freeTTB)
   recoR2      = fsig2.getVal()
   recoR2error = fsig2.getError()
   print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
   print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)+" \pm "+str(round(recoR2error*10000)/10000)+"$"
+else:
+  print "FINAL: freeTTB : "+str(freeTTB)
+  recoR2      = fsig2con.getVal()
+  #recoR2error = fsig2con.getError()
+  print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
+  print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)#+" \pm "+str(round(recoR2error*10000)/10000)+"$"
 
 recoRcc=1.
 recoRccerror=0.0
 if freeTTCC:
+  print "FINAL: freeTTCC : "+str(freeTTCC)
+  recoRcc      = fsigcc.getVal()
+  recoRccerror = fsigcc.getError()
+  print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
+  print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
+else:
+  print "FINAL: freeTTCC : "+str(freeTTCC)
   recoRcc      = fsigcc.getVal()
   recoRccerror = fsigcc.getError()
   print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
@@ -303,6 +343,7 @@ kVal      = k.getVal()
 kValerror = k.getError()
 print "FINAL: $k = "+str(round(kVal*10000)/10000)+" \pm "+str(round(kValerror*10000)/10000)+"$"
 
+print "FINAL: ----------------------   "
 
 ################
 ################
@@ -502,8 +543,8 @@ if freeTTB:
   l2.SetLineColor(0)
   l2.Draw()
 
-  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.eps");
-  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.png");
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.eps")
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.png")
 
 ###########################
 ###########################
@@ -541,9 +582,60 @@ if freeTTCC:
   l2.SetLineColor(0)
   l2.Draw()
 
-  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.eps");
-  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.png");
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.eps")
+  cNLLContour.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.png")
 
 ###########################
+###########################
+###########################
+cN = TCanvas("cN", "cN", 1)
+#histograms[GEN+"ttcc"]["h11"].Add(histograms[GEN+"ttc"]["h11"])
+
+histograms[GEN+"ttbb"]["h11"].DrawNormalized("HIST")
+histograms[GEN+"ttb"]["h11"].DrawNormalized("sameHIST")
+histograms[GEN+"ttcc"]["h11"].DrawNormalized("sameHIST")
+histograms[GEN+"ttlf"]["h11"].DrawNormalized("sameHIST")
+l21 = make_legend(0.69,0.6,0.85,0.88)
+l21.AddEntry(histograms[GEN+"ttbb"]["h11"],"ttbb","l")
+l21.AddEntry(histograms[GEN+"ttb"]["h11"],"ttb","l")
+l21.AddEntry(histograms[GEN+"ttcc"]["h11"],"ttcc","l")
+l21.AddEntry(histograms[GEN+"ttlf"]["h11"],"ttlf","l")
+l21.SetTextSize(0.04)
+l21.SetFillColor(0)
+l21.SetLineColor(0)
+l21.Draw()
+
+pt.Draw()
+pt2.Draw()
+pt3.Draw()
+
+
+
+cN.Print("plots/"+GEN+"_Norm1.eps")
+cN.Print("plots/"+GEN+"_Norm1.png")
+###########################
+cN2 = TCanvas("cN2", "cN2", 1)
+#histograms[GEN+"ttcc"]["h12"].Add(histograms[GEN+"ttc"]["h12"])
+
+histograms[GEN+"ttbb"]["h12"].DrawNormalized("HIST")
+histograms[GEN+"ttb"]["h12"].DrawNormalized("sameHIST")
+histograms[GEN+"ttcc"]["h12"].DrawNormalized("sameHIST")
+histograms[GEN+"ttlf"]["h12"].DrawNormalized("sameHIST")
+l22 = make_legend(0.69,0.6,0.85,0.88)
+l22.AddEntry(histograms[GEN+"ttbb"]["h12"],"ttbb","l")
+l22.AddEntry(histograms[GEN+"ttb"]["h12"],"ttb","l")
+l22.AddEntry(histograms[GEN+"ttcc"]["h12"],"ttcc","l")
+l22.AddEntry(histograms[GEN+"ttlf"]["h12"],"ttlf","l")
+l22.SetTextSize(0.04)
+l22.SetFillColor(0)
+l22.SetLineColor(0)
+l22.Draw()
+pt.Draw()
+pt2.Draw()
+pt3.Draw()
+
+
+cN2.Print("plots/"+GEN+"_Norm2.eps")
+cN2.Print("plots/"+GEN+"_Norm2.png")
 ###########################
 ###########################
