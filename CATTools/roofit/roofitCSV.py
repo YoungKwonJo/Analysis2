@@ -285,7 +285,7 @@ bkgpdf       = RooHistPdf("bkgpdf",      "bkgpdf",       RooArgSet(RooArgList(x,
 if freeTTB and not freeTTCC  : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
 elif not freeTTB and freeTTCC: model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2con, fsigcc))
 elif freeTTB and freeTTCC    : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2, fsigcc))
-else                         : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2con))
+else                         : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2con))
 
 #model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,knbkg)) # k*bkg
 model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,nbkg)) # fixing bkg

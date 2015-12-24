@@ -1,13 +1,13 @@
 FINAL: ----------------------   
 FINAL: MC:MG5
 FINAL: prefit: R=0.0328
-FINAL: $R = 0.0819 \pm 0.0111$
+FINAL: $R = 0.0316 \pm 0.007$
 FINAL: freeTTB : False
 FINAL: prefit: R2=0.0865
-FINAL: $R2 = 0.2157
+FINAL: $R2 = 0.083
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.0356
-FINAL: $k = 0.8676 \pm 0.033$
+FINAL: $k = 0.887 \pm 0.033$
 FINAL: ----------------------   
 FINAL: ----------------------   
 FINAL: MC:MG5
@@ -47,13 +47,13 @@ FINAL: ----------------------
 FINAL: ----------------------   
 FINAL: MC:POW
 FINAL: prefit: R=0.0312
-FINAL: $R = 0.1177 \pm 0.0159$
+FINAL: $R = 0.0326 \pm 0.0072$
 FINAL: freeTTB : False
 FINAL: prefit: R2=0.0867
-FINAL: $R2 = 0.3272
+FINAL: $R2 = 0.0905
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.035
-FINAL: $k = 1.0889 \pm 0.0416$
+FINAL: $k = 1.1211 \pm 0.0417$
 FINAL: ----------------------   
 FINAL: ----------------------   
 FINAL: MC:POW
@@ -93,13 +93,13 @@ FINAL: ----------------------
 FINAL: ----------------------   
 FINAL: MC:AMC
 FINAL: prefit: R=0.0271
-FINAL: $R = 0.1462 \pm 0.0103$
+FINAL: $R = 0.0722 \pm 0.0106$
 FINAL: freeTTB : False
 FINAL: prefit: R2=0.0523
-FINAL: $R2 = 0.2818
+FINAL: $R2 = 0.1391
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.0325
-FINAL: $k = 1.0792 \pm 0.0406$
+FINAL: $k = 1.0919 \pm 0.0406$
 FINAL: ----------------------   
 FINAL: ----------------------   
 FINAL: MC:AMC
