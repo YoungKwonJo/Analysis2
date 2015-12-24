@@ -1,14 +1,13 @@
 FINAL: ----------------------   
 FINAL: MC:MG5
 FINAL: prefit: R=0.0328
-FINAL: $R = 0.0313 \pm 0.0085$
+FINAL: $R = 0.0819 \pm 0.0111$
 FINAL: freeTTB : False
 FINAL: prefit: R2=0.0865
-FINAL: $R2 = 0.0823
+FINAL: $R2 = 0.2157
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.0356
-FINAL: $Rcc = 0.0381 \pm 0.0391$
-FINAL: $k = 0.887 \pm 0.033$
+FINAL: $k = 0.8676 \pm 0.033$
 FINAL: ----------------------   
 FINAL: ----------------------   
 FINAL: MC:MG5
@@ -19,7 +18,6 @@ FINAL: prefit: R2=0.0865
 FINAL: $R2 = 0.0524 \pm 0.0309$
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.0356
-FINAL: $Rcc = 0.0356 \pm 0.0$
 FINAL: $k = 0.8867 \pm 0.033$
 FINAL: ----------------------   
 FINAL: ----------------------   
@@ -49,14 +47,13 @@ FINAL: ----------------------
 FINAL: ----------------------   
 FINAL: MC:POW
 FINAL: prefit: R=0.0312
-FINAL: $R = 0.0258 \pm 0.0094$
+FINAL: $R = 0.1177 \pm 0.0159$
 FINAL: freeTTB : False
 FINAL: prefit: R2=0.0867
-FINAL: $R2 = 0.0717
+FINAL: $R2 = 0.3272
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.035
-FINAL: $Rcc = 0.08 \pm 0.0437$
-FINAL: $k = 1.1213 \pm 0.0417$
+FINAL: $k = 1.0889 \pm 0.0416$
 FINAL: ----------------------   
 FINAL: ----------------------   
 FINAL: MC:POW
@@ -67,7 +64,6 @@ FINAL: prefit: R2=0.0867
 FINAL: $R2 = 0.0445 \pm 0.0408$
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.035
-FINAL: $Rcc = 0.035 \pm 0.0$
 FINAL: $k = 1.121 \pm 0.0417$
 FINAL: ----------------------   
 FINAL: ----------------------   
@@ -97,14 +93,13 @@ FINAL: ----------------------
 FINAL: ----------------------   
 FINAL: MC:AMC
 FINAL: prefit: R=0.0271
-FINAL: $R = 0.0498 \pm 0.0105$
+FINAL: $R = 0.1462 \pm 0.0103$
 FINAL: freeTTB : False
 FINAL: prefit: R2=0.0523
-FINAL: $R2 = 0.096
+FINAL: $R2 = 0.2818
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.0325
-FINAL: $Rcc = 0.2087 \pm 0.0345$
-FINAL: $k = 1.0929 \pm 0.0406$
+FINAL: $k = 1.0792 \pm 0.0406$
 FINAL: ----------------------   
 FINAL: ----------------------   
 FINAL: MC:AMC
@@ -115,7 +110,6 @@ FINAL: prefit: R2=0.0523
 FINAL: $R2 = 0.1281 \pm 0.0304$
 FINAL: freeTTCC : False
 FINAL: prefit: Rcc=0.0325
-FINAL: $Rcc = 0.0325 \pm 0.0$
 FINAL: $k = 1.0917 \pm 0.0406$
 FINAL: ----------------------   
 FINAL: ----------------------   
