@@ -52,7 +52,19 @@ def addLegend(GEN):
 
   return tex2
 
+def addLegend2(text, xxx, yyy):
+  #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
+  tex2 = TLatex(-20.,50.,text)
+  tex2.SetNDC()
+  tex2.SetTextAlign(12)
+  tex2.SetX(xxx)
+  tex2.SetY(yyy)
+  #tex2.SetTextColor(2)
+  tex2.SetTextFont(42)
+  tex2.SetTextSize(0.05)
+  tex2.SetTextSizePixels(24)
 
+  return tex2
 
 def addDecayMode(ll):
   ll2="l^{#mp}l^{#pm} channel"
@@ -735,32 +747,53 @@ if len(sys.argv) > 3:
   arg3 = sys.argv[3]
 
 histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2)
+orig_r = 0.0316 # MG5
 
 if int(arg3)==0:
   aaa=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
 else:
   #a = []
-  hpull = TH1F("recoR_pull","pull test for recoR",100,0,100)
-  hpull2= TH1F("recoR_pull2","pull test for recoR",100,0,100)
-  for i in range(100):
+  hpull = TH1F("recoR_pull","pull test for recoR",80,-2,2)
+  #hpull = TH1F("recoR_pull","pull test for recoR",100,0,100)
+  #hpull2= TH1F("recoR_pull2","pull test for recoR",100,0,100)
+  for i in range(500):
     r,r_err = fitting(histograms, freeTTB, freeTTCC, GEN,True,True)
     #a.append( {i, result})
-    hpull.SetBinContent(i+1,r)
-    hpull.SetBinError(i+1,r_err)
+    hpull.Fill((orig_r-r)/r_err)
+    #hpull.SetBinContent(i+1,r)
+    #hpull.SetBinError(i+1,r_err)
   
  #0.0316 \pm 0.007
-  hpull2.SetBinContent(50,0.0316)
-  hpull2.SetBinError(50,0.007)
-  hpull2.SetLineColor(kRed)
-  hpull2.SetMarkerColor(kRed)
+  #hpull2.SetBinContent(50,0.0316)
+  #hpull2.SetBinError(50,0.007)
+  #hpull2.SetLineColor(kRed)
+  #hpull2.SetMarkerColor(kRed)
 
   #print "test : "+str(a)
   cpull = TCanvas("cpull", "cpull", 1)
-  hpull.GetXaxis().SetTitle("Counts")
-  hpull.GetYaxis().SetTitle("recoR")
+  #hpull.GetXaxis().SetTitle("Counts")
+  #hpull.GetYaxis().SetTitle("recoR")
+  hpull.GetYaxis().SetTitle("Counts ")
+  hpull.GetXaxis().SetTitle("(R_orig-R_i)/Rerr_i")
+  pt = addLegendCMS()
+  pt2 = addDecayMode("LL")
+  pt3 = addLegend("Madgraph")
+  if GEN == "POW": pt3=addLegend("Powheg")
+  if GEN == "AMC": pt3=addLegend("aMC@NLO")
   hpull.Draw()
-  hpull2.Draw("same")
-  cpull.Print("plots/recoR_pull_test.eps")
-  cpull.Print("plots/recoR_pull_test.png")
+  hpull.Fit("gaus","0")
+  #hpull2.Draw("same")
+  fit1 = hpull.GetFunction("gaus")
+  fit1.SetLineColor(kRed)
+  fit1.Draw("same")
+  mytext= ("Mean: "+str(round(fit1.GetParameter(1)*1000)/1000))
+  mytext2= ("Sigma: "+str(round(fit1.GetParameter(2)*10000)/10000))
+  pt4 = addLegend2(mytext,0.7,0.8)
+  pt5 = addLegend2(mytext2,0.7,0.75)
+  pt4.Draw()
+  pt5.Draw()
+
+  cpull.Print("plots/recoR_pull_test"+GEN+".eps")
+  cpull.Print("plots/recoR_pull_test"+GEN+".png")
 
 
