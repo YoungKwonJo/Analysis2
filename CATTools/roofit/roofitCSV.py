@@ -748,6 +748,7 @@ if len(sys.argv) > 3:
 
 histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2)
 orig_r = 0.0316 # MG5
+orig_err=0.00001#
 
 if int(arg3)==0:
   aaa=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
@@ -790,13 +791,26 @@ else:
   mytext= ("Mean: "+str(round(fit1.GetParameter(1)*1000)/1000))
   mytext2= ("Sigma: "+str(round(fit1.GetParameter(2)*10000)/10000))
   mytext3= ("R_orig: "+str(round(orig_r*10000)/10000))
+  mytext4= ("R_orig_err: "+str(round(orig_err*10000)/10000))
   
-  pt4 = addLegend2(mytext,0.7,0.8)
-  pt5 = addLegend2(mytext2,0.7,0.75)
-  pt6 = addLegend2(mytext3,0.7,0.7)
+  pt4 = addLegend2(mytext,0.6,0.8)
+  pt5 = addLegend2(mytext2,0.6,0.75)
+  pt6 = addLegend2(mytext3,0.2,0.5)
+  pt7 = addLegend2(mytext4,0.2,0.45)
   pt4.Draw()
   pt5.Draw()
   pt6.Draw()
+  pt7.Draw()
+  pt = addLegendCMS()
+  pt2 = addDecayMode("LL")
+  pt3 = addLegend("Madgraph")
+  if GEN == "POW": pt3=addLegend("Powheg")
+  if GEN == "AMC": pt3=addLegend("aMC@NLO")
+
+
+  pt.Draw()
+  pt2.Draw()
+  pt3.Draw()
 
   cpull.Print("plots/recoR_pull_test"+GEN+".eps")
   cpull.Print("plots/recoR_pull_test"+GEN+".png")
