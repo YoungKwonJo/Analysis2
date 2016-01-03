@@ -756,6 +756,7 @@ else:
   hpull = TH1F("recoR_pull","pull test for recoR",80,-2,2)
   #hpull = TH1F("recoR_pull","pull test for recoR",100,0,100)
   #hpull2= TH1F("recoR_pull2","pull test for recoR",100,0,100)
+  orig_r,orig_err=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
   for i in range(500):
     r,r_err = fitting(histograms, freeTTB, freeTTCC, GEN,True,True)
     #a.append( {i, result})
@@ -788,10 +789,14 @@ else:
   fit1.Draw("same")
   mytext= ("Mean: "+str(round(fit1.GetParameter(1)*1000)/1000))
   mytext2= ("Sigma: "+str(round(fit1.GetParameter(2)*10000)/10000))
+  mytext3= ("R_orig: "+str(round(orig_r*10000)/10000))
+  
   pt4 = addLegend2(mytext,0.7,0.8)
   pt5 = addLegend2(mytext2,0.7,0.75)
+  pt6 = addLegend2(mytext3,0.7,0.7)
   pt4.Draw()
   pt5.Draw()
+  pt6.Draw()
 
   cpull.Print("plots/recoR_pull_test"+GEN+".eps")
   cpull.Print("plots/recoR_pull_test"+GEN+".png")
