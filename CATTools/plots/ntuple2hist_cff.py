@@ -32,16 +32,25 @@ def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
   for cutname in cuts["cut"]:
     for i,ii in enumerate(monitors):
       mon = h1_set(mc['name'],monitors[i],cutname+cuts["channel"])
-      cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight)+"*"+weight+"/"+str(Ntot)+")"
+      cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight[0])+"*"+weight+"/"+str(Ntot)+")"
       #if int(cutname[1:2])==6 : cut = cut+"*(csvm_sf)"
       #if int(cutname[1:2])==7 : cut = cut+"*(csvt_sf)"
 
       if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
-        h1 = h1_maker(tree,mon,cut)
-        h.append(copy.deepcopy(h1))
+        continue
+        #h1 = h1_maker(tree,mon,cut)
+        #h.append(copy.deepcopy(h1))
       else :
         h1 = h1_maker(tree2,mon,cut)
         h.append(copy.deepcopy(h1))
+      if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 ):
+        for j,sysWeight in enumerate(eventweight): 
+          if j>0:
+            cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight[0])+"*("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
+            mon = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+sysWeight)
+            h1 = h1_maker(tree2,mon,cut)
+            h.append(copy.deepcopy(h1))
+
       #making shape for dy estimation
       if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)):
         incut = "((ll_m > 76) * (ll_m < 106))"
@@ -49,19 +58,20 @@ def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
         monIN = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+"_in")
         monOUT = h1_set(mc['name'],monitors[i],cutname+cuts["channel"]+"_out")
         newCut = cuts["cut"][cutname].replace("* (step2==1)","")
-        cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+str(eventweight)+"*"+weight+"/"+str(Ntot)+")"
-        cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+str(eventweight)+"*"+weight+"/"+str(Ntot)+")"
+        cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+str(eventweight[0])+"*"+weight+"/"+str(Ntot)+")"
+        cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+str(eventweight[0])+"*"+weight+"/"+str(Ntot)+")"
         if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
-          h1 = h1_maker(tree,monIN,cutIN)
-          h.append(copy.deepcopy(h1))
-          h2 = h1_maker(tree,monOUT,cutOUT)
-          h.append(copy.deepcopy(h2))
+          continue
+          #h1 = h1_maker(tree,monIN,cutIN)
+          #h.append(copy.deepcopy(h1))
+          #h2 = h1_maker(tree,monOUT,cutOUT)
+          #h.append(copy.deepcopy(h2))
         else :
           h1 = h1_maker(tree2,monIN,cutIN)
           h.append(copy.deepcopy(h1))
           h2 = h1_maker(tree2,monOUT,cutOUT)
           h.append(copy.deepcopy(h2))
- 
+
   return h
 
 
@@ -85,13 +95,20 @@ def h2_set(name,monitor,monitor2,cutname):
 def h2_all_maker(tree,mc, monitors, cuts,eventweight,Ntot):
   h = []
   for cutname in cuts["cut"]:
-    for i,ii in enumerate(monitors):
-      for j,jj in enumerate(monitors):
-        if i<j:
-          mon2 = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"])
-          cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+str(eventweight)+"/"+str(Ntot)+")"
-          h2 = h2_maker(tree,mon2,cut)
-          h.append(copy.deepcopy(h2))
+    if( cutname.find("S5")>-1 or cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1):
+      for i,ii in enumerate(monitors):
+        for j,jj in enumerate(monitors):
+          if i<j:
+            mon2 = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"])
+            cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+str(eventweight[0])+"/"+str(Ntot)+")"
+            h2 = h2_maker(tree,mon2,cut)
+            h.append(copy.deepcopy(h2))
+            for j,sysWeight in enumerate(eventweight): 
+              if j>0:
+                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+str(eventweight[0])+"*("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
+                mon = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"]+sysWeight)
+                h2 = h2_maker(tree2,mon2,cut)
+                h.append(copy.deepcopy(h2))
   return h
 
 ######################
