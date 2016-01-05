@@ -106,7 +106,7 @@ def h2_all_maker(tree,mc, monitors, cuts,eventweight,Ntot):
             for k,sysWeight in enumerate(eventweight): 
               if k>0:
                 cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")/"+str(Ntot)+")"
-                mon = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"]+sysWeight)
+                mon2 = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"]+sysWeight)
                 h2 = h2_maker(tree,mon2,cut)
                 h.append(copy.deepcopy(h2))
   return h
@@ -187,7 +187,7 @@ def ntuple2hist(json,cuts):
     Ntot = 1 #htot.GetBinContent(1)
     #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
-    h= h+h_all_maker(tree,tree2,datasamples[i],monitors,cuts,1,1)
+    h= h+h_all_maker(tree,tree2,datasamples[i],monitors,cuts,["1"],1)
     #f.Close()
 
   return h
@@ -238,7 +238,7 @@ def ntuple2hist2d(json,cuts):
     #htot = f.Get("hsumWeight")
     Ntot = 1 #htot.GetBinContent(1)
 
-    h= h+h2_all_maker(tree2,datasamples[i],monitors2,cuts,1,1)
+    h= h+h2_all_maker(tree2,datasamples[i],monitors2,cuts,["1"],1)
   return h
 
 
