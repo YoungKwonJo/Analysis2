@@ -103,11 +103,11 @@ def h2_all_maker(tree,mc, monitors, cuts,eventweight,Ntot):
             cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+eventweight[0]+"/"+str(Ntot)+")"
             h2 = h2_maker(tree,mon2,cut)
             h.append(copy.deepcopy(h2))
-            for j,sysWeight in enumerate(eventweight): 
-              if j>0:
-                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
+            for k,sysWeight in enumerate(eventweight): 
+              if k>0:
+                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")/"+str(Ntot)+")"
                 mon = h2_set(mc['name'],monitors[i],monitors[j],cutname+cuts["channel"]+sysWeight)
-                h2 = h2_maker(tree2,mon2,cut)
+                h2 = h2_maker(tree,mon2,cut)
                 h.append(copy.deepcopy(h2))
   return h
 
