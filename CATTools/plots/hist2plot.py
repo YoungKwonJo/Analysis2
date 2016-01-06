@@ -71,9 +71,9 @@ jsonLL = {
 "datasamples" : datasamples,
 "cuts" : [
 #"S0","S1","S2","S3","S4","S5","S6","S7"
-"S2"#,"S3","S4","S5",
-#"S6", "S6csvweight", "S6csvt_sf", "S6csvm_sf", "S6csvl_sf",
-#"S7", "S7csvweight", "S7csvt_sf", "S7csvm_sf", "S7csvl_sf"
+"S2","S3","S4","S5",
+"S6", "S6csvweight", "S6csvt_sf", "S6csvm_sf", "S6csvl_sf",
+"S7", "S7csvweight", "S7csvt_sf", "S7csvm_sf", "S7csvl_sf"
    ],
 "monitors" : mon,
 "monitors2" : mon2

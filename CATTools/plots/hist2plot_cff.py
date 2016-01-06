@@ -521,7 +521,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
 
   hdata.Reset()
   for i,mc in enumerate(datasamples):
-    histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
+    histnameS = "h1_"+mc['name']+"_"+mon+"_"+step[0:5]
     channel = step[0:2]
     h1 = f.Get(histnameS).Clone("h"+histnameS)
     if type(h1) is not TH1D :
@@ -806,9 +806,9 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
 
   hdata.Reset()
   for i,mc in enumerate(datasamples):
-    histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step
-    histnameSee = "h1_"+mc['name']+"_"+mon+"_ee_"+step
-    histnameSem = "h1_"+mc['name']+"_"+mon+"_em_"+step
+    histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step[0:2]
+    histnameSee = "h1_"+mc['name']+"_"+mon+"_ee_"+step[0:2]
+    histnameSem = "h1_"+mc['name']+"_"+mon+"_em_"+step[0:2]
     #channel = step[2:4]
     h1ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
     h1ee = f.Get(histnameSee).Clone("h"+histnameSee)
