@@ -14,11 +14,18 @@ DYsf = {
   "kMM":0.590181280767,
   "kEE":0.423598660525,
  "S2":(1.0,1.0),#,(1.0194253625808745, 0.9761723128684477)
+ "S3":(0.969459526796,0.929967637403),
+ "S4":(0.887850794773,0.828150595483),
+ "S5":(0.922371868199,1.1752323039),
+ "S6":(0.922371868199,1.1752323039),
+ "S7":(0.922371868199,1.1752323039),
+"old":"""
  "S3":(1.0194253625808745, 0.9761723128684477),
  "S4":(0.9490671288867788, 0.880210249155921),
  "S5":(1.4655520972621454, 1.7982692259874904),
  "S6":(1.4655520972621454, 1.7982692259874904),
  "S7":(1.4655520972621454, 1.7982692259874904)
+"""
 # "S6":(0.7244044498623947, -2.2453439355301055),
 # "S7":(1.5347787622277453, 140.52894541739607),
 }
@@ -27,8 +34,8 @@ def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
                        rd_ee_in, rd_mm_in, rd_em_in):    
     kMM = sqrt(rd_mm_in/rd_ee_in)/2.
     kEE = sqrt(rd_ee_in/rd_mm_in)/2.
-    kMM=0.590181280767
-    kEE=0.423598660525
+    #kMM=0.590181280767
+    #kEE=0.423598660525
     print "    kMM="+str(kMM)
     print "    kEE="+str(kEE)
 
@@ -298,9 +305,9 @@ def myHist2TGraphError(hist1):
 #####################
 def drellYanEstimationRun(f,step): #,mcsamples,datasamples):
  
-  step=step.replace("mm","")
-  step=step.replace("ee","")
-  step=step.replace("em","")
+  step=step.replace("mm_","")
+  step=step.replace("ee_","")
+  step=step.replace("em_","")
   mcs = ["DYJets","DYJets10"]
   mcxs = [6025.2,23914.65]
   datas = ["1","2","3"]
@@ -317,41 +324,41 @@ def drellYanEstimationRun(f,step): #,mcsamples,datasamples):
   hrdemin = TH1D("rd_em_in","",60,0,300)
 
   for i,mc in enumerate(mcs) :
-    inee = "h1_"+mc+"_ZMass_"+step+"ee_in"
+    inee = "h1_"+mc+"_ZMass_ee_"+step+"_in"
     h1=f.Get(inee).Clone("hhhh_ee_"+mc) 
     h1.Scale(mainlumi*mcxs[i])
     hmceein.Add(h1)
 
-    inmm = "h1_"+mc+"_ZMass_"+step+"mm_in"
+    inmm = "h1_"+mc+"_ZMass_mm_"+step+"_in"
     h2=f.Get(inmm).Clone("hhhh_mm_"+mc) 
     h2.Scale(mainlumi*mcxs[i])
     hmcmmin.Add(h2)
 
-    inem = "h1_"+mc+"_ZMass_"+step+"em_in"
+    inem = "h1_"+mc+"_ZMass_em_"+step+"_in"
     h3=f.Get(inem).Clone("hhhh_em_"+mc) 
     h3.Scale(mainlumi*mcxs[i])
     hmcemin.Add(h3)
 
-    outee = "h1_"+mc+"_ZMass_"+step+"ee_out"
+    outee = "h1_"+mc+"_ZMass_ee_"+step+"_out"
     h11=f.Get(outee).Clone("hhhh_ee_"+mc) 
     h11.Scale(mainlumi*mcxs[i])
     hmceeout.Add(h11)
 
-    outmm = "h1_"+mc+"_ZMass_"+step+"mm_out"
+    outmm = "h1_"+mc+"_ZMass_mm_"+step+"_out"
     h22=f.Get(outmm).Clone("hhhh_mm_"+mc) 
     h22.Scale(mainlumi*mcxs[i])
     hmcmmout.Add(h22)
 
   for data in datas :
-    eein = "h1_ElEl"+data+"_ZMass_"+step+"ee_in"
+    eein = "h1_ElEl"+data+"_ZMass_ee_"+step+"_in"
     h1=f.Get(eein).Clone("hhhh_rd_ee"+data)
     hrdeein.Add(h1)
 
-    mmin = "h1_MuMu"+data+"_ZMass_"+step+"mm_in"
+    mmin = "h1_MuMu"+data+"_ZMass_mm_"+step+"_in"
     h2=f.Get(mmin).Clone("hhhh_rd_mm"+data)
     hrdmmin.Add(h2)
 
-    emin = "h1_MuEl"+data+"_ZMass_"+step+"em_in"
+    emin = "h1_MuEl"+data+"_ZMass_em_"+step+"_in"
     h3=f.Get(emin).Clone("hhhh_rd_em"+data)
     hrdemin.Add(h3)
 
@@ -373,7 +380,7 @@ def singleplotStack2(filename,mon,step,mcsamples,datasamples,useReturn):
 def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
 
   #dyest = drellYanEstimationRun(f,step)
-  dyest = DYsf[step[0:2]]
+  dyest = DYsf[step[3:5]]
   mon = mon1["name"]
 
   #f = TFile.Open(filename,"read")
@@ -430,7 +437,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
     if not isMC: continue
 
     histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
-    channel = step[2:4]
+    channel = step[0:2]
     h2 = f.Get(histnameS).Clone("h"+histnameS)
     if type(h2) is not TH1D :
       continue
@@ -443,7 +450,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
 
     ###############
     isDY = mc['name'].find("DYJet")>-1
-    if isDY and int(step[1:2])>1: 
+    if isDY and int(step[4:5])>1: 
       if step.find("ee")>-1:
         h2.Scale(dyest[0])
       if step.find("mm")>-1:
@@ -515,7 +522,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
   hdata.Reset()
   for i,mc in enumerate(datasamples):
     histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
-    channel = step[2:4]
+    channel = step[0:2]
     h1 = f.Get(histnameS).Clone("h"+histnameS)
     if type(h1) is not TH1D :
       continue
@@ -678,7 +685,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
 
   hs = THStack("hs","")
 
-  hmctotName = "h1_"+mcsamples[0]['name']+"_"+mon+"_"+step+"mm"
+  hmctotName = "h1_"+mcsamples[0]['name']+"_"+mon+"_mm_"+step
   if log : print "hmcTotal: "+hmctotName
   hmctot = f.Get(hmctotName).Clone("hmctot")
   hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
@@ -702,9 +709,9 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     isMC = mc['label'].find("DATA")==-1
     if not isMC: continue
 
-    histnameSmm = "h1_"+mc['name']+"_"+mon+"_"+step+"mm"
-    histnameSee = "h1_"+mc['name']+"_"+mon+"_"+step+"ee"
-    histnameSem = "h1_"+mc['name']+"_"+mon+"_"+step+"em"
+    histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step
+    histnameSee = "h1_"+mc['name']+"_"+mon+"_ee_"+step
+    histnameSem = "h1_"+mc['name']+"_"+mon+"_em_"+step
     #channel = step[2:4]
     h2ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
     h2ee = f.Get(histnameSee).Clone("h"+histnameSee)
@@ -799,10 +806,10 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
 
   hdata.Reset()
   for i,mc in enumerate(datasamples):
-    histnameSmm = "h1_"+mc['name']+"_"+mon+"_"+step+"mm"
-    histnameSee = "h1_"+mc['name']+"_"+mon+"_"+step+"ee"
-    histnameSem = "h1_"+mc['name']+"_"+mon+"_"+step+"em"
-    channel = step[2:4]
+    histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step
+    histnameSee = "h1_"+mc['name']+"_"+mon+"_ee_"+step
+    histnameSem = "h1_"+mc['name']+"_"+mon+"_em_"+step
+    #channel = step[2:4]
     h1ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
     h1ee = f.Get(histnameSee).Clone("h"+histnameSee)
     h1em = f.Get(histnameSem).Clone("h"+histnameSem)
