@@ -430,7 +430,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
 
   isStat = mon.find("Stat")>-1
   if isStat : 
-    print "Stat step: "+step
+    print "Stat: step: "+step
 
   for i,mc in enumerate(mcsamples):
     isMC = mc['label'].find("DATA")==-1
@@ -703,7 +703,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
 
   isStat = mon.find("Stat")>-1
   if isStat : 
-    print "Stat step: "+step
+    print "Stat: step: "+step
 
   for i,mc in enumerate(mcsamples):
     isMC = mc['label'].find("DATA")==-1
