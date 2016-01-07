@@ -1,6 +1,6 @@
 # roofit
 
-./run.sh 0 0
+>./run.sh 
 
 
 #Todo list(fix me)
