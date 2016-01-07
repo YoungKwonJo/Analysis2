@@ -190,7 +190,7 @@ def loadHistogram(arg1, arg2):
   signals2= [GEN+'ttcc', GEN+'ttlf']#, GEN+'ttot']
   backgrounds1= [GEN+"ttot"]
   backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ']
-  backgrounds3= [ 'DYJets']
+  backgrounds3= [ 'DYJets','DYJets10']
   higgs= ['ttH2non', 'ttH2bb']
   
   bkghist = histograms[GEN+'ttot']["h1"].Clone("bkghist")
@@ -211,7 +211,7 @@ def loadHistogram(arg1, arg2):
     #print "FINAL "+hh
   histograms["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
 
-  for hh in backgrounds2:
+  for hh in backgrounds3:
     h = histograms[hh]["h1"]
     ddbkghist.Add(h)
     #print "FINAL "+hh
