@@ -382,6 +382,8 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
   #dyest = drellYanEstimationRun(f,step)
   dyest = DYsf[step[3:5]]
   mon = mon1["name"]
+  channel = step[0:2]
+  step2 = step[3:]
 
   #f = TFile.Open(filename,"read")
   canvasname = mon+step
@@ -437,7 +439,6 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
     if not isMC: continue
 
     histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
-    channel = step[0:2]
     h2 = f.Get(histnameS).Clone("h"+histnameS)
     if type(h2) is not TH1D :
       continue
@@ -463,13 +464,13 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
     if not isPowheg and not isTTH and not isMG5:
       hmcAmcNLO.Add(h2)
       if isStat and isAmcNLO:
-        if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*100)/100)+" \pm "+str(round(h2.GetBinError(1)*100)/100)+" $"
+        if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*10)/10)+" \pm "+str(round(h2.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)))+" \pm "+str(round(h2.GetBinError(1)))+" $"
       if isAmcNLO:  continue
     if not isPowheg and not isTTH and not isAmcNLO:
       hmcMG5.Add(h2)
       if isStat and isMG5:
-        if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*100)/100)+" \pm "+str(round(h2.GetBinError(1)*100)/100)+" $"
+        if h2.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)*10)/10)+" \pm "+str(round(h2.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2.GetBinContent(1)))+" \pm "+str(round(h2.GetBinError(1)))+" $"
       if isMG5:  continue
 
@@ -490,7 +491,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
       h3.SetLineColor(kBlack)
       label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       if isStat:
-        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
       leg.AddEntry(h3, label, "f")
       hs.Add(h3)
@@ -502,7 +503,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
 
       label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       if isStat:
-        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
  
       leg2.AddEntry(h3, label, "f")
@@ -555,12 +556,12 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
   labeltot = ("MC Total") #+ (" %.0f"%hmctot.Integral()).rjust(8)
   #leg2.AddEntry(hmctot,labeltot,"")
   if isStat:
-    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $ "+str(round(hmctot.GetBinContent(1)*100)/100)+" \pm "+str(round(hmctot.GetBinError(1)*100)/100)+" $"
+    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $ "+str(round(hmctot.GetBinContent(1)*10)/10)+" \pm "+str(round(hmctot.GetBinError(1)*10)/10)+" $"
     else                           : print " Stat: "+("MC Total").rjust(10)+" & $ "+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
  
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
   if isStat and (hmcSig.Integral()>0):
-    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)*100)/100)+" \pm "+str(round(hmcSig.GetBinError(1)*100)/100)+" $"
+    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)*10)/10)+" \pm "+str(round(hmcSig.GetBinError(1)*10)/10)+" $"
     else                           : print " Stat: "+("tth").rjust(10)+" & $ "+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
  
   labeldata = ("DATA     ")# + (" %.0f"%h2data.Integral()).rjust(8)
@@ -632,8 +633,8 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
   c1.Modified()
   c1.cd()
 
-  output = "plots/eps/TH1_"+mon+"_"+step+".eps"
-  output2 = "plots/png/TH1_"+mon+"_"+step+".png"
+  output = "plots/eps/TH1_"+mon+"_"+step2+channel+".eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step2+channel+".png"
   c1.Print(output)
   c1.Print(output2)
 
@@ -749,13 +750,13 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     if not isPowheg and not isTTH and not isMG5:
       hmcAmcNLO.Add(h2ll)
       if isStat and isAmcNLO:
-        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*100)/100)+" \pm "+str(round(h2ll.GetBinError(1)*100)/100)+" $"
+        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*10)/10)+" \pm "+str(round(h2ll.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
       if isAmcNLO : continue
     if not isPowheg and not isTTH and not isAmcNLO:
       hmcMG5.Add(h2ll)
       if isStat and isMG5:
-        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*100)/100)+" \pm "+str(round(h2ll.GetBinError(1)*100)/100)+" $"
+        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*10)/10)+" \pm "+str(round(h2ll.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
       if isMG5 : continue
 
@@ -777,7 +778,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
       label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg.AddEntry(h3, label, "f")
       if isStat:
-        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
  
       hs.Add(h3)
@@ -789,7 +790,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
       label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg2.AddEntry(h3, label, "f")
       if isStat:
-        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*100)/100)+" \pm "+str(round(h3.GetBinError(1)*100)/100)+" $"
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
  
       hs.Add(h3)
@@ -863,12 +864,12 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
   labeltot = ("MC Total") + (" %.0f"%hmctot.Integral()).rjust(8)
   #leg2.AddEntry(hmctot,labeltot,"")
   if isStat:
-    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)*100)/100)+" \pm "+str(round(hmctot.GetBinError(1)*100)/100)+" $"
+    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)*10)/10)+" \pm "+str(round(hmctot.GetBinError(1)*10)/10)+" $"
     else                           : print " Stat: "+("MC Totlal").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
  
   label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
   if isStat and (hmcSig.Integral()>0):
-    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)*100)/100)+" \pm "+str(round(hmcSig.GetBinError(1)*100)/100)+" $"
+    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)*10)/10)+" \pm "+str(round(hmcSig.GetBinError(1)*10)/10)+" $"
     else                       : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
  
   labeldata = ("DATA     ") #+ (" %.0f"%h2data.Integral()).rjust(8)

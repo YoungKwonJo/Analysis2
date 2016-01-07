@@ -28,13 +28,16 @@ json = {
 "mcsamples" : mcsamples,
 "datasamples" : datasamples,
 "cuts" : [
-"mm_S2","mm_S3","mm_S4","mm_S5",
+"mm_S2","mm_S3","mm_S4",
+"mm_S5", "mm_S5csvweight", "mm_S5csvt_sf", "mm_S5csvm_sf", "mm_S5csvl_sf",
 "mm_S6", "mm_S6csvweight", "mm_S6csvt_sf", "mm_S6csvm_sf", "mm_S6csvl_sf",
 "mm_S7", "mm_S7csvweight", "mm_S7csvt_sf", "mm_S7csvm_sf", "mm_S7csvl_sf",
-"ee_S2","ee_S3","ee_S4","ee_S5",
+"ee_S2","ee_S3","ee_S4",
+"ee_S5", "ee_S5csvweight", "ee_S5csvt_sf", "ee_S5csvm_sf", "ee_S5csvl_sf",
 "ee_S6", "ee_S6csvweight", "ee_S6csvt_sf", "ee_S6csvm_sf", "ee_S6csvl_sf",
 "ee_S7", "ee_S7csvweight", "ee_S7csvt_sf", "ee_S7csvm_sf", "ee_S7csvl_sf",
-"em_S2","em_S3","em_S4","em_S5",
+"em_S2","em_S3","em_S4",
+"em_S5", "em_S5csvweight", "em_S5csvt_sf", "em_S5csvm_sf", "em_S5csvl_sf",
 "em_S6", "em_S6csvweight", "em_S6csvt_sf", "em_S6csvm_sf", "em_S6csvl_sf",
 "em_S7", "em_S7csvweight", "em_S7csvt_sf", "em_S7csvm_sf", "em_S7csvl_sf"
    ],
@@ -71,7 +74,8 @@ jsonLL = {
 "datasamples" : datasamples,
 "cuts" : [
 #"S0","S1","S2","S3","S4","S5","S6","S7"
-"S2","S3","S4","S5",
+"S2","S3","S4",
+"S5", "S5csvweight", "S5csvt_sf", "S5csvm_sf", "S5csvl_sf",
 "S6", "S6csvweight", "S6csvt_sf", "S6csvm_sf", "S6csvl_sf",
 "S7", "S7csvweight", "S7csvt_sf", "S7csvm_sf", "S7csvl_sf"
    ],
