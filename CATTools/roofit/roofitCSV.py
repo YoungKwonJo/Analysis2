@@ -99,7 +99,8 @@ def loadHistogram(arg1, arg2):
   HN2 = "jet4CSV"
   from mcsample_cfi import mcsamples,datasamples 
   lumi = 2110. 
-  Step = "S6"
+  Step = "S6csvweight"
+  Step2 = "S6"
   
   freeTTB  = False
   freeTTCC = False
@@ -115,32 +116,45 @@ def loadHistogram(arg1, arg2):
   
   #histograms = ["name":"name","hist": ]
   histograms = {}
-  
+  dy_ee_sf = 0.922371868199
+  dy_mm_sf = 1.1752323039
+ 
   f = TFile.Open("hist_all.root")
   for mc in mcsamples:
     name = mc['name']
     color = mc['color'] 
-    h1 = f.Get("h2_"+name+"_"+HN+"_"+Step+"mm").Clone("h2_"+name+"_"+Step+"LL")
-    h2 = f.Get("h2_"+name+"_"+HN+"_"+Step+"ee")
-    h3 = f.Get("h2_"+name+"_"+HN+"_"+Step+"em")
+    h1 = f.Get("h2_"+name+"_"+HN+"_mm_"+Step).Clone("h2_"+name+"_"+Step+"LL")
+    h2 = f.Get("h2_"+name+"_"+HN+"_ee_"+Step)
+    h3 = f.Get("h2_"+name+"_"+HN+"_em_"+Step)
     if h1.Integral()>0 :  h1.Scale(mc['cx']*lumi)
     if h2.Integral()>0 :  h2.Scale(mc['cx']*lumi)
     if h3.Integral()>0 :  h3.Scale(mc['cx']*lumi)
+    if name.find("DYJets")>-1:
+      h1.Scale(dy_mm_sf)
+      h2.Scale(dy_ee_sf)
+
     h1.Add(h2)
     h1.Add(h3)
   
-    h11 = f.Get("h1_"+name+"_"+HN1+"_"+Step+"mm").Clone("h11_"+name+"_"+Step+"LL")
-    h21 = f.Get("h1_"+name+"_"+HN1+"_"+Step+"ee")
-    h31 = f.Get("h1_"+name+"_"+HN1+"_"+Step+"em")
+    h11 = f.Get("h1_"+name+"_"+HN1+"_mm_"+Step).Clone("h11_"+name+"_"+Step+"LL")
+    h21 = f.Get("h1_"+name+"_"+HN1+"_ee_"+Step)
+    h31 = f.Get("h1_"+name+"_"+HN1+"_em_"+Step)
+    if name.find("DYJets")>-1:
+      h11.Scale(dy_mm_sf)
+      h21.Scale(dy_ee_sf)
+
     h11.Add(h21)
     h11.Add(h31)
   
     ci = TColor.GetColor(mc['color'])  
     h11.SetLineColor(ci)
   
-    h12 = f.Get("h1_"+name+"_"+HN2+"_"+Step+"mm").Clone("h12_"+name+"_"+Step+"LL")
-    h22 = f.Get("h1_"+name+"_"+HN2+"_"+Step+"ee")
-    h32 = f.Get("h1_"+name+"_"+HN2+"_"+Step+"em")
+    h12 = f.Get("h1_"+name+"_"+HN2+"_mm_"+Step).Clone("h12_"+name+"_"+Step+"LL")
+    h22 = f.Get("h1_"+name+"_"+HN2+"_ee_"+Step)
+    h32 = f.Get("h1_"+name+"_"+HN2+"_em_"+Step)
+    if name.find("DYJets")>-1:
+      h12.Scale(dy_mm_sf)
+      h22.Scale(dy_ee_sf)
     h12.Add(h21)
     h12.Add(h31)
   
@@ -154,12 +168,12 @@ def loadHistogram(arg1, arg2):
   for i in range(1):
     name_ = "DATA"
     color = mc['color'] 
-    h1 = f.Get("h2_MuMu1_"+HN+"_"+Step+"mm").Clone("h2_"+name_+"_"+Step+"LL")
+    h1 = f.Get("h2_MuMu1_"+HN+"_mm_"+Step2).Clone("h2_"+name_+"_"+Step2+"LL")
     h1.Reset()
     for j in range(1,4):
-      h11 = f.Get("h2_MuMu"+str(j)+"_"+HN+"_"+Step+"mm")
-      h2 = f.Get("h2_ElEl"+str(j)+"_"+HN+"_"+Step+"ee")
-      h3 = f.Get("h2_MuEl"+str(j)+"_"+HN+"_"+Step+"em")
+      h11 = f.Get("h2_MuMu"+str(j)+"_"+HN+"_mm_"+Step2)
+      h2  = f.Get("h2_ElEl"+str(j)+"_"+HN+"_ee_"+Step2)
+      h3  = f.Get("h2_MuEl"+str(j)+"_"+HN+"_em_"+Step2)
       h1.Add(h11)
       h1.Add(h2)
       h1.Add(h3)
@@ -175,11 +189,14 @@ def loadHistogram(arg1, arg2):
   #signals1= [GEN+'ttbb', GEN+'ttb']
   signals2= [GEN+'ttcc', GEN+'ttlf']#, GEN+'ttot']
   backgrounds1= [GEN+"ttot"]
-  backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ', 'DYJets']
+  backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ']
+  backgrounds3= [ 'DYJets']
   higgs= ['ttH2non', 'ttH2bb']
   
   bkghist = histograms[GEN+'ttot']["h1"].Clone("bkghist")
   bkghist.Reset()
+  ddbkghist = histograms[GEN+'ttot']["h1"].Clone("ddbkghist")
+  ddbkghist.Reset()
   
   ttcclfhist = histograms[GEN+'ttot']["h1"].Clone("ttcclfhist")
   ttcclfhist.Reset()
@@ -193,6 +210,13 @@ def loadHistogram(arg1, arg2):
     bkghist.Add(h)
     #print "FINAL "+hh
   histograms["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
+
+  for hh in backgrounds2:
+    h = histograms[hh]["h1"]
+    ddbkghist.Add(h)
+    #print "FINAL "+hh
+  histograms["ddbkg"]={"h1":copy.deepcopy(ddbkghist),"color":kGray,"exp":ddbkghist.Integral()}
+
   f.Close()
   return histograms, freeTTB, freeTTCC,GEN
 
@@ -284,6 +308,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   n_ttcclf = histograms[GEN+"ttcclf"]["exp"]
   n_ttot = histograms[GEN+"ttot"]["exp"]
   n_bkg = histograms["bkg"]["exp"]
+  n_ddbkg = histograms["ddbkg"]["exp"]
   n_data = histograms["DATA"]["exp"]
   
   n_ttjj = n_ttbb+n_ttb+n_ttcc+n_ttlf
@@ -297,6 +322,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   print "n_ttlf:"+str(n_ttlf)
   print "n_ttot:"+str(n_ttot)
   print "n_bkg:"+str(n_bkg)
+  print "n_ddbkg:"+str(n_ddbkg)
   print "n_data:"+str(n_data)
   
   
@@ -324,6 +350,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   nttot =RooRealVar(    "nttot","number of ttot events",                            n_ttot , n_ttot, n_ttot)
   knttot=RooFormulaVar("knttot","number of ttot events after fitting","k*nttot",    RooArgList(k,nttot) )
   nbkg  =RooRealVar(     "nbkg","number of background events",                      n_bkg , n_bkg, n_bkg)
+  nddbkg  =RooRealVar(   "nddbkg","number of background events",                    n_ddbkg , n_ddbkg, n_ddbkg)
   knbkg=RooFormulaVar("knbkg","number of background events after fitting","k*nbkg", RooArgList(k,nbkg) )
   
   ######
@@ -341,17 +368,20 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   """ 
   
   #histogram
-  data    = RooDataHist("data",    "data set with (x)",   RooArgList(x, y), histograms["DATA"]["h1"])
-  #ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), test_ttbb)
-  ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), histograms[GEN+"ttbb"]["h1"])
-  ttb     = RooDataHist("ttb",     "ttb  set with (x)",   RooArgList(x, y), histograms[GEN+"ttb"]["h1"])
-  #tt2b    = RooDataHist("tt2b",    "tt2b set with (x)",  RooArgList(x, y), histograms[GEN+"tt2b"]["h1"])
-  ttcc    = RooDataHist("ttcc",    "ttcc set with (x)",   RooArgList(x, y), histograms[GEN+"ttcc"]["h1"] )
-  ttlf    = RooDataHist("ttlf",    "ttlf set with (x)",   RooArgList(x, y), histograms[GEN+"ttlf"]["h1"])
-  ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", RooArgList(x, y), histograms[GEN+"ttcclf"]["h1"])
-  ttot    = RooDataHist("ttot",    "ttot set with (x)",   RooArgList(x, y), histograms[GEN+"ttot"]["h1"])
-  bkg     = RooDataHist("bkg",     "bkg  set with (x)",   RooArgList(x, y), histograms["bkg"]["h1"])
+  xyArg = RooArgList(x, y)
+  data    = RooDataHist("data",    "data set with (x)",   xyArg, histograms["DATA"]["h1"])
+  #ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   xyArg, test_ttbb)
+  ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   xyArg, histograms[GEN+"ttbb"]["h1"])
+  ttb     = RooDataHist("ttb",     "ttb  set with (x)",   xyArg, histograms[GEN+"ttb"]["h1"])
+  #tt2b    = RooDataHist("tt2b",    "tt2b set with (x)",  xyArg, histograms[GEN+"tt2b"]["h1"])
+  ttcc    = RooDataHist("ttcc",    "ttcc set with (x)",   xyArg, histograms[GEN+"ttcc"]["h1"] )
+  ttlf    = RooDataHist("ttlf",    "ttlf set with (x)",   xyArg, histograms[GEN+"ttlf"]["h1"])
+  ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", xyArg, histograms[GEN+"ttcclf"]["h1"])
+  ttot    = RooDataHist("ttot",    "ttot set with (x)",   xyArg, histograms[GEN+"ttot"]["h1"])
+  bkg     = RooDataHist("bkg",     "bkg  set with (x)",   xyArg, histograms["bkg"]["h1"])
+  ddbkg   = RooDataHist("ddbkg",   "ddbkg  set with (x)", xyArg, histograms["ddbkg"]["h1"])
 
+  """
   if isPullTest is True:
     ttbb    = RooDataHist("ttbb",    "ttbb set with (x)",   RooArgList(x, y), newTemplate(histograms[GEN+"ttbb"]["h1"]))
     ttb     = RooDataHist("ttb",     "ttb  set with (x)",   RooArgList(x, y), newTemplate(histograms[GEN+"ttb"]["h1"]))
@@ -361,7 +391,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
     ttcclf  = RooDataHist("ttcclf",  "ttcclf set with (x)", RooArgList(x, y), newTemplate(histograms[GEN+"ttcclf"]["h1"]))
     ttot    = RooDataHist("ttot",    "ttot set with (x)",   RooArgList(x, y), newTemplate(histograms[GEN+"ttot"]["h1"]))
     bkg     = RooDataHist("bkg",     "bkg  set with (x)",   RooArgList(x, y), newTemplate(histograms["bkg"]["h1"]))
-
+  """
  
 
   #print "ttbar type: "+str(type(ttbar))
@@ -376,6 +406,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   ttcclfpdf    = RooHistPdf("ttcclfpdf",   "ttcclfpdf",    RooArgSet(RooArgList(x,y)), ttcclf)
   ttotpdf      = RooHistPdf("ttotpdf",     "ttotpdf",      RooArgSet(RooArgList(x,y)), ttot)
   bkgpdf       = RooHistPdf("bkgpdf",      "bkgpdf",       RooArgSet(RooArgList(x,y)), bkg)
+  ddbkgpdf     = RooHistPdf("ddbkgpdf",    "ddbkgpdf",     RooArgSet(RooArgList(x,y)), ddbkg)
   
   #for separate ttcc
   if freeTTB and not freeTTCC  : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2))
@@ -383,8 +414,8 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   elif freeTTB and freeTTCC    : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttccpdf, ttlfpdf), RooArgList(fsig,fsig2, fsigcc))
   else                         : model  = RooAddPdf("model",   "model",RooArgList( ttbbpdf, ttbpdf, ttcclfpdf), RooArgList(fsig,fsig2con))
   
-  #model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,knbkg)) # k*bkg
-  model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,nbkg)) # fixing bkg
+  model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf,ddbkgpdf),              RooArgList(knttjj,knttot,knbkg,nddbkg)) # k*bkg
+  #model2 = RooAddPdf("model2", "model2",RooArgList( model, ttotpdf, bkgpdf),              RooArgList(knttjj,knttot,nbkg)) # fixing bkg
   model2.fitTo(data)
   #model2.fitTo(ttlf)
   #nll0 = model2.createNLL(data)
@@ -460,8 +491,19 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   pt.Draw()
   pt2.Draw()
   pt3.Draw()
-  
-  if freeTTB:
+########################
+  #cPull0 = TCanvas("CPull0", "Pull", 1)
+  #hpull = RFrame.pullHist() 
+  #RFramePull = xyArg.frame(Title("Pull Distribution"))
+  #RFramePull.addPlotable(hpull,"P")
+  #RFramePull.Draw()
+  #cPull0.Print("plot/"+GEN+"_pull_test.eps")
+
+######################## 
+  if freeTTB and freeTTCC:
+    cR10.Print("plots/"+GEN+"_R_freeTTBTTCC.eps")
+    cR10.Print("plots/"+GEN+"_R_freeTTBTTCC.png") 
+  elif freeTTB:
     cR10.Print("plots/"+GEN+"_R_freeTTB.eps")
     cR10.Print("plots/"+GEN+"_R_freeTTB.png")
   elif freeTTCC:              
@@ -513,7 +555,10 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   pt2.Draw()
   pt3.Draw()
   
-  if freeTTB:
+  if freeTTB and freeTTCC:
+    cR00.Print("plots/"+GEN+"_K_freeTTBTTCC.eps")
+    cR00.Print("plots/"+GEN+"_K_freeTTBTTCC.png") 
+  elif freeTTB:
     cR00.Print("plots/"+GEN+"_K_freeTTB.eps")
     cR00.Print("plots/"+GEN+"_K_freeTTB.png")
   elif freeTTCC:              
@@ -544,7 +589,10 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   pt2.Draw()
   pt3.Draw()
   
-  if freeTTB:
+  if freeTTB and freeTTCC:
+    cR11.Print("plots/"+GEN+"_jet3CSV_freeTTBTTCC.eps")
+    cR11.Print("plots/"+GEN+"_jet3CSV_freeTTBTTCC.png") 
+  elif freeTTB:
     cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.eps")
     cR11.Print("plots/"+GEN+"_jet3CSV_freeTTB.png")
   elif freeTTCC:              
@@ -575,7 +623,10 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   pt2.Draw()
   pt3.Draw()
   
-  if freeTTB:
+  if freeTTB and freeTTCC:
+    cR12.Print("plots/"+GEN+"_jet4CSV_freeTTBTTCC.eps")
+    cR12.Print("plots/"+GEN+"_jet4CSV_freeTTBTTCC.png") 
+  elif freeTTB:
     cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.eps")
     cR12.Print("plots/"+GEN+"_jet4CSV_freeTTB.png")
   elif freeTTCC:
@@ -623,8 +674,12 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
     l2.SetLineColor(0)
     l2.Draw()
   
-    cNLLContourb.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.eps")
-    cNLLContourb.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.png")
+    if freeTTCC:
+      cNLLContourb.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTBTTCC.eps")
+      cNLLContourb.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTBTTCC.png") 
+    else :
+      cNLLContourb.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.eps")
+      cNLLContourb.Print("plots/"+GEN+"_NLL_fsigVSfsig2_freeTTB.png")
   
   ###########################
   ###########################
@@ -663,8 +718,12 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
     l2.SetLineColor(0)
     l2.Draw()
   
-    cNLLContourc.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.eps")
-    cNLLContourc.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.png")
+    if freeTTB:
+      cNLLContourc.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTBTTCC.eps")
+      cNLLContourc.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTBTTCC.png")
+    else :
+      cNLLContourc.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.eps")
+      cNLLContourc.Print("plots/"+GEN+"_NLL_fsigVSfsigcc_freeTTCC.png")
   
   ###########################
   ###########################
