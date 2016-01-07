@@ -101,14 +101,15 @@ ttothers = mAND2(ttotheslist)
 CS = ["#660000", "#ffcc00", "#cc6600", "#cc6600", "#ff0000","#ff6565"]
 #     [ Single t, VV,        WJets,   Z+Jets ,  ttV
 #BCS = [kPink-3,   kYellow-3, kGreen-3,kOrange-3, kAzure-2 ]
-BCS = ["#ff00ff",   "#ffffff", "#33cc33","#3366ff", "#cccccc" ]
+#BCS = ["#ff00ff",   "#ffffff", "#33cc33","#3366ff", "#cccccc" ]
+BCS = ["#ff00ff",   "#ffffff", "#33cc33","#3366ff", "#7676ff" ]
 #syst_col =TColor(1756, 0.3, 0.5, 0.5, "", 0.45)
 #["TTWlNu","TTWqq',"TTZll","TTZqq",  "STbt","STt","STbtW","STtW",  "WW","WZ","ZZ",  "WJets","DYJets","DYJets10",  "ttH2non","ttH2bb"]
 BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,66.1,31.8,  61526.7,6025.2,23914.65,     0.5058,0.5058]
 
-z="v2"
-zz="v2"
-zzz="v4GenTop"
+z="v2"#v5GenTop"
+zz="v2"#v5GenTop"
+zzz="v4GenTop"##v5GenTop"
 mcsamples=[
 
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+zzz), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },
