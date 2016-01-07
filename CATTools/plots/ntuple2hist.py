@@ -34,7 +34,27 @@ for mon22 in monitors2d.keys():
     print "++"+str(mon2)+"++"
 
 #mceventweight="puWeight"
-mceventweight=["((weight/abs(weight))*(puweight)(lepweight))","csvweight","csvt_sf","csvm_sf","csvl_sf","csvt_sfup","csvt_sfdw","csvm_sfup","csvm_sfdw","csvl_sfup","csvl_sfdw"]
+mceventweight=["((weight/abs(weight))*(puweight)(lepweight))","csvweight",
+"csvweight_JES_Up",          
+"csvweight_JES_Down",        
+"csvweight_LF_Up",           
+"csvweight_LF_Down",         
+"csvweight_HF_Up",           
+"csvweight_HF_Down",         
+"csvweight_HF_Stats1_Up",    
+"csvweight_HF_Stats1_Down",  
+"csvweight_HF_Stats2_Up",    
+"csvweight_HF_Stats2_Down",  
+"csvweight_LF_Stats1_Up",    
+"csvweight_LF_Stats1_Down",  
+"csvweight_LF_Stats2_Up",    
+"csvweight_LF_Stats2_Down",  
+"csvweight_Charm_Err1_Up",   
+"csvweight_Charm_Err1_Down", 
+"csvweight_Charm_Err2_Up",   
+"csvweight_Charm_Err2_Down" 
+#"csvt_sf","csvm_sf","csvl_sf","csvt_sfup","csvt_sfdw","csvm_sfup","csvm_sfdw","csvl_sfup","csvl_sfdw"
+]
 
 jsonMM = {
 "mcsamples" : mcsamples,
