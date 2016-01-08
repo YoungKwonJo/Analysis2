@@ -93,13 +93,13 @@ gStyle.SetPadTickX(1)
 gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
-def loadHistogram(arg1, arg2):
+def loadHistogram(arg1, arg2, Step):
   HN = "jet3CSV_jet4CSV"                                                                                                          
   HN1 = "jet3CSV"
   HN2 = "jet4CSV"
   from mcsample_cfi import mcsamples,datasamples 
   lumi = 2110. 
-  Step = "S6csvweight"
+  #Step = "S6csvweight"
   Step2 = "S6"
   
   freeTTB  = False
@@ -123,6 +123,8 @@ def loadHistogram(arg1, arg2):
   for mc in mcsamples:
     name = mc['name']
     color = mc['color'] 
+    #histnameMM = "h2_"+name+"_"+HN+"_mm_"+Step
+    #print histnameMM 
     h1 = f.Get("h2_"+name+"_"+HN+"_mm_"+Step).Clone("h2_"+name+"_"+Step+"LL")
     h2 = f.Get("h2_"+name+"_"+HN+"_ee_"+Step)
     h3 = f.Get("h2_"+name+"_"+HN+"_em_"+Step)
@@ -179,12 +181,12 @@ def loadHistogram(arg1, arg2):
       h1.Add(h3)
     histograms[name_]={"h1":copy.deepcopy(h1),"color":kBlack,"exp":h1.Integral()}
   
-  print str(type(histograms))
-  print str(histograms[GEN+"ttbb"]["color"])
-  print str(histograms[GEN+"ttbb"]["exp"])
-  print ""
-  print str(histograms["DATA"]["color"])
-  print str(histograms["DATA"]["exp"])
+  #print str(type(histograms))
+  #print str(histograms[GEN+"ttbb"]["color"])
+  #print str(histograms[GEN+"ttbb"]["exp"])
+  #print ""
+  #print str(histograms["DATA"]["color"])
+  #print str(histograms["DATA"]["exp"])
   
   #signals1= [GEN+'ttbb', GEN+'ttb']
   signals2= [GEN+'ttcc', GEN+'ttlf']#, GEN+'ttot']
@@ -225,58 +227,61 @@ def loadHistogram(arg1, arg2):
 ##############################################
 ##############################################
 def resultPrint(result, freeTTB, freeTTCC, GEN):
+  return resultPrint2(result, freeTTB, freeTTCC, GEN, True)
 
-  print "FINAL: ----------------------   "
-  print "FINAL: MC:"+ str(GEN)
+def resultPrint2(result, freeTTB, freeTTCC, GEN, isPrint):
+
+  if isPrint : print "FINAL: ----------------------   "
+  if isPrint : print "FINAL: MC:"+ str(GEN)
   fsig = result["fsig"]
   rttbb = result["rttbb"]
   recoR      = fsig.getVal()
   recoRerror = fsig.getError()
-  print "FINAL: prefit: R="+str(round(rttbb*10000)/10000)
-  print "FINAL: $R = "+ str(round(recoR*10000)/10000)+" \pm "+str(round(recoRerror*10000)/10000)+"$"
+  if isPrint : print "FINAL: prefit: R="+str(round(rttbb*10000)/10000)
+  if isPrint : print "FINAL: $R = "+ str(round(recoR*10000)/10000)+" \pm "+str(round(recoRerror*10000)/10000)+"$"
   
   recoR2=1.
   recoR2error=0.0
   if freeTTB:
-    print "FINAL: freeTTB : "+str(freeTTB)
+    if isPrint : print "FINAL: freeTTB : "+str(freeTTB)
     fsig2 = result["fsig2"]
     rttb = result["rttb"]
     recoR2      = fsig2.getVal()
     recoR2error = fsig2.getError()
-    print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
-    print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)+" \pm "+str(round(recoR2error*10000)/10000)+"$"
+    if isPrint : print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
+    if isPrint : print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)+" \pm "+str(round(recoR2error*10000)/10000)+"$"
   else:
-    print "FINAL: freeTTB : "+str(freeTTB)
+    if isPrint : print "FINAL: freeTTB : "+str(freeTTB)
     fsig2con = result["fsig2con"]
     recoR2      = fsig2con.getVal()
     rttb = result["rttb"]
     #recoR2error = fsig2con.getError()
-    print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
-    print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)#+" \pm "+str(round(recoR2error*10000)/10000)+"$"
+    if isPrint : print "FINAL: prefit: R2="+str(round(rttb*10000)/10000)
+    if isPrint : print "FINAL: $R2 = "+ str(round(recoR2*10000)/10000)#+" \pm "+str(round(recoR2error*10000)/10000)+"$"
   
   recoRcc=1.
   recoRccerror=0.0
   if freeTTCC:
-    print "FINAL: freeTTCC : "+str(freeTTCC)
+    if isPrint : print "FINAL: freeTTCC : "+str(freeTTCC)
     fsigcc = result["fsigcc"]
     rttcc = result["rttcc"]
     recoRcc      = fsigcc.getVal()
     recoRccerror = fsigcc.getError()
-    print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
-    print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
+    if isPrint : print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
+    if isPrint : print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
   else:
-    print "FINAL: freeTTCC : "+str(freeTTCC)
+    if isPrint : print "FINAL: freeTTCC : "+str(freeTTCC)
     #recoRcc      = fsigcc.getVal()
     #recoRccerror = fsigcc.getError()
     rttcc = result["rttcc"]
-    print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
-    #print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
+    if isPrint : print "FINAL: prefit: Rcc="+str(round(rttcc*10000)/10000)
+    #if isPrint : print "FINAL: $Rcc = "+ str(round(recoRcc*10000)/10000)+" \pm "+str(round(recoRccerror*10000)/10000)+"$"
   
   
   k = result["k"]
   kVal      = k.getVal()
   kValerror = k.getError()
-  print "FINAL: $k = "+str(round(kVal*10000)/10000)+" \pm "+str(round(kValerror*10000)/10000)+"$"
+  if isPrint : print "FINAL: $k = "+str(round(kVal*10000)/10000)+" \pm "+str(round(kValerror*10000)/10000)+"$"
   result2 = {"recoR":copy.deepcopy(recoR), "recoRerror":copy.deepcopy(recoRerror), "recoR2":copy.deepcopy(recoR2), "recoR2error":copy.deepcopy(recoR2error), "recoRcc":copy.deepcopy(recoRcc), "recoRccerror":copy.deepcopy(recoRccerror), "kVal":copy.deepcopy(kVal), "kValerror":copy.deepcopy(kValerror)  }
 
   return result2 
@@ -435,7 +440,8 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
       #"model2":copy.deepcopy(model2)
   }
   #return result
-  result2=resultPrint(result, freeTTB, freeTTCC, GEN)
+  #result2=resultPrint(result, freeTTB, freeTTCC, GEN)
+  result2=resultPrint2(result, freeTTB, freeTTCC, GEN, False)
   recoR=result2["recoR"]
   recoRerror=result2["recoRerror"]
   recoR2=result2["recoR2"]
@@ -785,33 +791,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
 ################
 ################
 ################
-################
-################
-################
-################
-################
-################
-################
-################
-################
-import sys
-if len(sys.argv) < 3:
-  sys.exit()
-
-arg1 = sys.argv[1] # default, freeB, freeC and, (freeB and freeC)
-arg2 = sys.argv[2] # MG5, AMC, POW
-
-arg3="0"
-if len(sys.argv) > 3:
-  arg3 = sys.argv[3]
-
-histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2)
-orig_r = 0.0316 # MG5
-orig_err=0.00001#
-
-if int(arg3)==0:
-  aaa=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
-else:
+def pulltest(histograms,freeTTB, freeTTCC, GEN):
   #a = []
   hpull = TH1F("recoR_pull","pull test for recoR",80,-2,2)
   #hpull = TH1F("recoR_pull","pull test for recoR",100,0,100)
@@ -873,5 +853,60 @@ else:
 
   cpull.Print("plots/recoR_pull_test"+GEN+".eps")
   cpull.Print("plots/recoR_pull_test"+GEN+".png")
+
+
+
+################
+################
+################
+################
+################
+################
+################
+################
+################
+import sys
+if len(sys.argv) < 3:
+  sys.exit()
+
+arg1 = sys.argv[1] # default, freeB, freeC and, (freeB and freeC)
+arg2 = sys.argv[2] # MG5, AMC, POW
+
+arg3="0"
+if len(sys.argv) > 3:
+  arg3 = sys.argv[3]
+
+StepSys = ["csvweight_JES_Up","csvweight_JES_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down"]
+
+histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2,"S6csvweight")
+histogramSys = {}
+for sys in StepSys:
+  histograms2,freeTTB2,freeTTCC2,GEN2=loadHistogram(arg1, arg2,"S6"+sys)
+  histogramSys[sys] = copy.deepcopy(histograms2)
+
+orig_r = 0.0316 # MG5
+orig_err=0.00001#
+SystematicUnc={}
+StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats1","Charm_Err1","Charm_Err2"]
+
+from math import *
+if int(arg3)==0 or int(arg3)==2:
+  orig_r,orig_err=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
+  print "FINAL: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
+  if int(arg3)==2:
+    for sys in StepSys:
+      orig_r2,orig_err2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
+      sysUnc = (orig_r-orig_r2)/orig_r
+      print "FINAL: "+(sys.rjust(30))+": "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
+      SystematicUnc[sys]=copy.deepcopy(sysUnc)
+    print "FINAL: ---- "+str(SystematicUnc)+"------"
+    for sys2 in StepSys2:
+      up=SystematicUnc["csvweight_"+sys2+"_Up"] 
+      dw=SystematicUnc["csvweight_"+sys2+"_Down"] 
+      sysUnc = sqrt(up*up+dw*dw)
+      print "FINAL: "+sys2.rjust(10)+" : "+str(round(sysUnc*10000)/100)+" % "
+else:
+  pulltest(histograms,freeTTB, freeTTCC, GEN)
+
 
 
