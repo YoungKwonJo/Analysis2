@@ -34,9 +34,9 @@ for mon22 in monitors2d.keys():
     print "++"+str(mon2)+"++"
 
 #mceventweight="puWeight"
-mceventweight=["(((weight/abs(weight))*(puweight)*(lepweight)))",
-"((weight/abs(weight))*(puweightUp)*(lepweight))*(csvweight)",
-"((weight/abs(weight))*(puweightDown)*(lepweight))*(csvweight)",
+mceventweight=["(weight/abs(weight)*puweight*lepweight)",
+"(weight/abs(weight)*puweightUp*lepweight*csvweight)",
+"(weight/abs(weight)*puweightDown*lepweight*csvweight)",
 "csvweight",
 "csvweight_JES_Up",          
 "csvweight_JES_Down",        

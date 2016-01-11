@@ -54,16 +54,17 @@ def ntuple2entries(files,name):
   tree = chain
   summary = {}
 
-  summary['total']=getDictionary(tree, "total", "2", vvv, tt, tt+"*"+S6, "total ")
-  summary['ttjj']=getDictionary(tree, "ttjj", "2", vvv, tt+"*"+ttjj, tt+"*"+ttjj+"*"+S6, "ttjj ")
-  summary['ttbb']=getDictionary(tree, "ttbb", "2", vvv, tt+"*"+ttbb, tt+"*"+ttbb+"*"+S6, "ttbb ")
-  summary['ttb']=getDictionary(tree, "ttb", "2", vvv, tt+"*"+ttb, tt+"*"+ttb+"*"+S6, "ttb ")
-  summary['ttcc']=getDictionary(tree, "ttcc", "2", vvv, tt+"*"+ttcc, tt+"*"+ttcc+"*"+S6, "ttcc ")
-  summary['ttlf']=getDictionary(tree, "ttlf", "2", vvv, tt+"*"+ttlf, tt+"*"+ttlf+"*"+S6, "ttlf ")
+  summary['total']=getDictionary(tree, "total", "2", vvv, tt,          tt+"*"+S6,          "total ")
+  summary['ttjj'] =getDictionary(tree, "ttjj",  "2", vvv, tt+"*"+ttjj, tt+"*"+ttjj+"*"+S6, "ttjj ")
+  summary['ttbb'] =getDictionary(tree, "ttbb",  "2", vvv, tt+"*"+ttbb, tt+"*"+ttbb+"*"+S6, "ttbb ")
+  summary['ttb']  =getDictionary(tree, "ttb",   "2", vvv, tt+"*"+ttb,  tt+"*"+ttb+"*"+S6,  "ttb ")
+  summary['ttcc'] =getDictionary(tree, "ttcc",  "2", vvv, tt+"*"+ttcc, tt+"*"+ttcc+"*"+S6, "ttcc ")
+  summary['ttlf'] =getDictionary(tree, "ttlf",  "2", vvv, tt+"*"+ttlf, tt+"*"+ttlf+"*"+S6, "ttlf ")
 
   summary["ratio"]={"events":summary["ttbb"]["GEN"]["events"]/summary["ttjj"]["GEN"]["events"],"integral":summary["ttbb"]["GEN"]["integral"]/summary["ttjj"]["GEN"]["integral"],"eventsS6":summary["ttbb"]["S6"]["events"]/summary["ttjj"]["S6"]["events"],"integralS6":summary["ttbb"]["S6"]["integral"]/summary["ttjj"]["S6"]["integral"]}
-  summary['fullphaseTTBB']=getDictionary(tree, "fullphaseTTBB", "2", vvv, tt+"*"+fullphaseTTBB, tt+"*"+S6, "fullphaseTTBB ")
-  summary['fullphaseTTJJ']=getDictionary(tree, "fullphaseTTJJ", "2", vvv, tt+"*"+fullphaseTTJJ, tt+"*"+S6, "fullphaseTTJJ ")
+  
+  summary['fullphaseTTBB']=getDictionary(tree, "fullphaseTTBB", "2", vvv, tt+"*"+fullphaseTTBB, tt+"*"+fullphaseTTBB+"*"+S6, "fullphaseTTBB ")
+  summary['fullphaseTTJJ']=getDictionary(tree, "fullphaseTTJJ", "2", vvv, tt+"*"+fullphaseTTJJ, tt+"*"+fullphaseTTJJ+"*"+S6, "fullphaseTTJJ ")
   summary["ratio2"]={"events":summary["fullphaseTTBB"]["GEN"]["events"]/summary["fullphaseTTJJ"]["GEN"]["events"],"integral":summary["fullphaseTTBB"]["GEN"]["integral"]/summary["fullphaseTTJJ"]["GEN"]["integral"],"eventsS6":summary["fullphaseTTBB"]["S6"]["events"]/summary["fullphaseTTJJ"]["S6"]["events"],"integralS6":summary["fullphaseTTBB"]["S6"]["integral"]/summary["fullphaseTTJJ"]["S6"]["integral"]}
   return summary
   eee="""

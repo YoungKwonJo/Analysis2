@@ -20,7 +20,7 @@ mm_cuts ={
 #   preselection,
    "("+mm+"&&"+trigger+")",
    #"("+cut[0]+"&&"+mm+"&&"+"(lep1_RelIso<0.15 && lep2_RelIso<0.15)"+")", cut[1], cut[2], cut[3], cut[4], cut[5]
-   "("+cut[0]+"&&"+mm+")", cut[1], cut[2], cut[3], cut[4], cut[5]
+   "("+cut[0]+"&&"+mm+")", cut[1], cut[2], cut[3], cut[4]#, cut[5]
 ]
 }
 ee_cuts = {
@@ -30,7 +30,7 @@ ee_cuts = {
 #   preselection,
    "("+ee+"&&"+trigger+")",
    #"("+cut[0]+"&&"+ee+"&&"+"(lep1_RelIso<0.12 && lep2_RelIso<0.12)"+")", cut[1], cut[2], cut[3], cut[4], cut[5]
-   "("+cut[0]+"&&"+ee+")", cut[1], cut[2], cut[3], cut[4], cut[5]
+   "("+cut[0]+"&&"+ee+")", cut[1], cut[2], cut[3], cut[4]#, cut[5]
 ]
 }
 em_cuts = {
@@ -40,7 +40,7 @@ em_cuts = {
 #   preselection,
    "("+em+"&&"+trigger+")",
    #"("+cut[0]+"&&"+em+"&&"+"(lep1_RelIso<0.12 && lep2_RelIso<0.15)"+")", cut[1], cut[2], cut[3], cut[4], cut[5]
-   "("+cut[0]+"&&"+em+")", cut[1], cut[2], cut[3], cut[4], cut[5]
+   "("+cut[0]+"&&"+em+")", cut[1], cut[2], cut[3], cut[4]#, cut[5]
 ]
 }
 

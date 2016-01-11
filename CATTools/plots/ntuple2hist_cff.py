@@ -64,7 +64,7 @@ def h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts, eventw
             mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"puweightDown")
             h1 = h1_maker(tree2,mon,cut)
             h.append(copy.deepcopy(h1))
-          elif sysWeight.find("csvweight")>-1 and sysWeight.find("lepweight")==-1:
+          elif sysWeight.find("csvweight")>-1 and sysWeight.find("lepweight") is -1:
             cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
             mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+sysWeight)
             if sysWeight.find("JES_Up")>-1:
@@ -152,7 +152,7 @@ def h2_all_maker(tree,tree3, tree4, tree5, tree6,mc, monitors, cuts,eventweight,
                 mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+"puweightDown")
                 h2 = h2_maker(tree,mon2,cut)
                 h.append(copy.deepcopy(h2))
-              elif sysWeight.find("csvweight")>-1 and sysWeight.find("lepweight")==-1:
+              elif sysWeight.find("csvweight")>-1 and sysWeight.find("lepweight") is -1:
                 cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")/"+str(Ntot)+")"
                 mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+sysWeight)
                 if sysWeight.find("JES_Up")>-1:
