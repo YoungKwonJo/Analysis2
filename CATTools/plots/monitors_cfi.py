@@ -1,12 +1,13 @@
 
 monitors = [
-#ddd="""
+  { "name":"Stat",         "unit":"Stat ",                         "var":"met",       "xbin_set":[1,0,10000]  },
+#]
+#fff=[
   { "name":"MET",          "unit":"Missing E_{T} (GeV)","var":"met",   "xbin_set":[30,0,300]  },
 #  { "name":"METpf",        "unit":"Missing E_{T}  (GeV)",          "var":"met",       "xbin_set":[60,0,300]  },
   { "name":"ZMass",        "unit":"Dilepton mass (GeV/c^{2}) ",    "var":"ll_m",  "xbin_set":[60,0,300]  },
   { "name":"nGoodPV",      "unit":"# of vertex ",             "var":"nvertex",   "xbin_set":[70,0,70]    },
 
-  { "name":"Stat",         "unit":"Stat ",                         "var":"met",       "xbin_set":[1,0,10000]  },
 
   { "name":"METPHI",       "unit":"Missing E_{T} without HF #phi", "var":"metphi","xbin_set":[20,-4,4]    },
 #  { "name":"METmva",       "unit":"MVA Missing E_{T}  (GeV)",      "var":"metPfMva",  "xbin_set":[60,0,300]  },
