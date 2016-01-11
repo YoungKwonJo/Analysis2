@@ -49,7 +49,7 @@ def getEntries(mypath):
 
 #loc = "../"
 #loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
-loc = "/store/user/youngjo/Cattools/v7-4-6v4/"
+loc = "/store/user/youngjo/Cattools/v7-4-6v5/"
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
@@ -105,11 +105,12 @@ CS = ["#660000", "#ffcc00", "#cc6600", "#cc6600", "#ff0000","#ff6565"]
 BCS = ["#ff00ff",   "#ffffff", "#33cc33","#3366ff", "#7676ff" ]
 #syst_col =TColor(1756, 0.3, 0.5, 0.5, "", 0.45)
 #["TTWlNu","TTWqq',"TTZll","TTZqq",  "STbt","STt","STbtW","STtW",  "WW","WZ","ZZ",  "WJets","DYJets","DYJets10",  "ttH2non","ttH2bb"]
-BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,66.1,31.8,  61526.7,6025.2,23914.65,     0.5058,0.5058]
+#BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,66.1,31.8,  61526.7,6025.2,23914.65,     0.5058,0.5058]
+BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,47.13,16.523,  61526.7,6025.2,18610.0,     0.5058,0.5058]
 
-z="v2"#v5GenTop"
-zz="v2"#v5GenTop"
-zzz="v4GenTop"##v5GenTop"
+z="v1"#v5GenTop"
+zz="v1"#v5GenTop"
+zzz="v1"##v5GenTop"
 mcsamples=[
 
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+zzz), "cx":ttcx, "color": CS[0],   "label":"t#bar{t}+b#bar{b}      " },

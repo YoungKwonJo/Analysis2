@@ -24,7 +24,7 @@ def h1_set(name,monitor,cutname):
         }
   return mon
 
-def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
+def h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts, eventweight,Ntot):
   h = []
   weight = "(1)"
   #if mc['name'] in aMC : weight = "(weight)"
@@ -43,13 +43,40 @@ def h_all_maker(tree,tree2,mc, monitors, cuts, eventweight,Ntot):
       else :
         h1 = h1_maker(tree2,mon,cut)
         h.append(copy.deepcopy(h1))
-      if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 or cutname.find("S5")>-1 ):
+      #if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 or cutname.find("S5")>-1 ):
+      if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 ):
+        cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+eventweight[0]+"*(csvweight)/"+str(Ntot)+")"
+        mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"JER_up")
+        h1jer_up = h1_maker(tree5,mon,cut)
+        h.append(copy.deepcopy(h1jer_up))
+        mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"JER_dw")
+        h1jer_dw = h1_maker(tree6,mon,cut)
+        h.append(copy.deepcopy(h1jer_dw))
+#####
         for j,sysWeight in enumerate(eventweight): 
-          if j>0:
-            cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
-            mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+sysWeight)
+          if sysWeight.find("puweightUp")>-1:
+            cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*(("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
+            mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"puweightUp")
             h1 = h1_maker(tree2,mon,cut)
             h.append(copy.deepcopy(h1))
+          elif sysWeight.find("puweightDown")>-1:
+            cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*(("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
+            mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"puweightDown")
+            h1 = h1_maker(tree2,mon,cut)
+            h.append(copy.deepcopy(h1))
+          elif sysWeight.find("csvweight")>-1 and sysWeight.find("lepweight")==-1:
+            cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")*"+weight+"/"+str(Ntot)+")"
+            mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+sysWeight)
+            if sysWeight.find("JES_Up")>-1:
+              h1 = h1_maker(tree3,mon,cut)
+              h.append(copy.deepcopy(h1))
+            elif sysWeight.find("JES_Down")>-1:
+              h1 = h1_maker(tree4,mon,cut)
+              h.append(copy.deepcopy(h1)) 
+            else:
+              h1 = h1_maker(tree2,mon,cut)
+              h.append(copy.deepcopy(h1))
+
 
       #making shape for dy estimation
       if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)):
@@ -92,10 +119,11 @@ def h2_set(name,monitor,monitor2,cutname):
         }
   return mon
 
-def h2_all_maker(tree,mc, monitors, cuts,eventweight,Ntot):
+def h2_all_maker(tree,tree3, tree4, tree5, tree6,mc, monitors, cuts,eventweight,Ntot):
   h = []
   for cutname in cuts["cut"]:
-    if( cutname.find("S5")>-1 or cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1):
+    #if( cutname.find("S5")>-1 or cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1):
+    if( cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1):
       for i,ii in enumerate(monitors):
         for j,jj in enumerate(monitors):
           if i<j:
@@ -103,12 +131,40 @@ def h2_all_maker(tree,mc, monitors, cuts,eventweight,Ntot):
             cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+eventweight[0]+"/"+str(Ntot)+")"
             h2 = h2_maker(tree,mon2,cut)
             h.append(copy.deepcopy(h2))
+
+            cut = "("+cuts["cut"][cutname]+" * "+mc['selection']+")*("+eventweight[0]+"*(csvweight)/"+str(Ntot)+")"
+            mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+"JER_up")
+            h2jer_up = h2_maker(tree5,mon2,cut)
+            h.append(copy.deepcopy(h2jer_up))
+            mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+"JER_dw")
+            h2jer_dw = h2_maker(tree6,mon2,cut)
+            h.append(copy.deepcopy(h2jer_dw))
+
+
             for k,sysWeight in enumerate(eventweight): 
-              if k>0:
-                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")/"+str(Ntot)+")"
-                mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+sysWeight)
+              if sysWeight.find("puweightUp")>-1:
+                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*(("+sysWeight+")/"+str(Ntot)+")"
+                mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+"puweightUp")
                 h2 = h2_maker(tree,mon2,cut)
                 h.append(copy.deepcopy(h2))
+              elif sysWeight.find("puweightDown")>-1:
+                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*(("+sysWeight+")/"+str(Ntot)+")"
+                mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+"puweightDown")
+                h2 = h2_maker(tree,mon2,cut)
+                h.append(copy.deepcopy(h2))
+              elif sysWeight.find("csvweight")>-1 and sysWeight.find("lepweight")==-1:
+                cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[0]+"*("+sysWeight+")/"+str(Ntot)+")"
+                mon2 = h2_set(mc['name'],monitors[i],monitors[j],cuts["channel"]+"_"+cutname+sysWeight)
+                if sysWeight.find("JES_Up")>-1:
+                  h2 = h2_maker(tree3,mon2,cut)
+                  h.append(copy.deepcopy(h2))
+                elif sysWeight.find("JES_Down")>-1:
+                  h2 = h2_maker(tree4,mon2,cut)
+                  h.append(copy.deepcopy(h2)) 
+                else:
+                  h2 = h2_maker(tree,mon2,cut)
+                  h.append(copy.deepcopy(h2))
+
   return h
 
 ######################
@@ -149,15 +205,27 @@ def ntuple2hist(json,cuts):
   for i,mc in enumerate(mcsamples):
     chain = TChain("cattree/nom")
     chain2 = TChain("cattree/nom2")
+    chain3 = TChain("cattree/nomJES_up")
+    chain4 = TChain("cattree/nomJES_dw")
+    chain5 = TChain("cattree/nomJER_up")
+    chain6 = TChain("cattree/nomJER_dw")
     for afile in mcsamples[i]['file']:
       f = TFile.Open(afile)
       if None == f: continue
       chain.Add(afile)
       chain2.Add(afile)
+      chain3.Add(afile)
+      chain4.Add(afile)
+      chain5.Add(afile)
+      chain6.Add(afile)
     #f = TFile.Open(mcsamples[i]['file'],"read")
     #tree = f.ntuple
     tree = chain
     tree2 = chain2
+    tree3 = chain3
+    tree4 = chain4
+    tree5 = chain5
+    tree6 = chain6
 
     htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
     tree.Project("htemp"+mcsamples[i]['name'],"1","weight/abs(weight)")
@@ -168,26 +236,39 @@ def ntuple2hist(json,cuts):
     #Ntot = htot.GetBinContent(1)
     #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
-    h= h+h_all_maker(tree,tree2,mcsamples[i],monitors,cuts,mceventweight,Ntot)
+    h= h+h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,mcsamples[i],monitors,cuts,mceventweight,Ntot)
     #f.Close()
   for i,mc in enumerate(datasamples):
     chain = TChain("cattree/nom")
     chain2 = TChain("cattree/nom2")
+    chain3 = TChain("cattree/nomJES_up")
+    chain4 = TChain("cattree/nomJES_dw")
+    chain5 = TChain("cattree/nomJER_up")
+    chain6 = TChain("cattree/nomJER_dw")
     for afile in datasamples[i]['file']:
       f = TFile.Open(afile)
       if None == f: continue
       chain.Add(afile)
       chain2.Add(afile)
-    #f = TFile.Open(datasamples[i]['file'],"read")
+      chain3.Add(afile)
+      chain4.Add(afile)
+      chain5.Add(afile)
+      chain6.Add(afile)
+    #f = TFile.Open(mcsamples[i]['file'],"read")
     #tree = f.ntuple
     tree = chain
     tree2 = chain2
+    tree3 = chain3
+    tree4 = chain4
+    tree5 = chain5
+    tree6 = chain6
+
     #htot = f.Get("hNEvent")
     #htot = f.Get("hsumWeight")
     Ntot = 1 #htot.GetBinContent(1)
     #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
-    h= h+h_all_maker(tree,tree2,datasamples[i],monitors,cuts,["1"],1)
+    h= h+h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors,cuts,["1"],1)
     #f.Close()
 
   return h
@@ -204,6 +285,29 @@ def ntuple2hist2d(json,cuts):
   for i,mc in enumerate(mcsamples):
     chain = TChain("cattree/nom")
     chain2 = TChain("cattree/nom2")
+    chain3 = TChain("cattree/nomJES_up")
+    chain4 = TChain("cattree/nomJES_dw")
+    chain5 = TChain("cattree/nomJER_up")
+    chain6 = TChain("cattree/nomJER_dw")
+    for afile in mcsamples[i]['file']:
+      f = TFile.Open(afile)
+      if None == f: continue
+      chain.Add(afile)
+      chain2.Add(afile)
+      chain3.Add(afile)
+      chain4.Add(afile)
+      chain5.Add(afile)
+      chain6.Add(afile)
+    #f = TFile.Open(mcsamples[i]['file'],"read")
+    #tree = f.ntuple
+    tree = chain
+    tree2 = chain2
+    tree3 = chain3
+    tree4 = chain4
+    tree5 = chain5
+    tree6 = chain6
+
+    old="""
     for afile in mcsamples[i]['file']:
       f = TFile.Open(afile)
       if None == f: continue
@@ -212,19 +316,44 @@ def ntuple2hist2d(json,cuts):
     #f = TFile.Open(mcsamples[i]['file'],"read")
     #tree = f.ntuple
     tree = chain
-    tree2 = chain2
+    tree2 = chain2 
+    """
 
     htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
     tree.Project("htemp"+mcsamples[i]['name'],"1","weight/abs(weight)")
     Ntot = htemp.GetBinContent(1)
 
 
-    h= h+h2_all_maker(tree2,mcsamples[i],monitors2,cuts,mceventweight,Ntot)
+    h= h+h2_all_maker(tree2,tree3, tree4, tree5, tree6,mcsamples[i],monitors2,cuts,mceventweight,Ntot)
    # f.Close()
 
   for i,mc in enumerate(datasamples):
     chain = TChain("cattree/nom")
     chain2 = TChain("cattree/nom2")
+    chain3 = TChain("cattree/nomJES_up")
+    chain4 = TChain("cattree/nomJES_dw")
+    chain5 = TChain("cattree/nomJER_up")
+    chain6 = TChain("cattree/nomJER_dw")
+    for afile in datasamples[i]['file']:
+      f = TFile.Open(afile)
+      if None == f: continue
+      chain.Add(afile)
+      chain2.Add(afile)
+      chain3.Add(afile)
+      chain4.Add(afile)
+      chain5.Add(afile)
+      chain6.Add(afile)
+    #f = TFile.Open(mcsamples[i]['file'],"read")
+    #tree = f.ntuple
+    tree = chain
+    tree2 = chain2
+    tree3 = chain3
+    tree4 = chain4
+    tree5 = chain5
+    tree6 = chain6
+
+
+    old="""
     for afile in datasamples[i]['file']:
       f = TFile.Open(afile)
       if None == f: continue
@@ -234,11 +363,12 @@ def ntuple2hist2d(json,cuts):
     #tree = f.ntuple
     tree = chain
     tree2 = chain2
+    """
     #htot = f.Get("hNEvent")
     #htot = f.Get("hsumWeight")
     Ntot = 1 #htot.GetBinContent(1)
 
-    h= h+h2_all_maker(tree2,datasamples[i],monitors2,cuts,["1"],1)
+    h= h+h2_all_maker(tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors2,cuts,["1"],1)
   return h
 
 
