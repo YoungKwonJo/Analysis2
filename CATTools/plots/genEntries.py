@@ -28,8 +28,8 @@ def ntuple2entries(files,name):
   ttcc = mAND("((NcJets20>=2) && !(NbJets20>=3))",visible)
   ttlf = mAND("(!(NbJets20>=4) && !(NbJets20==3) && !(NcJets20>=2))",visible)
 
-  dileptonic ="(diLeptonicMuoMuo ==1 ||  diLeptonicMuoEle ==1 ||  diLeptonicEleEle ==1 ||  diLeptonicTauMuo ==1 ||  diLeptonicTauEle ==1 ||  diLeptonicTauTau ==1 )"
-
+  #dileptonic ="(diLeptonicMuoMuo ==1 ||  diLeptonicMuoEle ==1 ||  diLeptonicEleEle ==1 ||  diLeptonicTauMuo ==1 ||  diLeptonicTauEle ==1 ||  diLeptonicTauTau ==1 )"
+  dileptonic ="(allHadronic != 1 && semiLeptonic != 1)"
 
   fullphaseTTBB="("+dileptonic+" && NaddbJets20 >= 2)"
   fullphaseTTJJ="("+dileptonic+" && NaddJets20 >= 2)"
@@ -67,80 +67,7 @@ def ntuple2entries(files,name):
   summary['fullphaseTTJJ']=getDictionary(tree, "fullphaseTTJJ", "2", vvv, tt+"*"+fullphaseTTJJ, tt+"*"+fullphaseTTJJ+"*"+S6, "fullphaseTTJJ ")
   summary["ratio2"]={"events":summary["fullphaseTTBB"]["GEN"]["events"]/summary["fullphaseTTJJ"]["GEN"]["events"],"integral":summary["fullphaseTTBB"]["GEN"]["integral"]/summary["fullphaseTTJJ"]["GEN"]["integral"],"eventsS6":summary["fullphaseTTBB"]["S6"]["events"]/summary["fullphaseTTJJ"]["S6"]["events"],"integralS6":summary["fullphaseTTBB"]["S6"]["integral"]/summary["fullphaseTTJJ"]["S6"]["integral"]}
   return summary
-  eee="""
-  htemp = TH1D("htemp"+name,"",1,-20,20)
-  tree.Project("htemp"+name,vvv,tt) 
-  print name+"  "+tt
-  aaaa="total events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  tot_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
 
-  
-  tree.Project("htemp"+name,vvv,tt+"*"+S6) 
-  print aaaa+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  totS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['total']={"GEN":tot_,"S6":totS6_, "eff1":totS6_["events"]/tot_["events"], "eff2":totS6_["integral"]/tot_["integral"]}  
-
-
-  tree.Project("htemp"+name,vvv,ttjj+"*"+tt)
-  bbbb="ttjj events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttjj_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  tree.Project("htemp"+name,vvv,ttjj+"*"+tt+"*"+S6)
-  print bbbb+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttjjS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['ttjj']={"GEN":ttjj_,"S6":ttjjS6_, "eff1":ttjjS6_["events"]/ttjj_["events"], "eff2":ttjjS6_["integral"]/ttjj_["integral"]}  
-
-###########
-  tree.Project("htemp"+name+"Full",vvv,fullphaseTTJJ+"*"+tt)
-  bbbb="FullPhase : ttjj events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  fullphasettjj_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-###########
-  tree.Project("htemp"+name+"Full",vvv,fullttjj+"*"+tt+"*"+S6)
-  print bbbb+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  fullphasettjjS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['fullttjj']={"GEN":fullphasettjj_,"S6":fullphasettjjS6_, "eff1":fullphasettjjS6_["events"]/fullphasettjj_["events"], "eff2":fullphasettjjS6_["integral"]/fullphasettjj_["integral"]}  
-
-############
-  """
-  ddd=""" 
-  tree.Project("htemp"+name,vvv,ttbb+"*"+tt)
-  cccc="ttbb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttbb_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  tree.Project("htemp"+name,vvv,ttbb+"*"+tt+"*"+S6)
-  print cccc+", S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttbbS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['ttbb']={"GEN":ttbb_,"S6":ttbbS6_, "eff1":ttbbS6_["events"]/ttbb_["events"], "eff2":ttbbS6_["integral"]/ttbb_["integral"]}  
-  
-  tree.Project("htemp"+name,vvv,ttb+"*"+tt)
-  dddd="ttb events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttb_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  tree.Project("htemp"+name,vvv,ttb+"*"+tt+"*"+S6)
-  print dddd+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttbS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['ttb']={"GEN":ttb_,"S6":ttbS6_, "eff1":ttbS6_["events"]/ttb_["events"], "eff2":ttbS6_["integral"]/ttb_["integral"]}  
-  
-  tree.Project("htemp"+name,vvv,ttcc+"*"+tt)
-  eeee="ttcc events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttcc_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  tree.Project("htemp"+name,vvv,ttcc+"*"+tt+"*"+S6)
-  print eeee+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttccS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['ttcc']={"GEN":ttcc_,"S6":ttccS6_, "eff1":ttccS6_["events"]/ttcc_["events"], "eff2":ttccS6_["integral"]/ttcc_["integral"]}  
-  
-  #tree.Project("htemp"+name,vvv,ttc+"*"+tt)
-  #ffff="ttc events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  #tree.Project("htemp"+name,vvv,ttc+"*"+tt+"*"+S6)
-  #print ffff+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  
-  tree.Project("htemp"+name,vvv,ttlf+"*"+tt)
-  gggg="ttlf events,(sumweights): "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttlf_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  tree.Project("htemp"+name,vvv,ttlf+"*"+tt+"*"+S6)
-  print gggg+" S6: "+str(int(htemp.GetEntries()))+", "+str(int(htemp.Integral()))
-  ttlfS6_={"events":htemp.GetEntries(),"integral":htemp.Integral()}
-  summary['ttlf']={"GEN":ttlf_,"S6":ttlfS6_, "eff1":ttlfS6_["events"]/ttlf_["events"], "eff2":ttlfS6_["integral"]/ttlf_["integral"] }  
-  summary["ratio"]={"events":ttbb_["events"]/ttjj_["events"],"integral":ttbb_["integral"]/ttjj_["integral"],"eventsS6":ttbbS6_["events"]/ttjjS6_["events"],"integralS6":ttbbS6_["integral"]/ttjjS6_["integral"]}
-  """
-  return summary
 
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
