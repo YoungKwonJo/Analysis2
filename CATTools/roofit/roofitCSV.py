@@ -451,7 +451,19 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   kVal=result2["kVal"]
   kValerror=result2["kValerror"]
 
-  if onlyPrint : return recoR, recoRerror
+  result2["n_ttbb"]  = copy.deepcopy(n_ttbb)
+  result2["n_ttb"]   = copy.deepcopy(n_ttb)
+  result2["n_ttcc"]  = copy.deepcopy(n_ttcc)
+  result2["n_ttlf"]  = copy.deepcopy(n_ttlf)
+  result2["n_ttot"]  = copy.deepcopy(n_ttot)
+  result2["n_bkg"]   = copy.deepcopy(n_bkg)
+  result2["n_ddbkg"] = copy.deepcopy(n_ddbkg)
+  result2["n_data"]  = copy.deepcopy(n_data)
+  result2["rttbb"]   = copy.deepcopy(rttbb), 
+  result2["rttb"]    = copy.deepcopy(rttb), 
+  result2["rttcc"]   = copy.deepcopy(rttcc),
+
+  if onlyPrint : return recoR, recoRerror,result2
 
   ################
   ################
@@ -796,9 +808,9 @@ def pulltest(histograms,freeTTB, freeTTCC, GEN):
   hpull = TH1F("recoR_pull","pull test for recoR",80,-2,2)
   #hpull = TH1F("recoR_pull","pull test for recoR",100,0,100)
   #hpull2= TH1F("recoR_pull2","pull test for recoR",100,0,100)
-  orig_r,orig_err=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
+  orig_r,orig_err,result=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
   for i in range(500):
-    r,r_err = fitting(histograms, freeTTB, freeTTCC, GEN,True,True)
+    r,r_err,result = fitting(histograms, freeTTB, freeTTCC, GEN,True,True)
     #a.append( {i, result})
     hpull.Fill((orig_r-r)/r_err)
     #hpull.SetBinContent(i+1,r)
@@ -927,21 +939,21 @@ from math import *
 if int(arg3)==0:
   cR10, cR00, cR11, cR12, cNLLContourb,cNLLContourc, cN, cN2=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
 elif int(arg3)==2:
-  orig_r,orig_err=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
+  orig_r,orig_err,result=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
   print "FINAL2: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
   genR      = orig_r*eRPOW;
   genRerror = orig_r*eRPOW*orig_err/orig_r
   print "FINAL2: csvweight: gen R $= "+ str(round(genR*10000)/10000)+" \pm "+str(round(genRerror*10000)/10000)+"$"
 
   for sys in StepSys:
-    orig_r2,orig_err2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
+    orig_r2,orig_err2,result2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
     sysUnc = (orig_r-orig_r2)/orig_r
     print "FINAL2: "+(sys.rjust(30))+": "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
     SystematicUnc[sys]=copy.deepcopy(sysUnc)
   print "FINAL2: ---- "+str(SystematicUnc)+"------"
-  orig_r3,orig_err3 = fitting(histograms, True, False, GEN,True,False)
-  orig_r4,orig_err4 = fitting(histograms, False, True, GEN,True,False)
-  orig_r5,orig_err5 = fitting(histogramsMG5, False, False, "MG5",True,False)
+  orig_r3,orig_err3,result3 = fitting(histograms, True, False, GEN,True,False)
+  orig_r4,orig_err4,result4 = fitting(histograms, False, True, GEN,True,False)
+  orig_r5,orig_err5,result5 = fitting(histogramsMG5, False, False, "MG5",True,False)
   sysUnc3 = (orig_r-orig_r3)/orig_r
   sysUnc4 = (orig_r-orig_r4)/orig_r
 
