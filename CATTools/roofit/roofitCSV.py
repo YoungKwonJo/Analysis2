@@ -879,6 +879,7 @@ if len(sys.argv) > 3:
 StepSys = ["csvweight_JES_Up","csvweight_JES_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down"]
 
 histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2,"S6csvweight")
+histogramsMG5,freeTTB5,freeTTCC5,GEN5=loadHistogram("0", "0","S6csvweight")
 histogramSys = {}
 for sys in StepSys:
   histograms2,freeTTB2,freeTTCC2,GEN2=loadHistogram(arg1, arg2,"S6"+sys)
@@ -887,7 +888,8 @@ for sys in StepSys:
 orig_r = 0.0316 # MG5
 orig_err=0.00001#
 SystematicUnc={}
-StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats1","Charm_Err1","Charm_Err2"]
+#StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats2","Charm_Err1","Charm_Err2"]
+StepSys2 = {"JES":["JES"],"LF":["LF","HF_Stats1","HF_Stats2"],"HF":["HF","LF_Stats1","LF_Stats2"],"Charm":["Charm_Err1","Charm_Err2"]}
 
 from math import *
 if int(arg3)==0 or int(arg3)==2:
@@ -899,12 +901,26 @@ if int(arg3)==0 or int(arg3)==2:
       sysUnc = (orig_r-orig_r2)/orig_r
       print "FINAL: "+(sys.rjust(30))+": "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
       SystematicUnc[sys]=copy.deepcopy(sysUnc)
-    print "FINAL: ---- "+str(SystematicUnc)+"------"
-    for sys2 in StepSys2:
-      up=SystematicUnc["csvweight_"+sys2+"_Up"] 
-      dw=SystematicUnc["csvweight_"+sys2+"_Down"] 
-      sysUnc = sqrt(up*up+dw*dw)
-      print "FINAL: "+sys2.rjust(10)+" : "+str(round(sysUnc*10000)/100)+" % "
+    print "FINAL: ---------------- "#+str(SystematicUnc)+"------"
+    orig_r3,orig_err3=fitting(histograms, True, False, GEN,True,False)
+    orig_r4,orig_err4=fitting(histograms, False, True, GEN,True,False)
+    orig_r5,orig_err5=fitting(histogramsMG5, False, False, "MG5",True,False)
+    sysUnc3 = (orig_r-orig_r3)/orig_r
+    sysUnc4 = (orig_r-orig_r4)/orig_r
+    sysUnc5 = (orig_r-orig_r5)/orig_r
+
+    for sys2 in StepSys2.keys():
+      sysUnc1=0.
+      for sys3 in StepSys2[sys2]:
+        up=SystematicUnc["csvweight_"+sys3+"_Up"] 
+        dw=SystematicUnc["csvweight_"+sys3+"_Down"] 
+        sysUnc1 += up*up+dw*dw
+      sysUnc = sqrt(sysUnc1)
+      print "FINAL: "+sys2.rjust(5)+" : "+str(round(sysUnc*10000)/100)+" % "
+    print "FINAL: "+("TTB").rjust(5)+" : "+str(round(sysUnc3*10000)/100)+" % "
+    print "FINAL: "+("TTCC").rjust(5)+" : "+str(round(sysUnc4*10000)/100)+" % "
+    print "FINAL: "+("GEN").rjust(5)+" : "+str(round(sysUnc5*10000)/100)+" % "
+    print "FINAL: ---------------- "#+str(SystematicUnc)+"------"
 else:
   pulltest(histograms,freeTTB, freeTTCC, GEN)
 
