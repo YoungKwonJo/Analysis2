@@ -861,10 +861,40 @@ def pulltest(histograms,freeTTB, freeTTCC, GEN):
 ################
 ################
 ################
+#POWHEG
+ttjjRatioTTPOW=(121044.0/19757190.0)
+ttjjAcceptancePOW=(121044.0/766823.0)
+ttbbAcceptancePOW=(1609.0/8700.0)
+ttjjEffPOW=(11855.0/121044.0)
+ttbbEffPOW=(400.0/1609.0)
+
+#aMC@NLO
+ttjjRatioTTAMC=(98110.0/14188545.0)
+ttjjAcceptanceAMC=(98110.0/645759.0)
+ttbbAcceptanceAMC=(1279.0/7203.0)
+ttjjEffAMC=(8766.0/98110.0)
+ttbbEffAMC=(264.0/1279.0)
+
+#MG5
+ttjjRatioTTMG5=(81283.0/11344206.0)
+ttjjAcceptanceMG5=(81283.0/496640.0)
+ttbbAcceptanceMG5=(1068.0/5520.0)
+ttjjEffMG5=(8425.0/81283.0)
+ttbbEffMG5=(280.0/1068.0)
+
+eRPOW = ttjjEffPOW/ttbbEffPOW #ttjjAcceptancePOW/ttbbAcceptancePOW
+eRAMC = ttjjEffAMC/ttbbEffAMC #ttjjAcceptanceAMC/ttbbAcceptanceAMC
+eRMG5 = ttjjEffMG5/ttbbEffMG5 #ttjjAcceptanceMG5/ttbbAcceptanceMG5
+
+print "FINAL2: POW eR= "+str(eRPOW)+"  , acceptance ttjj:"+str(ttjjAcceptancePOW)+", (effS6: "+str(ttjjEffPOW)+")  ,  ttbb:"+str(ttbbAcceptancePOW)+", (effS6: "+str(ttbbEffPOW)+")"
+print "FINAL2: AMC eR= "+str(eRAMC)+"  , acceptance ttjj:"+str(ttjjAcceptanceAMC)+", (effS6: "+str(ttjjEffAMC)+")  ,  ttbb:"+str(ttbbAcceptanceAMC)+", (effS6: "+str(ttbbEffAMC)+")"
+print "FINAL2: MG5 eR= "+str(eRMG5)+"  , acceptance ttjj:"+str(ttjjAcceptanceMG5)+", (effS6: "+str(ttjjEffMG5)+")  ,  ttbb:"+str(ttbbAcceptanceMG5)+", (effS6: "+str(ttbbEffMG5)+")"
+
 ################
 ################
 ################
 ################
+
 import sys
 if len(sys.argv) < 3:
   sys.exit()
@@ -876,7 +906,10 @@ arg3="0"
 if len(sys.argv) > 3:
   arg3 = sys.argv[3]
 
-StepSys = ["csvweight_JES_Up","csvweight_JES_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down"]
+#StepSys = ["csvweight_JES_Up","csvweight_JES_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down"]
+
+StepSys = ["csvweight_JES_Up","csvweight_JES_Down","JER_up","JER_dw","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down","puweightUp","puweightDown"]
+StepSys2 = {"JES":["csvweight_JES","JER"],"LF":["csvweight_LF","csvweight_HF_Stats1","csvweight_HF_Stats2"],"HF":["csvweight_HF","csvweight_LF_Stats1","csvweight_LF_Stats2"],"Charm":["csvweight_Charm_Err1","csvweight_Charm_Err2"],"pileup":["puweight"]}
 
 histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2,"S6csvweight")
 histogramsMG5,freeTTB5,freeTTCC5,GEN5=loadHistogram("0", "0","S6csvweight")
@@ -888,39 +921,55 @@ for sys in StepSys:
 orig_r = 0.0316 # MG5
 orig_err=0.00001#
 SystematicUnc={}
-#StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats2","Charm_Err1","Charm_Err2"]
-StepSys2 = {"JES":["JES"],"LF":["LF","HF_Stats1","HF_Stats2"],"HF":["HF","LF_Stats1","LF_Stats2"],"Charm":["Charm_Err1","Charm_Err2"]}
+#StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats1","Charm_Err1","Charm_Err2"]
 
 from math import *
-if int(arg3)==0 or int(arg3)==2:
+if int(arg3)==0:
+  cR10, cR00, cR11, cR12, cNLLContourb,cNLLContourc, cN, cN2=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
+elif int(arg3)==2:
   orig_r,orig_err=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
-  print "FINAL: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
-  if int(arg3)==2:
-    for sys in StepSys:
-      orig_r2,orig_err2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
-      sysUnc = (orig_r-orig_r2)/orig_r
-      print "FINAL: "+(sys.rjust(30))+": "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
-      SystematicUnc[sys]=copy.deepcopy(sysUnc)
-    print "FINAL: ---------------- "#+str(SystematicUnc)+"------"
-    orig_r3,orig_err3=fitting(histograms, True, False, GEN,True,False)
-    orig_r4,orig_err4=fitting(histograms, False, True, GEN,True,False)
-    orig_r5,orig_err5=fitting(histogramsMG5, False, False, "MG5",True,False)
-    sysUnc3 = (orig_r-orig_r3)/orig_r
-    sysUnc4 = (orig_r-orig_r4)/orig_r
-    sysUnc5 = (orig_r-orig_r5)/orig_r
+  print "FINAL2: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
+  genR      = orig_r*eRPOW;
+  genRerror = orig_r*eRPOW*orig_err/orig_r
+  print "FINAL2: csvweight: gen R $= "+ str(round(genR*10000)/10000)+" \pm "+str(round(genRerror*10000)/10000)+"$"
 
-    for sys2 in StepSys2.keys():
-      sysUnc1=0.
-      for sys3 in StepSys2[sys2]:
-        up=SystematicUnc["csvweight_"+sys3+"_Up"] 
-        dw=SystematicUnc["csvweight_"+sys3+"_Down"] 
-        sysUnc1 += up*up+dw*dw
-      sysUnc = sqrt(sysUnc1)
-      print "FINAL: "+sys2.rjust(5)+" : "+str(round(sysUnc*10000)/100)+" % "
-    print "FINAL: "+("TTB").rjust(5)+" : "+str(round(sysUnc3*10000)/100)+" % "
-    print "FINAL: "+("TTCC").rjust(5)+" : "+str(round(sysUnc4*10000)/100)+" % "
-    print "FINAL: "+("GEN").rjust(5)+" : "+str(round(sysUnc5*10000)/100)+" % "
-    print "FINAL: ---------------- "#+str(SystematicUnc)+"------"
+  for sys in StepSys:
+    orig_r2,orig_err2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
+    sysUnc = (orig_r-orig_r2)/orig_r
+    print "FINAL2: "+(sys.rjust(30))+": "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
+    SystematicUnc[sys]=copy.deepcopy(sysUnc)
+  print "FINAL2: ---- "+str(SystematicUnc)+"------"
+  orig_r3,orig_err3 = fitting(histograms, True, False, GEN,True,False)
+  orig_r4,orig_err4 = fitting(histograms, False, True, GEN,True,False)
+  orig_r5,orig_err5 = fitting(histogramsMG5, False, False, "MG5",True,False)
+  sysUnc3 = (orig_r-orig_r3)/orig_r
+  sysUnc4 = (orig_r-orig_r4)/orig_r
+
+  sysUnc5 = (genR-orig_r5*eRMG5)/genR
+
+  sysUnc=0.
+  for sys2 in StepSys2.keys():
+    sysUnc1=0.
+    for sys3 in StepSys2[sys2]:
+      if sys3.find("JER")>-1:
+        up=SystematicUnc[sys3+"_up"] 
+        dw=SystematicUnc[sys3+"_dw"] 
+      elif sys3.find("puweight")>-1:
+        up=SystematicUnc[sys3+"Up"] 
+        dw=SystematicUnc[sys3+"Down"] 
+      else:
+        up=SystematicUnc[sys3+"_Up"] 
+        dw=SystematicUnc[sys3+"_Down"] 
+      sysUnc1 += up*up+dw*dw
+    sysUnc = sqrt(sysUnc1)
+    print "FINAL2: "+sys2.rjust(10)+" : "+str(round(sysUnc*10000)/100)+" % "
+    sysUnc = 0.
+
+  print "FINAL2: "+("TTB").rjust(5)+" : "+str(round(sysUnc3*10000)/100)+" % "
+  print "FINAL2: "+("TTCC").rjust(5)+" : "+str(round(sysUnc4*10000)/100)+" % "
+  print "FINAL2: "+("GEN").rjust(5)+" : "+str(round(sysUnc5*10000)/100)+" % "
+  print "FINAL2: ---------------- "#+str(SystematicUnc)+"------"
+
 else:
   pulltest(histograms,freeTTB, freeTTCC, GEN)
 
