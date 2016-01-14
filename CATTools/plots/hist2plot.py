@@ -90,6 +90,14 @@ def ll():
       #singleplotStackLL2(f1,mon1['name'],step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
       singleplotStackLL2(f1,mon1,step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
 
+def mmee():
+  f1 = jsonLL['file'] #TFile.Open(json['file'],"read")
+  for step1 in jsonLL['cuts']:
+    for mon1 in jsonLL['monitors']:
+      #singleplotStackLL2(f1,mon1['name'],step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
+      singleplotStackLMMEE2(f1,mon1,step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
+
+
 import sys
 if len(sys.argv) < 2:
   sys.exit()
@@ -98,6 +106,8 @@ arg1 = sys.argv[1] # default, freeB, freeC and, (freeB and freeC)
 
 if int(arg1)==0:
   mmeeem()
+elif int(arg1)==1:
+  mmee()
 else :
   ll()
 

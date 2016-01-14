@@ -964,3 +964,312 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
   else : c1.Close() 
     
 ############################################
+############################################
+############################################
+############################################
+############################################
+############################################
+def singleplotStackMMEE2(filename,mon,step,mcsamples,datasamples,useReturn):
+  f = TFile.Open(filename,"read")
+  singleplotStackMMEE(f,mon,step,mcsamples,datasamples,useReturn)
+  f.Close()
+
+def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
+
+  #dyest = drellYanEstimationRun(f,step[0:2])
+  dyest = DYsf[step[0:2]]
+  print "step : "+step+":"+str(dyest)
+  #f = TFile.Open(filename,"read")
+  mon = mon1["name"]
+  canvasname = mon+step
+  c1 = myCanvas(canvasname)
+  #c1 = TCanvas( 'c1', '', 500, 500 )
+  if log : print mon+step
+  #c1.Divide(1,2)
+
+   #Plot Pad
+  pad1 = myPad1(canvasname+"pad1")
+  #Ratio Pad
+  pad2 = myPad2(canvasname+"pad2")
+##############
+  pad1.Draw()
+  pad1.cd() 
+
+  legx1 = 0.8
+  wid=0.12
+  legx2 = 0.67
+  leg  = make_legend(legx1,0.64, legx1+wid,0.88)
+  leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
+  leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
+ 
+  lumi = mainlumi
+
+  hs = THStack("hs","")
+
+  hmctotName = "h1_"+mcsamples[0]['name']+"_"+mon+"_mm_"+step
+  if log : print "hmcTotal: "+hmctotName
+  hmctot = f.Get(hmctotName).Clone("hmctot")
+  hmcmerge = f.Get(hmctotName).Clone("hmcmerge")
+  hmcSig = f.Get(hmctotName).Clone("hmcSig")
+  hmctot.Reset()
+  hmcmerge.Reset()
+  hmcSig.Reset()
+
+  hmcAmcNLO = hmctot.Clone("hmcAmcNLO")
+  hmcMG5   = hmctot.Clone("hmcMG5")
+  hdata = hmctot.Clone("hdata")
+  myMCHistSet(hmctot)
+  myMCHistSet(hmcmerge)
+  myDataHistSet(hdata)
+
+  isStat = mon.find("Stat")>-1
+  if isStat : 
+    print "Stat: step: "+step
+
+  for i,mc in enumerate(mcsamples):
+    isMC = mc['label'].find("DATA")==-1
+    if not isMC: continue
+
+    histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step
+    histnameSee = "h1_"+mc['name']+"_"+mon+"_ee_"+step
+    #histnameSem = "h1_"+mc['name']+"_"+mon+"_em_"+step
+    #channel = step[2:4]
+    h2ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
+    h2ee = f.Get(histnameSee).Clone("h"+histnameSee)
+    #h2em = f.Get(histnameSem).Clone("h"+histnameSem)
+    if type(h2ll) is not TH1D :
+      continue
+
+
+    h2ll.AddBinContent(h2ll.GetNbinsX(),h2ll.GetBinContent(h2ll.GetNbinsX()+1))
+    h2ee.AddBinContent(h2ee.GetNbinsX(),h2ee.GetBinContent(h2ee.GetNbinsX()+1))
+    #h2em.AddBinContent(h2em.GetNbinsX(),h2em.GetBinContent(h2em.GetNbinsX()+1))
+    ###############
+    isDY = mc['name'].find("DYJet")>-1
+    if isDY and int(step[1:2])>1: 
+        h2ee.Scale(dyest[0])
+        h2ll.Scale(dyest[1])
+
+
+    #if h2.Integral()>0 :  h2.Scale(mc['cx']/Ntot*lumi)
+    h2ll.Add(h2ee)
+    #h2ll.Add(h2em)
+
+    if h2ll.Integral()>0 :  h2ll.Scale(mc['cx']*lumi)
+    #if h2ll.Integral()>0 :  h2ll.Scale(lumi)
+
+    ###############
+    ci = TColor.GetColor(mc['color']);
+    h2ll.SetFillColor(ci)
+    h2ll.SetLineColor(kBlack)
+
+    isTTH = mc['name'].find("ttH")>-1
+    isPowheg = mc['name'].find("POW")>-1
+    isAmcNLO = mc['name'].find("AMC")>-1
+    isMG5 = mc['name'].find("MG5")>-1
+    if not isPowheg and not isTTH and not isMG5:
+      hmcAmcNLO.Add(h2ll)
+      if isStat and isAmcNLO:
+        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*10)/10)+" \pm "+str(round(h2ll.GetBinError(1)*10)/10)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
+      if isAmcNLO : continue
+    if not isPowheg and not isTTH and not isAmcNLO:
+      hmcMG5.Add(h2ll)
+      if isStat and isMG5:
+        if h2ll.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)*10)/10)+" \pm "+str(round(h2ll.GetBinError(1)*10)/10)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h2ll.GetBinContent(1)))+" \pm "+str(round(h2ll.GetBinError(1)))+" $"
+      if isMG5 : continue
+
+    if not isTTH and not isMG5 and not isAmcNLO:
+      hmctot.Add(h2ll)
+
+    hmcmerge.Add(h2ll)
+    #hs.Add( h2ll )
+
+    selEvet=h2ll.Integral() 
+    selEnts=h2ll.GetEntries()
+    if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
+    isSameNext=False
+    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
+    if  (not isSameNext) and isPowheg:
+      h3=hmcmerge.Clone("h"+mc['name'])
+      h3.SetFillColor(ci)
+      h3.SetLineColor(kBlack)
+      label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
+      leg.AddEntry(h3, label, "f")
+      if isStat:
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
+ 
+      hs.Add(h3)
+      hmcmerge.Reset()
+    elif not isSameNext and not isTTH :
+      h3=hmcmerge.Clone("h"+mc['name'])
+      h3.SetFillColor(ci)
+      h3.SetLineColor(kBlack)
+      label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
+      leg2.AddEntry(h3, label, "f")
+      if isStat:
+        if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
+        else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
+ 
+      hs.Add(h3)
+      hmcmerge.Reset()
+    elif not isSameNext and  isTTH : 
+      h3=hmcmerge.Clone("h"+mc['name'])
+      #h3.SetLineColor(kBlack)
+      hmcSig.Add(h3)
+      hmcSig.SetLineColor(ci)
+      hmcSig.SetTitle(mc['label'])
+      #label = ("%s"%mc['label']) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
+      #leg2.AddEntry(hmcSig, label, "l")
+      hmcmerge.Reset()
+
+  hdata.Reset()
+  for i,mc in enumerate(datasamples):
+    histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step[0:2]
+    histnameSee = "h1_"+mc['name']+"_"+mon+"_ee_"+step[0:2]
+    #histnameSem = "h1_"+mc['name']+"_"+mon+"_em_"+step[0:2]
+    #channel = step[2:4]
+    h1ll = f.Get(histnameSmm).Clone("h"+histnameSmm)
+    h1ee = f.Get(histnameSee).Clone("h"+histnameSee)
+    #h1em = f.Get(histnameSem).Clone("h"+histnameSem)
+    if type(h1ll) is not TH1D :
+      continue
+    h1ll.GetYaxis().SetTitle("Events")
+
+    isMuMu = mc['name'].find("MuMu")==-1
+    isElEl = mc['name'].find("ElEl")==-1
+    #isMuEl = mc['name'].find("MuEl")==-1
+    if not isMuMu :
+      h1ee.Reset()
+      h1em.Reset()
+    if not isElEl :
+      h1ll.Reset()
+      h1em.Reset()
+    if not isMuEl :
+      h1ee.Reset()
+      h1ll.Reset()
+
+    h1ll.AddBinContent(h1ll.GetNbinsX(),h1ll.GetBinContent(h1ll.GetNbinsX()+1))
+    h1ee.AddBinContent(h1ee.GetNbinsX(),h1ee.GetBinContent(h1ee.GetNbinsX()+1))
+    #h1em.AddBinContent(h1em.GetNbinsX(),h1em.GetBinContent(h1em.GetNbinsX()+1))
+    h1ll.Add(h1ee)
+    #h1ll.Add(h1em)
+
+    selEvet=h1ll.Integral() 
+    selEnts=h1ll.GetEntries()
+ 
+    hdata.Add(h1ll)
+    if log : print "data:"+mc['file']+": "+str(round(selEvet))+", "+str(selEnts)
+    #if not (round(selEvet) == round(selEnts)) : return 
+################################
+  scale = hmctot.GetMaximum()
+  minimum = 0.05
+
+  h1data = hdata.Clone("h1data")
+  h2data = myDataHistSet(h1data)
+
+  maxY=0.
+  for i in range(int(h1data.GetNbinsX()*0.7)+1, h1data.GetNbinsX()+2):
+     if maxY<h1data.GetBinContent(i): maxY=h1data.GetBinContent(i)
+
+  h2data.SetMaximum(maxY*10000)
+  #if maxY is 0. : h2data.SetMaximum(scale*100)
+  if maxY*10000 < scale*140 : h2data.SetMaximum(scale*140)
+
+  #h2data.SetMaximum(scale*40)
+  h2data.SetMinimum(minimum)
+  #if log :  print "dddd"+str(type(hmctot))+("bbbb: %f"%hmctot.Integral())
+  labeltot = ("MC Total") + (" %.0f"%hmctot.Integral()).rjust(8)
+  #leg2.AddEntry(hmctot,labeltot,"")
+  if isStat:
+    if hmctot.GetBinContent(1)<100 : print " Stat: "+("MC Total").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)*10)/10)+" \pm "+str(round(hmctot.GetBinError(1)*10)/10)+" $"
+    else                           : print " Stat: "+("MC Totlal").rjust(10)+" & $"+str(round(hmctot.GetBinContent(1)))+" \pm "+str(round(hmctot.GetBinError(1)))+" $"
+ 
+  label = ("%s"%hmcSig.GetTitle()) #+ (" %.0f"%(hmcSig.Integral()) ).rjust(7)
+  if isStat and (hmcSig.Integral()>0):
+    if hmcSig.GetBinContent(1)<100 : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)*10)/10)+" \pm "+str(round(hmcSig.GetBinError(1)*10)/10)+" $"
+    else                       : print " Stat: "+("tth").rjust(10)+" & $"+str(round(hmcSig.GetBinContent(1)))+" \pm "+str(round(hmcSig.GetBinError(1)))+" $"
+ 
+  labeldata = ("DATA     ") #+ (" %.0f"%h2data.Integral()).rjust(8)
+  leg.AddEntry(h2data,labeldata,"p")
+  if isStat:
+    print " Stat: "+("DATA").rjust(10)+" & $ "+str(round(h2data.GetBinContent(1)))+" $" #+" +- "+str(h2data.GetBinError(1))
+ 
+
+#########################################
+  h2data.GetYaxis().SetTitle("Events")
+  h2data.GetXaxis().SetTitle("")
+  h2data.Draw()
+  hs.Draw("same,hist")
+  gr = myHist2TGraphError(hmctot)
+  #gr.Draw("same,2")
+  gr.Draw("e2SAME")
+  #leg.AddEntry(gr,"Uncertainty","f")
+  myAmcNLOHistSet(hmcAmcNLO)
+  hmcAmcNLO.Draw("histoSAME")
+  myMG5HistSet(hmcMG5)
+  hmcMG5.Draw("histoSAME")
+  leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
+  leg3.AddEntry(hmcMG5,"Madgraph","l")
+  leg3.AddEntry(hmcSig, label, "l")
+  hmcSig.Draw("same")
+  h2data.Draw("same")
+#  h2data.Draw("sameaxis")
+
+
+  leg.Draw()
+  leg2.Draw()
+  leg3.Draw()
+  pad1.SetLogy()
+  pt = addLegendLumi(lumi)
+  pt2 = addLegendCMS()
+  pt3 = addDecayMode("#mu#mu/ee")
+  pt.Draw()
+  pt2.Draw()
+  pt3.Draw()
+
+  pad1.Modified()
+  c1.cd()
+###########################################
+  if log :  print "pad1 step"
+  #pad2 = TPad("pad2", "",0,0,1,0.3)
+  pad2 = myPad2(canvasname+"pad2")
+
+  if log :  print "pad2 step1"
+  pad2.Draw()
+  pad2.cd()
+  hdataAMC=hdata.Clone("hdataAMC")
+  hdataMG5=hdata.Clone("hdataMG5")
+  hdata.Divide(hmctot)
+  hdataAMC.Divide(hmcAmcNLO)
+  hdataMG5.Divide(hmcMG5)
+  myAmcNLORatioSet(hdataAMC)
+  myMG5RatioSet(hdataMG5)
+
+  hratio = myRatio(hdata)
+  hratio.GetXaxis().SetTitle(mon1['unit'])
+  hratio.Draw()
+  hratiosyst = myRatioSyst(hdata)
+  hratiosyst.Draw("e2")
+  hratio.Draw("e1SAME")
+  hdataAMC.Draw("histSAME")
+  hdataMG5.Draw("histSAME")
+  
+
+  pad2.Modified()
+  c1.cd()
+  c1.Modified()
+  c1.cd()
+
+  output = "plots/eps/TH1_"+mon+"_"+step+"MMEE.eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step+"MMEE.png"
+  c1.Print(output)
+  c1.Print(output2)
+
+  #f.Close()
+  #c1.Close()
+  if useReturn : return c1,pad1,pad2,hs,gr,h2data,hdataMC,leg,leg2
+  else : c1.Close() 
+   
