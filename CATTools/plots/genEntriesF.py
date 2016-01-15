@@ -10,6 +10,16 @@ def getDictionary(tree, vvv, sel1, br):
   selection1_={"events":htemp.GetEntries(),"cx":cx}
   return selection1_ 
 
+def getDictionary2(tree, vvv, sel1):
+  htemp = TH1D("htemp1","",1,-20,20)
+  tree.Project("htemp1",vvv,sel1)
+  cx = htemp.GetEntries()*831.76/19757190.
+  bbbb= str(int(htemp.GetEntries()))+", cx:"+str((cx) )
+  print bbbb
+  selection1_={"events":htemp.GetEntries(),"cx":cx}
+  return selection1_ 
+
+
 def ntuple2entries(files,name):
   vvv = "1"
   tt="(1)"
@@ -31,14 +41,18 @@ def ntuple2entries(files,name):
   habr = (0.66)  
 
   FS = {
-   "di0":  {"sel":  dileptonic0, "br": dibr}   ,
-#   "dim1":   dileptonicm1  ,
-#   "dip1":   dileptonicp1  ,
-   "semi0": {"sel": semiLeptonic0, "br": sebr} ,
-#   "semim1": semiLeptonicm1,
-#   "semip1": semiLeptonicp1,
-   "hadron": {"sel": allHadronic, "br": habr},
-   "full": {"sel":"(1)", "br": 1.0}
+#   "di0":  {"sel":  dileptonic0, "br": dibr}   ,
+   "di0":   dileptonic0  ,
+   "dim1":   dileptonicm1  ,
+   "dip1":   dileptonicp1  ,
+#   "semi0": {"sel": semiLeptonic0, "br": sebr} ,
+   "semi0": semiLeptonic0,
+   "semim1": semiLeptonicm1,
+   "semip1": semiLeptonicp1,
+#   "hadron": {"sel": allHadronic, "br": habr},
+   "hadron": allHadronic,
+#   "full": {"sel":"(1)", "br": 1.0}
+   "full": "(1)"
   }
 
   chain = TChain("cattree/nom")
@@ -50,8 +64,11 @@ def ntuple2entries(files,name):
   summary = {}
 
   for ii in FS.keys():
-    summary['ttbb'+ii]=getDictionary(tree, vvv, tt+"*"+FS[ii]["sel"]+"*"+TTBB, FS[ii]["br"])
-    summary['ttjj'+ii]=getDictionary(tree, vvv, tt+"*"+FS[ii]["sel"]+"*"+TTJJ, FS[ii]["br"])
+    #summary['ttbb'+ii]=getDictionary(tree, vvv, tt+"*"+FS[ii]["sel"]+"*"+TTBB, FS[ii]["br"])
+    #summary['ttjj'+ii]=getDictionary(tree, vvv, tt+"*"+FS[ii]["sel"]+"*"+TTJJ, FS[ii]["br"])
+    summary['ttbb'+ii]=getDictionary2(tree, vvv, tt+"*"+FS[ii]+"*"+TTBB)
+    summary['ttjj'+ii]=getDictionary2(tree, vvv, tt+"*"+FS[ii]+"*"+TTJJ)
+
 
   return summary
 
