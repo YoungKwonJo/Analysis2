@@ -67,7 +67,7 @@ def piechart(json,name):
   tot=0.
   for i,ii in enumerate(json.keys()):
     tot += json[ii]
-  pieleg = make_legend(0.4,0.73, 0.75,0.93)
+  pieleg = make_legend(0.65,0.71, 0.88,0.9)
   hh={}
   for i,ii in enumerate(json.keys()):
     pie.SetEntryVal(i,json[ii])
@@ -89,6 +89,7 @@ def piechart(json,name):
   text = ("all  "+((" (1.00000)").rjust(10))+((" %d"%tot).rjust(9)))
   pieleg.AddEntry(hh["all"], text,"f")
   pie.SetRadius(0.35)
+  pie.SetY(.35)
   pie.SetLabelsOffset(.01)
 
   return pie,pieleg,hh
@@ -117,11 +118,15 @@ def loadSel(tree,sel,sels):
 def SavePDF(pow, name):
   pie,pieleg,hh=piechart(pow,name)
   c1 = TCanvas( "c1"+name, '',1)
+  gStyle.SetOptTitle(1)
   pie.Draw("nol")
   pieleg.Draw()
   c1.Print(name+".pdf")
   return c1
 
+
+gROOT.ProcessLine(".L tdrStyle.C")
+setTDRStyle()
 
 ttbarPOW = "TT_powheg"
 loc = "/store/user/youngjo/Cattools/v7-4-6v5/"
@@ -148,12 +153,6 @@ TTNN ={
  "ttbb":TTBB, "ttbj":TTBJ, "ttcc":TTCC, "ttLF":TTLF
 }
 
-FS = {
- "di0":   dileptonic0  ,        "semi0": semiLeptonic0,   "hadron": allHadronic,
-#   "dim1":   dileptonicm1  ,   "semim1": semiLeptonicm1,
-#   "dip1":   dileptonicp1  ,   "semip1": semiLeptonicp1,
-#   "full": "(1)"
-}
 ETC = "(!"+dileptonic0+" && !"+semiLeptonic0+" && !"+allHadronic+")"
 CHANNEL ={
   "dileptonic": dileptonic0,
@@ -164,6 +163,31 @@ CHANNEL ={
 
 #################
 #################
+#dilepH = "("+dileptonic0+" && NJets20>=4 )"
+#semilepH = "("+semiLeptonic0+" && NJets20>=6 )"
+dilepH   = dileptonic0  
+semilepH = semiLeptonic0
+ttbbH = " (genTtbarId%100>52) "
+ttbjH = " (genTtbarId%100>50 && genTtbarId%100<53) "
+ttcjH = " (genTtbarId%100>40 && genTtbarId%100<43) "
+ttccH = " (genTtbarId%100>42 && genTtbarId%100<49) "
+ttlfH = " (genTtbarId%100 <41) "
+TTNNH = {
+  "ttbb":ttbbH,   "ttbj":ttbjH,   "ttcc":ttccH,   "ttlf":ttlfH 
+}
+
+
+#################
+ttjjDiLeptonVis="(NJets20>=4 && NbJets20>=2 && lepton1_pt>20 && lepton2_pt>20 && abs(lepton1_eta)<2.4 && abs(lepton2_eta)<2.4)"
+ttbbvis = "(NbJets20>=4)" 
+ttbjvis = "(NbJets20==3)" 
+ttccvis = "((NcJets20>=2) && !(NbJets20>=3))"
+ttlfvis = "(!"+ttbbvis+" && !"+ttbjvis+" && !"+ttccvis+")"
+TTNNvis ={
+  "ttbb":ttbbvis,   "ttbj":ttbjvis,   "ttcc":ttccvis,   "ttlf":ttlfvis 
+}
+#################
+ttjjSemiLeptonVis="(NJets20>=6 && NbJets20>=2 && ((lepton1_pt>20 && abs(lepton1_eta)<2.4) || (lepton2_pt>20  && abs(lepton2_eta)<2.4)))"
 #################
 #################
 #################
@@ -171,16 +195,21 @@ pow0=loadSel(tree,"(1)",CHANNEL)
 pow1=loadSel(tree,dileptonic0,TTNN)
 pow2=loadSel(tree,semiLeptonic0,TTNN)
 pow3=loadSel(tree,allHadronic,TTNN)
+
+pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
+pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
+
+pow6=loadSel(tree,dilepH,TTNNH)
+pow7=loadSel(tree,semilepH,TTNNH)
+
 #################
 SavePDF(pow0,"POWttbarall")
-SavePDF(pow1,"POWttbarDileptonic")
-SavePDF(pow2,"POWttbarSemiLeptonic")
-SavePDF(pow3,"POWttbarHadronic")
+SavePDF(pow1,"POWttbarDileptonicFullPhase")
+SavePDF(pow2,"POWttbarSemileptonicFullPhase")
+SavePDF(pow3,"POWttbarHadronicFullphase")
 
-#pie,pieleg,hh=piechart(pow,"POWHEG")
-#c1 = TCanvas( "c1", '',1)
-#pie.Draw("nol")
-#pieleg.Draw()
-#c1.Print("test.png")
+SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
+SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
 
-
+SavePDF(pow6,"POWttbarDileptonicTTH")
+SavePDF(pow7,"POWttbarSemileptonicTTH")
