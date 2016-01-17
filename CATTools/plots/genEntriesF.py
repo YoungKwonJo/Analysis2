@@ -175,7 +175,8 @@ ttlfH = " (genTtbarId%100 <41) "
 TTNNH = {
   "ttbb":ttbbH,   "ttbj":ttbjH,   "ttcc":ttccH,   "ttlf":ttlfH 
 }
-
+dilepHv = "( lepton1_pt>20 && lepton2_pt>20 && abs(lepton1_eta)<2.4 && abs(lepton2_eta)<2.4 && NJets20>=4 )"
+semilepHv = "( ((lepton1_pt>20 && abs(lepton1_eta)<2.4) ^ (lepton2_pt>20  && abs(lepton2_eta)<2.4)) && NJets20>=6 )"
 
 #################
 ttjjDiLeptonVis="(NJets20>=4 && NbJets20>=2 && lepton1_pt>20 && lepton2_pt>20 && abs(lepton1_eta)<2.4 && abs(lepton2_eta)<2.4)"
@@ -187,7 +188,7 @@ TTNNvis ={
   "ttbb":ttbbvis,   "ttbj":ttbjvis,   "ttcc":ttccvis,   "ttlf":ttlfvis 
 }
 #################
-ttjjSemiLeptonVis="(NJets20>=6 && NbJets20>=2 && ((lepton1_pt>20 && abs(lepton1_eta)<2.4) || (lepton2_pt>20  && abs(lepton2_eta)<2.4)))"
+ttjjSemiLeptonVis="(NJets20>=6 && NbJets20>=2 && ((lepton1_pt>20 && abs(lepton1_eta)<2.4) ^ (lepton2_pt>20  && abs(lepton2_eta)<2.4)))"
 #################
 #################
 #################
@@ -202,6 +203,8 @@ pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
 pow6=loadSel(tree,dilepH,TTNNH)
 pow7=loadSel(tree,semilepH,TTNNH)
 
+pow8=loadSel(tree,dilepHv,TTNNH)
+pow9=loadSel(tree,semilepHv,TTNNH)
 #################
 SavePDF(pow0,"POWttbarall")
 SavePDF(pow1,"POWttbarDileptonicFullPhase")
@@ -211,5 +214,9 @@ SavePDF(pow3,"POWttbarHadronicFullphase")
 SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
 SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
 
-SavePDF(pow6,"POWttbarDileptonicTTH")
-SavePDF(pow7,"POWttbarSemileptonicTTH")
+SavePDF(pow6,"POWttbarDileptonicTTHFull")
+SavePDF(pow7,"POWttbarSemileptonicTTHFull")
+
+SavePDF(pow8,"POWttbarDileptonicTTHVisible")
+SavePDF(pow9,"POWttbarSemileptonicTTHVisible")
+
