@@ -10,7 +10,8 @@ ee= "(channel==2)"
 em= "(channel==1)"
 
 preselection = "(filtered==1)" 
-trigger   = "((tri==1)*(filtered==1))"
+#trigger   = "((tri==1)*(filtered==1))"
+trigger   = "(tri==1)"#*(filtered==1))"
 
 cut = [ "(step1==1)", "(step2==1)",  "(step3==1)", "(step4==1)","(step5==1)","(step6==1)" ]
 mm_cuts ={

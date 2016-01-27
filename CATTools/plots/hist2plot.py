@@ -95,7 +95,7 @@ def mmee():
   for step1 in jsonLL['cuts']:
     for mon1 in jsonLL['monitors']:
       #singleplotStackLL2(f1,mon1['name'],step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
-      singleplotStackLMMEE2(f1,mon1,step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
+      singleplotStackMMEE2(f1,mon1,step1,jsonLL['mcsamples'],jsonLL['datasamples'],False)
 
 
 import sys

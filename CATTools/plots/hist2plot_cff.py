@@ -6,7 +6,7 @@ from math import sqrt
 ################
 log = False
 #log = True
-mainlumi=2110.
+mainlumi=2170.
 ci = 920
 
 ###################################################
@@ -135,7 +135,7 @@ def plotTH2F(filename,mon,step,mcsamples):
     if type(h1) is not TH2F :  
       return
     h1.SetTitle("")
-    ci = TColor.GetColor(mc['color']);
+    ci = TColor.GetColor(mc["ColorLabel"]['color']);
     h1.SetLineColor(ci)
     h1.Draw("colz")
 
@@ -488,13 +488,13 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
       hmctot.Add( h2 )
     hmcmerge.Add(h2)
     #hs.Add(h2)
-    ci = TColor.GetColor(mc['color']);
+    ci = TColor.GetColor(mc["ColorLabel"]['color']);
 
     selEvet=h2.Integral() 
     selEnts=h2.GetEntries()
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
-    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
+    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["ColorLabel"]["label"]
     if  (not isSameNext) and isPowheg: 
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
@@ -749,7 +749,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     #if h2ll.Integral()>0 :  h2ll.Scale(lumi)
 
     ###############
-    ci = TColor.GetColor(mc['color']);
+    ci = TColor.GetColor(mc["ColorLabel"]['color']);
     h2ll.SetFillColor(ci)
     h2ll.SetLineColor(kBlack)
 
@@ -780,7 +780,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     selEnts=h2ll.GetEntries()
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
-    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
+    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["ColorLabel"]["label"]
     if  (not isSameNext) and isPowheg:
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
@@ -1059,7 +1059,7 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
     #if h2ll.Integral()>0 :  h2ll.Scale(lumi)
 
     ###############
-    ci = TColor.GetColor(mc['color']);
+    ci = TColor.GetColor(mc["ColorLabel"]['color']);
     h2ll.SetFillColor(ci)
     h2ll.SetLineColor(kBlack)
 
@@ -1090,7 +1090,7 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
     selEnts=h2ll.GetEntries()
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
-    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["label"]
+    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["ColorLabel"]["label"]
     if  (not isSameNext) and isPowheg:
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
@@ -1143,13 +1143,13 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
     #isMuEl = mc['name'].find("MuEl")==-1
     if not isMuMu :
       h1ee.Reset()
-      h1em.Reset()
+      #h1em.Reset()
     if not isElEl :
       h1ll.Reset()
-      h1em.Reset()
-    if not isMuEl :
-      h1ee.Reset()
-      h1ll.Reset()
+      #h1em.Reset()
+    #if not isMuEl :
+    #  h1ee.Reset()
+    #  h1ll.Reset()
 
     h1ll.AddBinContent(h1ll.GetNbinsX(),h1ll.GetBinContent(h1ll.GetNbinsX()+1))
     h1ee.AddBinContent(h1ee.GetNbinsX(),h1ee.GetBinContent(h1ee.GetNbinsX()+1))
