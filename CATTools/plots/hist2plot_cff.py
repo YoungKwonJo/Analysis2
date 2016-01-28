@@ -140,7 +140,7 @@ def plotTH2F(filename,mon,step,mcsamples):
     h1.Draw("colz")
 
     leg = make_legend(0.5,0.91, 0.75,0.99)
-    leg.AddEntry(h1, ("%s : "%mc['label']) + ("%.0f"%h1.Integral()), "l");
+    leg.AddEntry(h1, ("%s : "%mc["ColorLabel"]['label']) + ("%.0f"%h1.Integral()), "l");
     legs.append(copy.deepcopy(leg))
     legs[i].Draw()
   output = "plots/eps/TH2_"+mon+"_"+step+".eps"
@@ -445,7 +445,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
     print "Stat: step: "+step
 
   for i,mc in enumerate(mcsamples):
-    isMC = mc['label'].find("DATA")==-1
+    isMC = mc["ColorLabel"]['label'].find("DATA")==-1
     if not isMC: continue
 
     histnameS = "h1_"+mc['name']+"_"+mon+"_"+step
@@ -494,12 +494,12 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
     selEnts=h2.GetEntries()
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
-    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["ColorLabel"]["label"]
+    if i<len(mcsamples)-1 : isSameNext= mc["ColorLabel"]['label'] is mcsamples[i+1]["ColorLabel"]["label"]
     if  (not isSameNext) and isPowheg: 
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc["ColorLabel"]['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       if isStat:
         if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
@@ -511,7 +511,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
       h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
 
-      label = ("%s"%mc['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc["ColorLabel"]['label']) #+ (" %.0f"%(h3.Integral()) ).rjust(7)
       if isStat:
         if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
         else                       : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)))+" \pm "+str(round(h3.GetBinError(1)))+" $"
@@ -525,7 +525,7 @@ def singleplotStack(f,mon1,step,mcsamples,datasamples,useReturn):
       #h3.SetLineColor(kBlack)
       hmcSig.Add(h3)
       hmcSig.SetLineColor(ci)
-      hmcSig.SetTitle(mc['label'])
+      hmcSig.SetTitle(mc["ColorLabel"]['label'])
 #      label = ("%s"%mc['label']) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
 #      leg2.AddEntry(hmcSig, label, "l")
       hmcmerge.Reset()
@@ -717,7 +717,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     print "Stat: step: "+step
 
   for i,mc in enumerate(mcsamples):
-    isMC = mc['label'].find("DATA")==-1
+    isMC = mc["ColorLabel"]['label'].find("DATA")==-1
     if not isMC: continue
 
     histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step
@@ -780,12 +780,12 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
     selEnts=h2ll.GetEntries()
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
-    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["ColorLabel"]["label"]
+    if i<len(mcsamples)-1 : isSameNext= mc["ColorLabel"]['label'] is mcsamples[i+1]["ColorLabel"]["label"]
     if  (not isSameNext) and isPowheg:
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc["ColorLabel"]['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg.AddEntry(h3, label, "f")
       if isStat:
         if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
@@ -797,7 +797,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc["ColorLabel"]['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg2.AddEntry(h3, label, "f")
       if isStat:
         if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
@@ -810,7 +810,7 @@ def singleplotStackLL(f,mon1,step,mcsamples,datasamples,useReturn):
       #h3.SetLineColor(kBlack)
       hmcSig.Add(h3)
       hmcSig.SetLineColor(ci)
-      hmcSig.SetTitle(mc['label'])
+      hmcSig.SetTitle(mc["ColorLabel"]['label'])
       #label = ("%s"%mc['label']) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
       #leg2.AddEntry(hmcSig, label, "l")
       hmcmerge.Reset()
@@ -1027,7 +1027,7 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
     print "Stat: step: "+step
 
   for i,mc in enumerate(mcsamples):
-    isMC = mc['label'].find("DATA")==-1
+    isMC = mc["ColorLabel"]['label'].find("DATA")==-1
     if not isMC: continue
 
     histnameSmm = "h1_"+mc['name']+"_"+mon+"_mm_"+step
@@ -1090,12 +1090,12 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
     selEnts=h2ll.GetEntries()
     if log : print "mc:"+mc['file']+":"+str(round(selEvet))+", "+str(selEnts)
     isSameNext=False
-    if i<len(mcsamples)-1 : isSameNext= mc['label'] is mcsamples[i+1]["ColorLabel"]["label"]
+    if i<len(mcsamples)-1 : isSameNext= mc["ColorLabel"]['label'] is mcsamples[i+1]["ColorLabel"]["label"]
     if  (not isSameNext) and isPowheg:
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc["ColorLabel"]['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg.AddEntry(h3, label, "f")
       if isStat:
         if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
@@ -1107,7 +1107,7 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
       h3=hmcmerge.Clone("h"+mc['name'])
       h3.SetFillColor(ci)
       h3.SetLineColor(kBlack)
-      label = ("%s"%mc['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
+      label = ("%s"%mc["ColorLabel"]['label'])# + (" %.0f"%(h3.Integral()) ).rjust(7)
       leg2.AddEntry(h3, label, "f")
       if isStat:
         if h3.GetBinContent(1)<100 : print " Stat: "+(mc['name']).rjust(10)+" & $"+str(round(h3.GetBinContent(1)*10)/10)+" \pm "+str(round(h3.GetBinError(1)*10)/10)+" $"
@@ -1120,7 +1120,7 @@ def singleplotStackMMEE(f,mon1,step,mcsamples,datasamples,useReturn):
       #h3.SetLineColor(kBlack)
       hmcSig.Add(h3)
       hmcSig.SetLineColor(ci)
-      hmcSig.SetTitle(mc['label'])
+      hmcSig.SetTitle(mc["ColorLabel"]['label'])
       #label = ("%s"%mc['label']) + (" %.0f"%(hmcSig.Integral()) ).rjust(7)
       #leg2.AddEntry(hmcSig, label, "l")
       hmcmerge.Reset()

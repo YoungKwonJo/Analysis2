@@ -127,9 +127,9 @@ print str(cx)
 #["TTWlNu","TTWqq',"TTZll","TTZqq",  "STbt","STt","STbtW","STtW",  "WW","WZ","ZZ",  "WJets","DYJets","DYJets10",  "ttH2non","ttH2bb"]
 #BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,47.13,16.523,  61526.7,6025.2,18610.0,     0.5058,0.5058]
 
-z  ="v2"
-zz ="v2"
-zzz="v2"
+z  ="v3"
+zz ="v3"
+zzz="v3"
 mcsamples=[
 
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttbb"]    },

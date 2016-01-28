@@ -102,6 +102,7 @@ def getEntriesy(tree, sel1):
 
 def loadfiles(files):
   chain = TChain("cattree/nom")
+  #chain = TChain("cattree/genTop")
   for afile in files:
     f = TFile.Open(afile)
     if None == f: continue
@@ -129,10 +130,11 @@ gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
 ttbarPOW = "TT_powheg"
-loc = "/store/user/youngjo/Cattools/v7-4-6v5/"
+loc = "/store/user/youngjo/Cattools/v7-6-1v1/"
 z="v2"
 
 tree=loadfiles(files(loc + ttbarPOW+z))
+#tree=loadfiles(["/cms/home/chanwook/work/ttbb/cattools/src/CATTools/CatAnalyzer/test/TTBBGenAnalyzer_TT_powheg.root"])
 
 ##################
 dileptonic0  ="(diLeptonic0==1 )"
@@ -197,26 +199,26 @@ pow1=loadSel(tree,dileptonic0,TTNN)
 pow2=loadSel(tree,semiLeptonic0,TTNN)
 pow3=loadSel(tree,allHadronic,TTNN)
 
-pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
-pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
+#pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
+#pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
 
-pow6=loadSel(tree,dilepH,TTNNH)
-pow7=loadSel(tree,semilepH,TTNNH)
+#pow6=loadSel(tree,dilepH,TTNNH)
+#pow7=loadSel(tree,semilepH,TTNNH)
 
-pow8=loadSel(tree,dilepHv,TTNNH)
-pow9=loadSel(tree,semilepHv,TTNNH)
+#pow8=loadSel(tree,dilepHv,TTNNH)
+#pow9=loadSel(tree,semilepHv,TTNNH)
 #################
 SavePDF(pow0,"POWttbarall")
 SavePDF(pow1,"POWttbarDileptonicFullPhase")
 SavePDF(pow2,"POWttbarSemileptonicFullPhase")
 SavePDF(pow3,"POWttbarHadronicFullphase")
 
-SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
-SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
+#SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
+#SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
 
-SavePDF(pow6,"POWttbarDileptonicTTHFull")
-SavePDF(pow7,"POWttbarSemileptonicTTHFull")
+#SavePDF(pow6,"POWttbarDileptonicTTHFull")
+#SavePDF(pow7,"POWttbarSemileptonicTTHFull")
 
-SavePDF(pow8,"POWttbarDileptonicTTHVisible")
-SavePDF(pow9,"POWttbarSemileptonicTTHVisible")
+#SavePDF(pow8,"POWttbarDileptonicTTHVisible")
+#SavePDF(pow9,"POWttbarSemileptonicTTHVisible")
 

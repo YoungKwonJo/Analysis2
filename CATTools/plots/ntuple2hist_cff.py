@@ -228,7 +228,8 @@ def ntuple2hist(json,cuts):
     tree6 = chain6
 
     htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
-    tree.Project("htemp"+mcsamples[i]['name'],"1","weight")#/abs(weight)")
+    #tree.Project("htemp"+mcsamples[i]['name'],"1","weight")#/abs(weight)")
+    tree.Project("htemp"+mcsamples[i]['name'],"1","weight/abs(weight)")
     Ntot = htemp.GetBinContent(1)
     #if not mc['name'] in aMC : Ntot = htemp.GetEntries()
     #htot = f.Get("hNEvent")
@@ -320,7 +321,8 @@ def ntuple2hist2d(json,cuts):
     """
 
     htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
-    tree.Project("htemp"+mcsamples[i]['name'],"1","weight")#/abs(weight)")
+    #tree.Project("htemp"+mcsamples[i]['name'],"1","weight")#/abs(weight)")
+    tree.Project("htemp"+mcsamples[i]['name'],"1","weight/abs(weight)")
     Ntot = htemp.GetBinContent(1)
 
 
