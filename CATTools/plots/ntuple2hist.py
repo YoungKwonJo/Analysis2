@@ -34,36 +34,36 @@ for mon22 in monitors2d.keys():
     print "++"+str(mon2)+"++"
 
 #mceventweight="puWeight"
-mceventweight=[
-#"(weight*puweight*lepweight)",
-#"(weight*puweightUp*lepweight*csvweight)",
-#"(weight*puweightDown*lepweight*csvweight)",
-"(weight/abs(weight)*puweight*lepweight)",
-"(weight/abs(weight)*puweightUp*lepweight*csvweight)",
-"(weight/abs(weight)*puweightDown*lepweight*csvweight)",
-"csvweight",
-"csvweight_JES_Up",          
-"csvweight_JES_Down",        
-"csvweight_LF_Up",           
-"csvweight_LF_Down",         
+baseWeight = "weight*puweight*lepweight"
+mceventweight={
+"CEN"                 : "("+baseWeight+")",
+"csvweight"           : "("+baseWeight+"*csvweight)",
+"PuWeightUp"          : "(weight*puweightUp*lepweight*csvweight)",
+"PUWeightDN"          : "(weight*puweightDown*lepweight*csvweight)",
+"JER_Up"              : "("+baseWeight+"*csvweight)",
+"JER_Down"            : "("+baseWeight+"*csvweight)",
+"csvweight_JES_Up"    : "("+baseWeight+"*csvweight_JES_Up)",        
+"csvweight_JES_Down"  : "("+baseWeight+"*csvweight_JES_Down)",      
+"csvweight_LF_Up"     : "("+baseWeight+"*csvweight_LF_Up)",         
+"csvweight_LF_Down"   : "("+baseWeight+"*csvweight_LF_Down)",       
 #]
 #ddddd=[
-"csvweight_HF_Up",           
-"csvweight_HF_Down",         
-"csvweight_HF_Stats1_Up",    
-"csvweight_HF_Stats1_Down",  
-"csvweight_HF_Stats2_Up",    
-"csvweight_HF_Stats2_Down",  
-"csvweight_LF_Stats1_Up",    
-"csvweight_LF_Stats1_Down",  
-"csvweight_LF_Stats2_Up",    
-"csvweight_LF_Stats2_Down",  
-"csvweight_Charm_Err1_Up",   
-"csvweight_Charm_Err1_Down", 
-"csvweight_Charm_Err2_Up",   
-"csvweight_Charm_Err2_Down" 
+"csvweight_HF_Up"          :  "("+baseWeight+"*csvweight_HF_Up)",           
+"csvweight_HF_Down"        :  "("+baseWeight+"*csvweight_HF_Down)",         
+"csvweight_HF_Stats1_Up"   :  "("+baseWeight+"*csvweight_HF_Stats1_Up)",    
+"csvweight_HF_Stats1_Down" :  "("+baseWeight+"*csvweight_HF_Stats1_Down)",  
+"csvweight_HF_Stats2_Up"   :  "("+baseWeight+"*csvweight_HF_Stats2_Up)",    
+"csvweight_HF_Stats2_Down" :  "("+baseWeight+"*csvweight_HF_Stats2_Down)",  
+"csvweight_LF_Stats1_Up"   :  "("+baseWeight+"*csvweight_LF_Stats1_Up)",    
+"csvweight_LF_Stats1_Down" :  "("+baseWeight+"*csvweight_LF_Stats1_Down)",  
+"csvweight_LF_Stats2_Up"   :  "("+baseWeight+"*csvweight_LF_Stats2_Up)",    
+"csvweight_LF_Stats2_Down" :  "("+baseWeight+"*csvweight_LF_Stats2_Down)",  
+"csvweight_Charm_Err1_Up"  :  "("+baseWeight+"*csvweight_Charm_Err1_Up)",   
+"csvweight_Charm_Err1_Down":  "("+baseWeight+"*csvweight_Charm_Err1_Down)", 
+"csvweight_Charm_Err2_Up"  :  "("+baseWeight+"*csvweight_Charm_Err2_Up)",   
+"csvweight_Charm_Err2_Down":  "("+baseWeight+"*csvweight_Charm_Err2_Down)" 
 #"csvt_sf","csvm_sf","csvl_sf","csvt_sfup","csvt_sfdw","csvm_sfup","csvm_sfdw","csvl_sfup","csvl_sfdw"
-]
+}
 
 jsonMM = {
 "mcsamples" : mcsamples,
