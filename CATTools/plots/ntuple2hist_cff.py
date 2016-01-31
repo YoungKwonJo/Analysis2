@@ -69,7 +69,7 @@ def h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts, eventw
 
     hh[aWeight]=copy.deepcopy(h)
 
-  return h
+  return hh
 
 
 ######################
@@ -89,7 +89,7 @@ def h2_set(name,monitor,monitor2,cutname):
         }
   return mon
 
-def h2_all_maker(tree,tree3, tree4, tree5, tree6,mc, monitors, cuts,eventweight,Ntot):
+def h2_all_maker(tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts,eventweight,Ntot):
   hh = {}
   for k,aWeight in enumerate(eventweight.keys()): 
     h = []
@@ -121,28 +121,6 @@ def h2_all_maker(tree,tree3, tree4, tree5, tree6,mc, monitors, cuts,eventweight,
 ######################
 ######################
 ######################
-######################
-######################
-
-def cut_maker(cuts_):
-  cuts  = {}
-  for i,cut in enumerate(cuts_["cut"]):
-    if i==0 :
-      cuts["S%d"%i]=cut
-    else:
-      cuts["S%d"%i]= cuts["S%d"%(i-1)] + " * " + cut
-  cutsN = {"channel":cuts_["channel"],"cut":cuts}
-  if log : print cutsN
-  return cutsN
-
-def cut_maker2(cuts_):
-  cuts  = {}
-  for i,cut in enumerate(cuts_["cut"]):
-      cuts["S%d"%i]=cut
-  cutsN = {"channel":cuts_["channel"],"cut":cuts}
-  return cuts
-####################
-####################
 ####################
 ####################
 ####################
@@ -220,7 +198,7 @@ def ntuple2hist(json,cuts):
     Ntot = 1 #htot.GetBinContent(1)
     #if log : print "total:"+str(mc['file'])+":"+str(round(Ntot))
 
-    h[mcsamples[i]['name']]=h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors,cuts,["1"],1)
+    h[datasamples[i]['name']]=h_all_maker(tree,tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors,cuts,{"CEN":"1"},1)
     #f.Close()
 
   return h
@@ -293,21 +271,21 @@ def ntuple2hist2d(json,cuts):
 
     Ntot = 1 
 
-    h[mcsamples[i]['name']]=h2_all_maker(tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors2,cuts,["1"],1)
+    h[datasamples[i]['name']]=h2_all_maker(tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors2,cuts,{"CEN":"1"},1)
   return h
 
 
 def makeoutput(outputname, h):
-  fout = TFile("root/"+outputname,"RECREATE")
-  #fout = TFile(""+outputname,"RECREATE")
-  for a in h.key():
+  #fout = TFile("root/"+outputname,"RECREATE")
+  fout = TFile(""+outputname,"RECREATE")
+  for a in h.keys():
     dirA = fout.mkdir(a)
     dirA.cd()
     for b in h[a].keys():
       dirB = dirA.mkdir(b)
       dirB.cd()
-      for c in h[a][b].keys():
-        h[a][b][c].Write()
+      for c in h[a][b]:
+        c.Write()
   fout.Write()
   fout.Close()
 
@@ -315,33 +293,38 @@ def makeoutput(outputname, h):
 #########################################
 #########################################
 #########################################
+######################
+######################
+
+def cut_maker(cuts_,ii):
+  cuts  = {}
+  for i,cut in enumerate(cuts_["cut"]):
+    if i==0 :
+      cuts["S%d"%i]=cut
+    else:
+      cuts["S%d"%i]= cuts["S%d"%(i-1)] + " * " + cut
+
+  cuts2  = {}
+  cuts2["S%d"%ii] = cuts["S%d"%ii]
+  #cutsN = {"channel":cuts_["channel"],"cut":cuts2}
+  cutsN = {"channel":cuts_["channel"],"cut":cuts2}
+  if log : print cutsN
+  return cutsN
+
+####################
+####################
 #########################################
 #########################################
 #########################################
 def makehist(json):
-  cuts_  = cut_maker(json['cuts']) 
-  cutsQCD_  = cut_maker(json['cutsQCD']) 
-  h=[]
+  cuts_  = json['cuts'] #cut_maker(json['cuts']) 
+  #cutsQCD_  = cut_maker(json['cutsQCD']) 
+  h={}
   if len(json['monitors'])>0 :
-    h += ntuple2hist(json,cuts_)
-    #h += ntuple2histQCD(json,cutsQCD_)
+    h = ntuple2hist(json,cuts_)
   if len(json['monitors2'])>0 :
-    h += ntuple2hist2d(json,cuts_)
-    #h += ntuple2hist2dQCD(json,cutsQCD_)
+    h = ntuple2hist2d(json,cuts_)
   makeoutput(json['output'],h)
-
-def makehist2(json):
-  cuts_  = cut_maker2(json['cuts']) 
-  cutsQCD_  = cut_maker(json['cutsQCD']) 
-  h=[]
-  if len(json['monitors'])>0 :
-    h += ntuple2hist(json,cuts_)
-    #h += ntuple2histQCD(json,cutsQCD_)
-  if len(json['monitors2'])>0 :
-    h += ntuple2hist2d(json,cuts_)
-    #h += ntuple2hist2dQCD(json,cutQCD_)
-  makeoutput(json['output'],h)
-
 
 ###################################################
 ###################################################

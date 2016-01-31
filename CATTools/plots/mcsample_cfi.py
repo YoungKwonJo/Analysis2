@@ -182,14 +182,11 @@ datasamples=[
 
 {"name":"MuMu1", "selection": "(1)", "file": files(loc + "DoubleMuon_Run2015C"+zz),  "ColorLabel": ColorLabelSet["DATA"] },
 {"name":"MuMu2", "selection": "(1)", "file": files(loc + "DoubleMuon_Run2015D"+zz),  "ColorLabel": ColorLabelSet["DATA"] },
-#{"name":"MuMu3", "selection": "(1)", "file": files(loc + "DoubleMuon_Run2015Dprompt"+zz),  "ColorLabel": ColorLabelSet["DATA"] },
 
 {"name":"ElEl1", "selection": "(1)", "file": files(loc + "DoubleEG_Run2015C"+zz),    "ColorLabel": ColorLabelSet["DATA"] },
 {"name":"ElEl2", "selection": "(1)", "file": files(loc + "DoubleEG_Run2015D"+zz),    "ColorLabel": ColorLabelSet["DATA"] },
-#{"name":"ElEl3", "selection": "(1)", "file": files(loc + "DoubleEG_Run2015Dprompt"+zz),    "ColorLabel": ColorLabelSet["DATA"] },
 
 {"name":"MuEl1", "selection": "(1)", "file": files(loc + "MuonEG_Run2015C"+zz),      "ColorLabel": ColorLabelSet["DATA"] },
 {"name":"MuEl2", "selection": "(1)", "file": files(loc + "MuonEG_Run2015D"+zz),      "ColorLabel": ColorLabelSet["DATA"] },
-#{"name":"MuEl3", "selection": "(1)", "file": files(loc + "MuonEG_Run2015Dprompt"+zz),      "ColorLabel": ColorLabelSet["DATA"] },
 
 ]

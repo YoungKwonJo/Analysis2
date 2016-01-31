@@ -10,27 +10,28 @@ if len(sys.argv) is 1:
   print "> python  ntuple2hist.py [1,2,3, or 4] \n"
   sys.exit()
 
-#gROOT.ProcessLine(".L MuonSF.C")
-#mumusf ="((channel==3)*(MuonSF(lep1_pt,lep1_eta)*MuonSF(lep2_pt,lep2_eta)))"
-#emusf ="((channel==1)*(MuonSF(lep2_pt,lep2_eta)))"
-#eesf = "((channel==2)*(1.0))"
-#lepsf = "("+mumusf+"+"+emusf+"+"+eesf+")"
-
 arg = sys.argv[1]
 ii=int(arg)
-if ii>len(monitors)+1 : sys.exit()
-#if ii>len(monitors) : sys.exit()
+jj=len(mm_cuts["cut"])
+iijj = int(ii/jj)
+cuti= int(ii%jj)
+
+if iijj>len(monitors)+1 : sys.exit()
+
+mm_cut=cut_maker(mm_cuts,cuti)
+ee_cut=cut_maker(ee_cuts,cuti)
+em_cut=cut_maker(em_cuts,cuti)
+
 
 mon1=[]
-if ii<len(monitors) :
-  mon1 = [monitors[ii]]
+if iijj<len(monitors) :
+  mon1 = [monitors[iijj]]
   #print monitors[ii]
 
 mon2=[]
-iii = ii#-len(monitors)+1
 for mon22 in monitors2d.keys():
-  if mon22 == ("Mon"+str(iii)) :
-    mon2+=monitors2d["Mon" +str(iii)]
+  if mon22 == ("Mon%d"%iijj) :
+    mon2+=monitors2d[ ("Mon%d"%iijj) ]
     print "++"+str(mon2)+"++"
 
 #mceventweight="puWeight"
@@ -70,28 +71,21 @@ jsonMM = {
 "mceventweight": mceventweight,
 "datasamples" : datasamples,
 "monitors" : mon1,
-#"monitors" : monitors["Mon1"],
 "monitors2" : mon2,
-#"monitors2" : [],
-"cuts" : mm_cuts, 
-"cutsQCD" : mm_cutsQCD, 
-"output" : "hist_mon" + arg +mm_cuts["channel"]+ ".root"
+"cuts" : mm_cut, 
+"output" : "hist_mon" + arg +mm_cut["channel"]+ ".root"
 }
 
 makehist(jsonMM)
-#makehist2(json)
 
 jsonEE = {
 "mcsamples" : mcsamples,
 "mceventweight": mceventweight,
 "datasamples" : datasamples,
 "monitors" : mon1,
-#"monitors" : monitors["Mon1"],
 "monitors2" : mon2,
-#"monitors2" : [],
-"cuts" : ee_cuts,
-"cutsQCD" : ee_cutsQCD, 
-"output" : "hist_mon" + arg +ee_cuts["channel"]+ ".root"
+"cuts" : ee_cut,
+"output" : "hist_mon" + arg +ee_cut["channel"]+ ".root"
 }
 makehist(jsonEE)
 
@@ -100,12 +94,9 @@ jsonEM = {
 "mceventweight": mceventweight,
 "datasamples" : datasamples,
 "monitors" : mon1,
-#"monitors" : monitors["Mon1"],
 "monitors2" : mon2,
-#"monitors2" : [],
-"cuts" : em_cuts,
-"cutsQCD" : em_cutsQCD, 
-"output" : "hist_mon" + arg +em_cuts["channel"]+ ".root"
+"cuts" : em_cut,
+"output" : "hist_mon" + arg +em_cut["channel"]+ ".root"
 }
 makehist(jsonEM)
 

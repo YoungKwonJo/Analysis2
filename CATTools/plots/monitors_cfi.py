@@ -1,7 +1,9 @@
 
 monitors = [
-#  { "name":"Stat",         "unit":"Stat ",                         "var":"met",       "xbin_set":[1,0,10000]  },
+  { "name":"Stat",         "unit":"Stat ",                         "var":"met",       "xbin_set":[1,0,10000]  },
   { "name":"nGoodPV",      "unit":"# of vertex ",             "var":"nvertex",   "xbin_set":[30,0,30]    },
+#]
+#fff=[
   { "name":"Weight",         "unit":"Weight",             "var":"weight",      "xbin_set":[50,0,10]    },
   { "name":"PuWeight",       "unit":"PuWeight",             "var":"puweight",    "xbin_set":[50,0,10]    },
   { "name":"LepWeight",      "unit":"LepWeight",             "var":"lepweight",   "xbin_set":[50,0,10]    },
@@ -85,13 +87,13 @@ monitors = [
 #  { "name":"NelIso",      "unit":"number of electron ",          "var":"NelIso",       "xbin_set":[5,0,5]    },
 ]
 #"""
-
+MN2 = len(monitors)
 monitors2d = {
 #"Mon1" : [
 #  { "name":"jet1CSV",     "unit":"CSV2 of 1st leading Jet ",     "var":"jets_bDiscriminatorCSV[0]",   "xbin_set":[20,0,1]     },
 #  { "name":"jet2CSV",     "unit":"CSV2 of 2nd leading Jet ",     "var":"jets_bDiscriminatorCSV[1]",   "xbin_set":[20,0,1]     },
 #],
-"Mon39" : [
+("Mon%d"%MN2) : [
   { "name":"jet3CSV",     "unit":"CSV2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[2]]",   "xbin_set":[10,0,1]     },
   { "name":"jet4CSV",     "unit":"CSV2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[3]]",   "xbin_set":[10,0,1]     },
 ],
