@@ -39,6 +39,10 @@ baseWeight = "weight*puweight*lepweight"
 mceventweight={
 "CEN"                 : "("+baseWeight+")",
 "csvweight"           : "("+baseWeight+"*csvweight)",
+}
+mceventweight2={
+"CEN"                 : "("+baseWeight+")",
+"csvweight"           : "("+baseWeight+"*csvweight)",
 "PuWeightUp"          : "(weight*puweightUp*lepweight*csvweight)",
 "PUWeightDN"          : "(weight*puweightDown*lepweight*csvweight)",
 "JER_Up"              : "("+baseWeight+"*csvweight)",
@@ -69,6 +73,7 @@ mceventweight={
 jsonMM = {
 "mcsamples" : mcsamples,
 "mceventweight": mceventweight,
+"mceventweight2": mceventweight2,
 "datasamples" : datasamples,
 "monitors" : mon1,
 "monitors2" : mon2,
@@ -81,6 +86,7 @@ makehist(jsonMM)
 jsonEE = {
 "mcsamples" : mcsamples,
 "mceventweight": mceventweight,
+"mceventweight2": mceventweight2,
 "datasamples" : datasamples,
 "monitors" : mon1,
 "monitors2" : mon2,
@@ -92,6 +98,7 @@ makehist(jsonEE)
 jsonEM = {
 "mcsamples" : mcsamples,
 "mceventweight": mceventweight,
+"mceventweight2": mceventweight2,
 "datasamples" : datasamples,
 "monitors" : mon1,
 "monitors2" : mon2,
