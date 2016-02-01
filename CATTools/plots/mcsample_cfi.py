@@ -131,7 +131,6 @@ z  ="v3"
 zz ="v3"
 zzz="v3"
 mcsamples=[
-
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttbb"]    },
 #{"name":"MG5tt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttbb"]   },
 {"name":"MG5ttb",   "selection": GW(ttb),      "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttb"]     },
@@ -170,14 +169,18 @@ mcsamples=[
 {"name":"ZZ",     "selection": "(1)", "file": files(loc + "ZZ"+z),            "cx":cx["ZZ"],            "ColorLabel": ColorLabelSet["VV"]        },
 
 {"name":"WJets",  "selection": "(1)", "file": files(loc + "WJets"+z),         "cx":cx["WJets"],         "ColorLabel": ColorLabelSet["WJets"]     },
+
 {"name":"DYJets", "selection": "(1)", "file": files(loc + "DYJets"+z),        "cx":cx["DYJets"],        "ColorLabel": ColorLabelSet["ZJets"]     },
 {"name":"DYJets10", "selection": "(1)", "file": files(loc +"DYJets_10to50"+z),"cx":cx["DYJets_10to50"], "ColorLabel": ColorLabelSet["ZJets"]     },
-
 
 {"name":"ttH2non", "selection": "(1)", "file": files(loc + "ttH_nonbb"+z),  "cx":cx["ttH_nonbb"],       "ColorLabel": ColorLabelSet["ttH"],   "isStack":False   },
 {"name":"ttH2bb",  "selection": "(1)", "file": files(loc + "ttH_bb"+z),     "cx":cx["ttH_bb"],          "ColorLabel": ColorLabelSet["ttH"],   "isStack":False   },
 ]
 
+mcsamples2=[
+{"name":"DYJets", "selection": "(1)", "file": files(loc + "DYJets"+z),        "cx":cx["DYJets"],        "ColorLabel": ColorLabelSet["ZJets"]     },
+{"name":"DYJets10", "selection": "(1)", "file": files(loc +"DYJets_10to50"+z),"cx":cx["DYJets_10to50"], "ColorLabel": ColorLabelSet["ZJets"]     },
+]
 datasamples=[
 
 {"name":"MuMu1", "selection": "(1)", "file": files(loc + "DoubleMuon_Run2015C"+zz),  "ColorLabel": ColorLabelSet["DATA"] },

@@ -11,30 +11,16 @@ ci = 920
 
 ###################################################
 DYsf = {
-#  "kMM":0.590181280767,
-#  "kEE":0.423598660525,
-  "kMM":0.592512945972,
-  "kEE":0.421931709171,
+ "kMM" : 0.564035113137,
+ "kEE" : 0.443234816729,
   # EE MM
- "S2":(1.0,1.0),#,(1.0194253625808745, 0.9761723128684477)
- "S3":(0.991676316803,0.982542467473),
- "S4":(0.908245012217,0.875669775936),
- "S5":(0.971850180711,1.18935444135),
- "S6":(0.971850180711,1.18935444135),
-# "S3":(0.969459526796,0.929967637403),
-# "S4":(0.887850794773,0.828150595483),
-# "S5":(0.922371868199,1.1752323039),
-# "S6":(0.922371868199,1.1752323039),
-# "S7":(0.922371868199,1.1752323039),
-"old":"""
- "S3":(1.0194253625808745, 0.9761723128684477),
- "S4":(0.9490671288867788, 0.880210249155921),
- "S5":(1.4655520972621454, 1.7982692259874904),
- "S6":(1.4655520972621454, 1.7982692259874904),
- "S7":(1.4655520972621454, 1.7982692259874904)
-"""
-# "S6":(0.7244044498623947, -2.2453439355301055),
-# "S7":(1.5347787622277453, 140.52894541739607),
+ "S2":(1.0,1.0),
+ "S3":(0.969986566176,0.916420581219),
+ "S4":(1.04666179925,0.950433756095),
+ "S5":(1.04666179925,0.950433756095),
+ "S6":(1.04666179925,0.950433756095)
+# "S5":(1.1013247035,0.881718375234),
+# "S6":(),
 }
 
 def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
@@ -406,8 +392,8 @@ def singleplotStack2(filename,mon,weight,step,mcsamples,datasamples,useReturn):
 
 def singleplotStack(f,mon1,weight,step,mcsamples,datasamples,useReturn):
 
-  dyest = drellYanEstimationRun(f,step)
-  #dyest = DYsf[step[3:5]]
+  #dyest = drellYanEstimationRun(f,step)
+  dyest = DYsf[step[3:5]]
   mon = mon1["name"]
   channel = step[0:2]
   step2 = step[3:]
@@ -684,8 +670,8 @@ def singleplotStackLL2(filename,mon,weight,step,mcsamples,datasamples,useReturn)
 
 def singleplotStackLL(f,mon1,weight,step,mcsamples,datasamples,useReturn):
 
-  dyest = drellYanEstimationRun(f,step[0:2])
-  #dyest = DYsf[step[0:2]]
+  #dyest = drellYanEstimationRun(f,step[0:2])
+  dyest = DYsf[step[0:2]]
   print "step : "+step+":"+str(dyest)
   #f = TFile.Open(filename,"read")
   mon = mon1["name"]
@@ -994,8 +980,8 @@ def singleplotStackMMEE2(filename,mon,weight,step,mcsamples,datasamples,useRetur
 
 def singleplotStackMMEE(f,mon1,weight,step,mcsamples,datasamples,useReturn):
 
-  dyest = drellYanEstimationRun(f,step[0:2])
-  #dyest = DYsf[step[0:2]]
+  #dyest = drellYanEstimationRun(f,step[0:2])
+  dyest = DYsf[step[0:2]]
   print "step : "+step+":"+str(dyest)
   #f = TFile.Open(filename,"read")
   mon = mon1["name"]

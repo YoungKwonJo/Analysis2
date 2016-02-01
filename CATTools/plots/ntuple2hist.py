@@ -12,9 +12,9 @@ if len(sys.argv) is 1:
 
 arg = sys.argv[1]
 ii=int(arg)
-jj=len(mm_cuts["cut"])
+jj=len(mm_cuts["cut"])-2
 iijj = int(ii/jj)
-cuti= int(ii%jj)
+cuti= int(ii%jj)+2
 
 if iijj>len(monitors)+1 : sys.exit()
 

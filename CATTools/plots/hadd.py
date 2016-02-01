@@ -21,15 +21,18 @@ def files(path):
     llll = [ lll+l1 for l1 in l]
     return llll
 
-ll=files("/store/user/youngjo/Cattools/v7-6-1v1/resultv3")
+ll=files("/store/user/youngjo/Cattools/v7-6-1v1/resultv32")
 lls=len(ll)
 ll2 = {}
-for i in range(int(lls/20)):
-  n = []
-  for j,l in enumerate(ll):
-    if (j%20) == i :
-      n.append(l)
-  ll2["h"+str(i)]=n
+dd = 40
+n = []
+jj=0
+for i,ii in enumerate(ll):
+  n.append(ii)
+  if i%dd ==39 or i is lls-1:
+    ll2["h"+str(jj)]=n
+    jj+=1
+    n = []
   
 for j in ll2.keys():
   aa = "hadd hmon_"+str(j)+".root "
@@ -37,7 +40,7 @@ for j in ll2.keys():
     aa+=" "+k
   os.system(aa)
 
-print "lls : "+str(lls)+" : "
+print "lls : "+str(lls)+" : "+str(len(ll2.keys()))
 
 
 
