@@ -67,7 +67,7 @@ def piechart(json,name):
   tot=0.
   for i,ii in enumerate(json.keys()):
     tot += json[ii]
-  pieleg = make_legend(0.65,0.71, 0.88,0.9)
+  pieleg = make_legend(0.60,0.71, 0.86,0.9)
   hh={}
   for i,ii in enumerate(json.keys()):
     pie.SetEntryVal(i,json[ii])
@@ -123,6 +123,7 @@ def SavePDF(pow, name):
   pie.Draw("nol")
   pieleg.Draw()
   c1.Print(name+".pdf")
+  c1.Print(name+".png")
   return c1
 
 
@@ -130,8 +131,8 @@ gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
 ttbarPOW = "TT_powheg"
-loc = "/store/user/youngjo/Cattools/v7-6-1v1/"
-z="v2"
+loc = "/store/user/youngjo/Cattools/v7-6-1v2/"
+z="v5"
 
 tree=loadfiles(files(loc + ttbarPOW+z))
 #tree=loadfiles(["/cms/home/chanwook/work/ttbb/cattools/src/CATTools/CatAnalyzer/test/TTBBGenAnalyzer_TT_powheg.root"])
@@ -199,8 +200,8 @@ pow1=loadSel(tree,dileptonic0,TTNN)
 pow2=loadSel(tree,semiLeptonic0,TTNN)
 pow3=loadSel(tree,allHadronic,TTNN)
 
-#pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
-#pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
+pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
+pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
 
 #pow6=loadSel(tree,dilepH,TTNNH)
 #pow7=loadSel(tree,semilepH,TTNNH)
@@ -213,8 +214,8 @@ SavePDF(pow1,"POWttbarDileptonicFullPhase")
 SavePDF(pow2,"POWttbarSemileptonicFullPhase")
 SavePDF(pow3,"POWttbarHadronicFullphase")
 
-#SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
-#SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
+SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
+SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
 
 #SavePDF(pow6,"POWttbarDileptonicTTHFull")
 #SavePDF(pow7,"POWttbarSemileptonicTTHFull")

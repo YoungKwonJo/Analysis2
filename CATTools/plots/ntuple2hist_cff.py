@@ -26,52 +26,52 @@ def h1_set(name,monitor,cutname):
 
 def h_all_maker(tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts, eventweight,Ntot,hN_maker):
   hh = {}
-  for k,aWeight in enumerate(eventweight.keys()): 
-    h=[]
-    for cutname in cuts["cut"]:
-      for i,ii in enumerate(monitors):
-        mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"_"+aWeight)
-        if hN_maker is h2_maker : 
-          if i+1 < len(monitors) and len(monitors) > 1 : mon = h2_set(mc['name'],monitors[i],monitors[i+1],cuts["channel"]+"_"+cutname+"_"+aWeight)
-          else  : continue
-        cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight[aWeight]+"/"+str(Ntot)+")"
+  h=[]
+  aWeight=eventweight["name"]
+  for cutname in cuts["cut"]:
+    for i,ii in enumerate(monitors):
+      mon = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"_"+aWeight)
+      if hN_maker is h2_maker : 
+        if i+1 < len(monitors) and len(monitors) > 1 : mon = h2_set(mc['name'],monitors[i],monitors[i+1],cuts["channel"]+"_"+cutname+"_"+aWeight)
+        else  : continue
+      cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight["var"]+"/"+str(Ntot)+")"
 
-        if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 ) or aWeight is "CEN" or aWeight is "csvweight":
-          if aWeight.find("JER_Up")>-1:
-            h2 = hN_maker(tree5,mon,cut)
-            h.append(copy.deepcopy(h2))
-          elif aWeight.find("JER_Down")>-1:
-            h2 = hN_maker(tree6,mon,cut)
-            h.append(copy.deepcopy(h2))
-          elif aWeight.find("JES_Up")>-1:
-            h2 = hN_maker(tree3,mon,cut)
-            h.append(copy.deepcopy(h2))
-          elif aWeight.find("JES_Down")>-1:
-            h2 = hN_maker(tree4,mon,cut)
-            h.append(copy.deepcopy(h2))
-          else :
-            h2 = hN_maker(tree2,mon,cut)
-            h.append(copy.deepcopy(h2))
+      #if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 ) or aWeight is "CEN" or aWeight is "csvweight":
+      if aWeight.find("JER_Up")>-1:
+        h2 = hN_maker(tree5,mon,cut)
+        h.append(copy.deepcopy(h2))
+      elif aWeight.find("JER_Down")>-1:
+        h2 = hN_maker(tree6,mon,cut)
+        h.append(copy.deepcopy(h2))
+      elif aWeight.find("JES_Up")>-1:
+        h2 = hN_maker(tree3,mon,cut)
+        h.append(copy.deepcopy(h2))
+      elif aWeight.find("JES_Down")>-1:
+        h2 = hN_maker(tree4,mon,cut)
+        h.append(copy.deepcopy(h2))
+      else :
+        h2 = hN_maker(tree2,mon,cut)
+        h.append(copy.deepcopy(h2))
 
-        #making shape for dy estimation
-        if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)) and aWeight is "CEN" :
-          incut = "((ll_m > 76) * (ll_m < 106))"
-          outcut ="(!((ll_m > 76) * (ll_m < 106)))"
-          monIN = h1_set(mc['name'],monitors[i], cuts["channel"]+"_"+cutname+"_in")
-          monOUT = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"_out")
-          newCut = cuts["cut"][cutname].replace("* (step2==1)","")
-          cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+eventweight[aWeight]+"/"+str(Ntot)+")"
-          cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+eventweight[aWeight]+"/"+str(Ntot)+")"
-          if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
-            continue
-          else :
-            h1 = h1_maker(tree2,monIN,cutIN)
-            h.append(copy.deepcopy(h1))
-            h2 = h1_maker(tree2,monOUT,cutOUT)
-            h.append(copy.deepcopy(h2))
-            print "  "+mc['name']+" \n "+newCut+" \n "+monIN["name"]+" , "+monOUT["name"]
+      #making shape for dy estimation
+      if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)) and aWeight is "NOM" :
+        incut = "((ll_m > 76) * (ll_m < 106))"
+        outcut ="(!((ll_m > 76) * (ll_m < 106)))"
+        monIN = h1_set(mc['name'],monitors[i], cuts["channel"]+"_"+cutname+"_in")
+        monOUT = h1_set(mc['name'],monitors[i],cuts["channel"]+"_"+cutname+"_out")
+        newCut = cuts["cut"][cutname].replace("* (step2==1)","")
+        cutIN = "("+newCut+" * "+incut+" * "+mc['selection'] +")*("+eventweight["var"]+"/"+str(Ntot)+")"
+        cutOUT = "("+newCut+" * "+outcut+" * "+mc['selection'] +")*("+eventweight["var"]+"/"+str(Ntot)+")"
+        if(cutname.find("S0")>-1 or cutname.find("S1")>-1 ):
+          continue
+        else :
+          h1 = h1_maker(tree2,monIN,cutIN)
+          h.append(copy.deepcopy(h1))
+          h2 = h1_maker(tree2,monOUT,cutOUT)
+          h.append(copy.deepcopy(h2))
+          print "  "+mc['name']+" \n "+newCut+" \n "+monIN["name"]+" , "+monOUT["name"]
 
-    hh[aWeight]=copy.deepcopy(h)
+  hh[eventweight["name"]]=copy.deepcopy(h)
 
   return hh
 
@@ -159,8 +159,12 @@ def ntuple2hist(json,cuts,mcweight,mon,hN_maker):
     tree6 = chain6
 
     Ntot = 1 #htot.GetBinContent(1)
+    dataweight = {"name":"NOM","var":"(1)"}
+    if mceventweight["name"].find("JES_Up")>-1   : dataweight = {"name":"JES_Up","var":"(1)"}
+    if mceventweight["name"].find("JES_Down")>-1 : dataweight = {"name":"JES_Down","var":"(1)"}
 
-    h[datasamples[i]['name']]=h_all_maker(tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors,cuts,{"CEN":"1"},1,hN_maker)
+    if mceventweight["name"].find("JES")>-1 or mceventweight["name"].find("NOM")>-1:
+      h[datasamples[i]['name']]=h_all_maker(tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors,cuts,dataweight,1,hN_maker)
     #f.Close()
 
   return h
@@ -184,9 +188,6 @@ def makeoutput(outputname, h):
 #########################################
 #########################################
 #########################################
-######################
-######################
-
 def cut_maker(cuts_,ii):
   cuts  = {}
   for i,cut in enumerate(cuts_["cut"]):
@@ -202,19 +203,16 @@ def cut_maker(cuts_,ii):
   if log : print cutsN
   return cutsN
 
-####################
-####################
 #########################################
 #########################################
 #########################################
 def makehist(json):
-  cuts_  = json['cuts'] #cut_maker(json['cuts']) 
-  #cutsQCD_  = cut_maker(json['cutsQCD']) 
+  cuts_  = json['cuts']  
   h={}
   if len(json['monitors'])>0 :
     h = ntuple2hist(json,cuts_,"mceventweight","monitors",h1_maker)
   if len(json['monitors2'])>0 :
-    h = ntuple2hist(json,cuts_,"mceventweight2","monitors2",h2_maker)
+    h = ntuple2hist(json,cuts_,"mceventweight","monitors2",h2_maker)
   makeoutput(json['output'],h)
 
 ###################################################

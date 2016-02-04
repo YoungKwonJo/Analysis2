@@ -10,7 +10,7 @@ mainlumi=2170.
 ci = 920
 
 ###################################################
-DYsf = {
+DYsfmva = {
  "kMM" : 0.564035113137,
  "kEE" : 0.443234816729,
   # EE MM
@@ -19,9 +19,21 @@ DYsf = {
  "S4":(1.04666179925,0.950433756095),
  "S5":(1.04666179925,0.950433756095),
  "S6":(1.04666179925,0.950433756095)
-# "S5":(1.1013247035,0.881718375234),
-# "S6":(),
 }
+DYsf = {
+ "kMM" : 0.600653370713,
+ "kEE" : 0.416213430557,
+  # EE MM
+ "S2":(1.0,1.0),
+ "S3":(0.992418427487,0.916387197892),
+ "S4":(1.06777384456,0.949934750951),
+ "S5":(1.06777384456,0.949934750951),
+ "S6":(1.06777384456,0.949934750951)
+# "S5":(1.17764007675,0.894244897143),
+# "S6":(,)
+}
+
+
 
 def drellYanEstimation(mc_ee_in, mc_ee_out, mc_mm_in, mc_mm_out,
                        rd_ee_in, rd_mm_in, rd_em_in,kMM,kEE):    
@@ -593,10 +605,10 @@ def singleplotStack(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   #leg.AddEntry(gr,"Uncertainty","f")
   gr.Draw("e2SAME")
   myAmcNLOHistSet(hmcAmcNLO)
-  hmcAmcNLO.Draw("histoSAME")
+  #hmcAmcNLO.Draw("histoSAME")
   myMG5HistSet(hmcMG5)
   hmcMG5.Draw("histoSAME")
-  leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
+  #leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
   leg3.AddEntry(hmcMG5,"Madgraph","l")
   leg3.AddEntry(hmcSig, label, "l")
 
@@ -639,7 +651,7 @@ def singleplotStack(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
   hratio.Draw("e1SAME")
-  hdataAMC.Draw("histSAME")
+  #hdataAMC.Draw("histSAME")
   hdataMG5.Draw("histSAME")
  
   pad2.Modified()
@@ -647,8 +659,9 @@ def singleplotStack(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   c1.Modified()
   c1.cd()
 
-  output = "plots/eps/TH1_"+mon+"_"+step2+channel+weight+".eps"
-  output2 = "plots/png/TH1_"+mon+"_"+step2+channel+weight+".png"
+  Weight2=weight.replace("CEN","")  
+  output = "plots/eps/TH1_"+mon+"_"+step2+channel+Weight2+".eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step2+channel+Weight2+".png"
   c1.Print(output)
   c1.Print(output2)
 
@@ -902,10 +915,10 @@ def singleplotStackLL(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   gr.Draw("e2SAME")
   #leg.AddEntry(gr,"Uncertainty","f")
   myAmcNLOHistSet(hmcAmcNLO)
-  hmcAmcNLO.Draw("histoSAME")
+  #hmcAmcNLO.Draw("histoSAME")
   myMG5HistSet(hmcMG5)
   hmcMG5.Draw("histoSAME")
-  leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
+  #leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
   leg3.AddEntry(hmcMG5,"Madgraph","l")
   leg3.AddEntry(hmcSig, label, "l")
   hmcSig.Draw("same")
@@ -948,7 +961,7 @@ def singleplotStackLL(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
   hratio.Draw("e1SAME")
-  hdataAMC.Draw("histSAME")
+  #hdataAMC.Draw("histSAME")
   hdataMG5.Draw("histSAME")
   
 
@@ -957,8 +970,9 @@ def singleplotStackLL(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   c1.Modified()
   c1.cd()
 
-  output = "plots/eps/TH1_"+mon+"_"+step+"LL"+weight+".eps"
-  output2 = "plots/png/TH1_"+mon+"_"+step+"LL"+weight+".png"
+  Weight2=weight.replace("CEN","")  
+  output = "plots/eps/TH1_"+mon+"_"+step+"LL"+Weight2+".eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step+"LL"+Weight2+".png"
   c1.Print(output)
   c1.Print(output2)
 
@@ -1216,10 +1230,10 @@ def singleplotStackMMEE(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   gr.Draw("e2SAME")
   #leg.AddEntry(gr,"Uncertainty","f")
   myAmcNLOHistSet(hmcAmcNLO)
-  hmcAmcNLO.Draw("histoSAME")
+  #hmcAmcNLO.Draw("histoSAME")
   myMG5HistSet(hmcMG5)
   hmcMG5.Draw("histoSAME")
-  leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
+  #leg3.AddEntry(hmcAmcNLO,"MC@NLO","l")
   leg3.AddEntry(hmcMG5,"Madgraph","l")
   leg3.AddEntry(hmcSig, label, "l")
   hmcSig.Draw("same")
@@ -1262,7 +1276,7 @@ def singleplotStackMMEE(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   hratiosyst = myRatioSyst(hdata)
   hratiosyst.Draw("e2")
   hratio.Draw("e1SAME")
-  hdataAMC.Draw("histSAME")
+  #hdataAMC.Draw("histSAME")
   hdataMG5.Draw("histSAME")
   
 
@@ -1271,8 +1285,9 @@ def singleplotStackMMEE(f,mon1,weight,step,mcsamples,datasamples,useReturn):
   c1.Modified()
   c1.cd()
 
-  output = "plots/eps/TH1_"+mon+"_"+step+"MMEE"+weight+".eps"
-  output2 = "plots/png/TH1_"+mon+"_"+step+"MMEE"+weight+".png"
+  Weight2=weight.replace("CEN","")  
+  output = "plots/eps/TH1_"+mon+"_"+step+"MMEE"+Weight2+".eps"
+  output2 = "plots/png/TH1_"+mon+"_"+step+"MMEE"+Weight2+".png"
   c1.Print(output)
   c1.Print(output2)
 

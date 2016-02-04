@@ -49,7 +49,7 @@ def getEntries(mypath):
 
 #loc = "../"
 #loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
-loc = "/store/user/youngjo/Cattools/v7-6-1v1/"
+loc = "/store/user/youngjo/Cattools/v7-6-1v2/"
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
@@ -122,36 +122,43 @@ data = loadJson('dataset.json')
 cx = {}
 for aa in data:
   cx[aa["name"]]=aa["xsec"]
-print str(cx)
+#print str(cx)
 
 #["TTWlNu","TTWqq',"TTZll","TTZqq",  "STbt","STt","STbtW","STtW",  "WW","WZ","ZZ",  "WJets","DYJets","DYJets10",  "ttH2non","ttH2bb"]
 #BCX=[0.2043,0.4062,0.2529,0.5297,    35.6,35.6,43.79844,26.0659,   110.8,47.13,16.523,  61526.7,6025.2,18610.0,     0.5058,0.5058]
 
-z  ="v3"
-zz ="v3"
-zzz="v3"
+z  ="v1" # bkg
+zz ="v1" # data
+zzz="v3" # ttbar
 mcsamples=[
 {"name":"MG5ttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttbb"]    },
-#{"name":"MG5tt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttbb"]   },
 {"name":"MG5ttb",   "selection": GW(ttb),      "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttb"]     },
 {"name":"MG5ttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttcc"]    },
-#{"name":"MG5ttc",   "selection": GW(ttc),      "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttc"]    },   
 {"name":"MG5ttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttlf"]    },
 {"name":"MG5ttot",  "selection": GW(ttothers), "file": files(loc + ttbarMG5+zzz), "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttot"]    },
 
 {"name":"AMCttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttbb"]    },
-#{"name":"AMCtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttbb"]   },
 {"name":"AMCttb",   "selection": GW(ttb),      "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttb"]     },
 {"name":"AMCttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttcc"]    },
-#{"name":"AMCttc",   "selection": GW(ttc),      "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttc"]    },   
 {"name":"AMCttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttlf"]    },
 {"name":"AMCttot",  "selection": GW(ttothers), "file": files(loc + ttbarAMC+zzz), "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttot"]    },
 
+{"name":"upPOWttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarPOW+"_scaleup"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]    },
+{"name":"upPOWttb",   "selection": GW(ttb),      "file": files(loc + ttbarPOW+"_scaleup"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttb"]     },
+{"name":"upPOWttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarPOW+"_scaleup"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttcc"]    },
+{"name":"upPOWttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarPOW+"_scaleup"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttlf"]    },
+{"name":"upPOWttot",  "selection": GW(ttothers), "file": files(loc + ttbarPOW+"_scaleup"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]    },
+
+{"name":"dwPOWttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarPOW+"_scaledown"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]    },
+{"name":"dwPOWttb",   "selection": GW(ttb),      "file": files(loc + ttbarPOW+"_scaledown"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttb"]     },
+{"name":"dwPOWttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarPOW+"_scaledown"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttcc"]    },
+{"name":"dwPOWttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarPOW+"_scaledown"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttlf"]    },
+{"name":"dwPOWttot",  "selection": GW(ttothers), "file": files(loc + ttbarPOW+"_scaledown"+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]    },
+
+{"name":"sysPOWAll","selection": "(1)",        "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]    },
 {"name":"POWttbb",  "selection": GW(ttbb),     "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]    },
-#{"name":"POWtt2b",  "selection": GW(tt2b),     "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]   },
 {"name":"POWttb",   "selection": GW(ttb),      "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttb"]     },
 {"name":"POWttcc",  "selection": GW(ttcc),     "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttcc"]    },
-#{"name":"POWttc",   "selection": GW(ttc),      "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttc"]    },
 {"name":"POWttlf",  "selection": GW(ttlf),     "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttlf"]    },
 {"name":"POWttot",  "selection": GW(ttothers), "file": files(loc + ttbarPOW+zzz), "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]    },
 

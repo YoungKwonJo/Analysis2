@@ -12,17 +12,11 @@ monitors = [
 #]
 #fff=[
   { "name":"MET",          "unit":"Missing E_{T} (GeV)","var":"met",   "xbin_set":[30,0,300]  },
-#  { "name":"METpf",        "unit":"Missing E_{T}  (GeV)",          "var":"met",       "xbin_set":[60,0,300]  },
   { "name":"ZMass",        "unit":"Dilepton mass (GeV/c^{2}) ",    "var":"ll_m",  "xbin_set":[60,0,300]  },
 
 
   { "name":"METPHI",       "unit":"Missing E_{T} without HF #phi", "var":"metphi","xbin_set":[20,-4,4]    },
-#  { "name":"METmva",       "unit":"MVA Missing E_{T}  (GeV)",      "var":"metPfMva",  "xbin_set":[60,0,300]  },
-#  { "name":"METPuppi",     "unit":"Puppi Missing E_{T}  (GeV)",    "var":"metPuppi",   "xbin_set":[60,0,300]  },
-#  { "name":"nBJet20L",       "unit":"b-Jet20 multiplicity loose ",     "var":"nBJet20L",    "xbin_set":[8,0,8]      },
-#  { "name":"nBJet20M",       "unit":"b-Jet20 multiplicity medium ",    "var":"nBJet20M",    "xbin_set":[6,0,6]      },
-#  { "name":"NJet20",         "unit":"Jet20 multiplicity ",             "var":"nJet20",      "xbin_set":[10,0,10]    },
-#  { "name":"nBJet20T",       "unit":"b-Jet20 multiplicity tight ",     "var":"nBJet20T",    "xbin_set":[6,0,6]      },
+
   { "name":"nBJet30L",       "unit":"b-Jet30 multiplicity loose ",     "var":"nbjetL30",    "xbin_set":[8,0,8]      },
   { "name":"nBJet30M",       "unit":"b-Jet30 multiplicity medium ",    "var":"nbjetM30",    "xbin_set":[6,0,6]      },
   { "name":"NJet30",         "unit":"Jet30 multiplicity ",             "var":"njet30",      "xbin_set":[10,0,10]    },
@@ -63,55 +57,12 @@ monitors = [
   { "name":"jet3CSVpt",     "unit":"CSVv2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[2]",   "xbin_set":[10,0,1]     },
   { "name":"jet4CSVpt",     "unit":"CSVv2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[3]",   "xbin_set":[10,0,1]     },
 
-
-#  { "name":"jetPP1CSV",   "unit":"CSV2 of 1st leading JetPuppi ",     "var":"jetPuppi_csv[0]",   "xbin_set":[20,0,1]     },
-#  { "name":"jetPP2CSV",   "unit":"CSV2 of 2nd leading JetPuppi ",     "var":"jetPuppi_csv[1]",   "xbin_set":[20,0,1]     },
-#  { "name":"jetPP3CSV",   "unit":"CSV2 of 3rd leading JetPuppi ",     "var":"jetPuppi_csv[2]",   "xbin_set":[20,0,1]     },
-#  { "name":"jetPP4CSV",   "unit":"CSV2 of 4th leading JetPuppi ",     "var":"jetPuppi_csv[3]",   "xbin_set":[20,0,1]     },
-#  { "name":"jetPP1Pt",      "unit":"p_T of 1st leading JetPuppi ",      "var":"jetPuppi_pt[0]",    "xbin_set":[40,0,400]   },
-#  { "name":"jetPP2Pt",      "unit":"p_T of 2nd leading JetPuppi ",      "var":"jetPuppi_pt[1]",    "xbin_set":[40,0,400]   },
-#  { "name":"jetPP3Pt",      "unit":"p_T of 3rd leading JetPuppi ",      "var":"jetPuppi_pt[2]",    "xbin_set":[40,0,400]   },
-#  { "name":"jetPP4Pt",      "unit":"p_T of 4th leading JetPuppi ",      "var":"jetPuppi_pt[3]",    "xbin_set":[40,0,400]   },
-#  { "name":"nBJet20LPuppi",       "unit":"b-Jet20Puppi multiplicity loose ",     "var":"nBJet20LPuppi",    "xbin_set":[8,0,8]      },
-#  { "name":"nBJet20MPuppi",       "unit":"b-Jet20Puppi multiplicity medium ",    "var":"nBJet20MPuppi",    "xbin_set":[6,0,6]      },
-#  { "name":"NJet20Puppi",         "unit":"Jet20Puppi multiplicity ",             "var":"nJet20Puppi",      "xbin_set":[10,0,10]    },
-#  { "name":"nBJet20TPuppi",       "unit":"b-Jet20Puppi multiplicity tight ",     "var":"nBJet20TPuppi",    "xbin_set":[6,0,6]      },
-#  { "name":"nBJet30LPuppi",       "unit":"b-Jet30Puppi multiplicity loose ",     "var":"nBJet30LPuppi",    "xbin_set":[8,0,8]      },
-#  { "name":"nBJet30MPuppi",       "unit":"b-Jet30Puppi multiplicity medium ",    "var":"nBJet30MPuppi",    "xbin_set":[6,0,6]      },
-#  { "name":"NJet30Puppi",         "unit":"Jet30Puppi multiplicity ",             "var":"nJet30Puppi",      "xbin_set":[10,0,10]    },
-#  { "name":"nBJet30TPuppi",       "unit":"b-Jet30Puppi multiplicity tight ",     "var":"nBJet30TPuppi",    "xbin_set":[6,0,6]      },
-#  { "name":"Nlep",        "unit":"number of lepton ",            "var":"lepton_N",     "xbin_set":[5,0,5]    },
-#  { "name":"Nmu",         "unit":"number of muon ",              "var":"Nmu",          "xbin_set":[5,0,5]    },
-#  { "name":"NmuIso",      "unit":"number of muon ",              "var":"NmuIso",       "xbin_set":[5,0,5]    },
-#  { "name":"Nel",         "unit":"number of electron ",          "var":"Nel",          "xbin_set":[5,0,5]    },
-#  { "name":"NelIso",      "unit":"number of electron ",          "var":"NelIso",       "xbin_set":[5,0,5]    },
 ]
 #"""
 MN2 = len(monitors)
 monitors2d = {
-#"Mon1" : [
-#  { "name":"jet1CSV",     "unit":"CSV2 of 1st leading Jet ",     "var":"jets_bDiscriminatorCSV[0]",   "xbin_set":[20,0,1]     },
-#  { "name":"jet2CSV",     "unit":"CSV2 of 2nd leading Jet ",     "var":"jets_bDiscriminatorCSV[1]",   "xbin_set":[20,0,1]     },
-#],
 ("Mon%d"%MN2) : [
   { "name":"jet3CSV",     "unit":"CSV2 of 3rd leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[2]]",   "xbin_set":[10,0,1]     },
   { "name":"jet4CSV",     "unit":"CSV2 of 4th leading Jet ",     "var":"jets_bDiscriminatorCSV[csvd_jetid[3]]",   "xbin_set":[10,0,1]     },
 ],
-#"Mon27" : [
-#  { "name":"NJet",        "unit":"Jet multiplicity ",             "var":"nJet",     "xbin_set":[10,0,10]    },
-#  { "name":"nBJetL",      "unit":"b-Jet multiplicity loose ",     "var":"nBJetL",   "xbin_set":[8,0,8]      },
-#  { "name":"nBJetM",      "unit":"b-Jet multiplicity medium ",    "var":"nBJetM",   "xbin_set":[8,0,8]      },
-#  { "name":"nBJetT",      "unit":"b-Jet multiplicity tight ",     "var":"nBJetT",   "xbin_set":[8,0,8]      },
-#],
-#"Mon27" : [
-#  { "name":"NJet",        "unit":"Jet multiplicity ",            "var":"nJet",         "xbin_set":[10,0,10]    },
-#  { "name":"genNJet",     "unit":"genJet multiplicity ",         "var":"NgenJet",      "xbin_set":[10,0,10]    },
-#  { "name":"Category",    "unit":"Category ",                    "var":"Category",     "xbin_set":[5,0,5]      },
-#],
-#"Mon28" : [
-##  { "name":"Nmu",         "unit":"number of muon ",              "var":"Nmu",          "xbin_set":[5,0,5]    },
-#  { "name":"NmuIso",      "unit":"number of muon ",              "var":"NmuIso",       "xbin_set":[5,0,5]    },
-##  { "name":"Nel",         "unit":"number of electron ",          "var":"Nel",          "xbin_set":[5,0,5]    },
-#  { "name":"NelIso",      "unit":"number of electron ",          "var":"NelIso",       "xbin_set":[5,0,5]    },
-#],
 }
