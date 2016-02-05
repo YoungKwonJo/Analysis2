@@ -7,6 +7,10 @@ from ROOT import *
 from array import array
 import copy
 
+
+lumi = 2170.
+loc = "/Users/youngkwonjo/Documents/CMS/Analysis/20160204_ttbb_roofit/histogram/"
+
 def make_legend(xmin,ymin,xmax,ymax):
   #leg = TLegend(0.65,0.7, 0.89,0.89)
   leg = TLegend(xmin,ymin,xmax,ymax)
@@ -93,14 +97,14 @@ gStyle.SetPadTickX(1)
 gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
-def loadHistogram(arg1, arg2, Step):
+def loadHistogram(arg1, arg2, Step, Weight):
   HN = "jet3CSV_jet4CSV"                                                                                                          
   HN1 = "jet3CSV"
   HN2 = "jet4CSV"
   from mcsample_cfi import mcsamples,datasamples 
-  lumi = 2110. 
+  #lumi = 2110. 
   #Step = "S6csvweight"
-  Step2 = "S6"
+  #Step2 = "S6"
   
   freeTTB  = False
   freeTTCC = False
@@ -112,22 +116,31 @@ def loadHistogram(arg1, arg2, Step):
   
   GEN="MG5"
   if int(arg2)==1 : GEN="POW"
-  if int(arg2)==2 : GEN="AMC"
+#  if int(arg2)==2 : GEN="AMC"
   
   #histograms = ["name":"name","hist": ]
   histograms = {}
-  dy_ee_sf = 0.922371868199
-  dy_mm_sf = 1.1752323039
- 
-  f = TFile.Open("hist_all.root")
+  histograms2 = {}
+  dy_ee_sf = 1.17764007675
+  dy_mm_sf = 0.894244897143
+
+  Weight1= Weight
+  if Weight is "Scale_Up":   Weight1="csvweight"
+  if Weight is "Scale_Down": Weight1="csvweight"
+  scale=""
+  if Weight is "Scale_Up":   scale="up"
+  if Weight is "Scale_Down": scale="dw"
+
+  f = TFile.Open(loc+"/hist_"+Weight1+".root")
   for mc in mcsamples:
     name = mc['name']
-    color = mc['color'] 
+    color = mc['ColorLabel']['color'] 
     #histnameMM = "h2_"+name+"_"+HN+"_mm_"+Step
-    #print histnameMM 
-    h1 = f.Get("h2_"+name+"_"+HN+"_mm_"+Step).Clone("h2_"+name+"_"+Step+"LL")
-    h2 = f.Get("h2_"+name+"_"+HN+"_ee_"+Step)
-    h3 = f.Get("h2_"+name+"_"+HN+"_em_"+Step)
+    print name
+    #print name+"/"+Weight+"/h2_"+name+"_"+HN+"_mm_"+Step+"_"+Weight
+    h1 = f.Get(name+"/"+Weight1+"/h2_"+name+"_"+HN+"_mm_"+Step+"_"+Weight1).Clone("h2_"+name+"_"+Step+"LL"+"_"+Weight1)
+    h2 = f.Get(name+"/"+Weight1+"/h2_"+name+"_"+HN+"_ee_"+Step+"_"+Weight1)
+    h3 = f.Get(name+"/"+Weight1+"/h2_"+name+"_"+HN+"_em_"+Step+"_"+Weight1)
     if h1.Integral()>0 :  h1.Scale(mc['cx']*lumi)
     if h2.Integral()>0 :  h2.Scale(mc['cx']*lumi)
     if h3.Integral()>0 :  h3.Scale(mc['cx']*lumi)
@@ -138,63 +151,82 @@ def loadHistogram(arg1, arg2, Step):
     h1.Add(h2)
     h1.Add(h3)
   
-    h11 = f.Get("h1_"+name+"_"+HN1+"_mm_"+Step).Clone("h11_"+name+"_"+Step+"LL")
-    h21 = f.Get("h1_"+name+"_"+HN1+"_ee_"+Step)
-    h31 = f.Get("h1_"+name+"_"+HN1+"_em_"+Step)
-    if name.find("DYJets")>-1:
-      h11.Scale(dy_mm_sf)
-      h21.Scale(dy_ee_sf)
-
-    h11.Add(h21)
-    h11.Add(h31)
+    h1111 = "h1_"+name+"_"+HN1+"_mm_"+Step+"_"+Weight1
+    h11 = TH1F(h1111,"",1,0,1)
+    if None != f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN1+"_mm_"+Step+"_"+Weight1):
+      h11 = f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN1+"_mm_"+Step+"_"+Weight1).Clone("h11_"+name+"_"+Step+"LL"+"_"+Weight1)
+      h21 = f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN1+"_ee_"+Step+"_"+Weight1)
+      h31 = f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN1+"_em_"+Step+"_"+Weight1)
+      if name.find("DYJets")>-1:
+        h11.Scale(dy_mm_sf)
+        h21.Scale(dy_ee_sf)
+      
+      h11.Add(h21)
+      h11.Add(h31)
   
-    ci = TColor.GetColor(mc['color'])  
+    ci = TColor.GetColor(mc['ColorLabel']['color'])  
     h11.SetLineColor(ci)
+    #h111.SetLineColor(ci)
   
-    h12 = f.Get("h1_"+name+"_"+HN2+"_mm_"+Step).Clone("h12_"+name+"_"+Step+"LL")
-    h22 = f.Get("h1_"+name+"_"+HN2+"_ee_"+Step)
-    h32 = f.Get("h1_"+name+"_"+HN2+"_em_"+Step)
-    if name.find("DYJets")>-1:
-      h12.Scale(dy_mm_sf)
-      h22.Scale(dy_ee_sf)
-    h12.Add(h21)
-    h12.Add(h31)
+    h1222 = "h1_"+name+"_"+HN2+"_mm_"+Step+"_"+Weight1
+    h12 = TH1F(h1222,"",1,0,1)
+    if None != f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN2+"_mm_"+Step+"_"+Weight1):
+      h12 = f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN2+"_mm_"+Step+"_"+Weight1).Clone("h12_"+name+"_"+Step+"LL"+"_"+Weight1)
+      h22 = f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN2+"_ee_"+Step+"_"+Weight1)
+      h32 = f.Get(name+"/"+Weight1+"/h1_"+name+"_"+HN2+"_em_"+Step+"_"+Weight1)
+      if name.find("DYJets")>-1:
+        h12.Scale(dy_mm_sf)
+        h22.Scale(dy_ee_sf)
+      h12.Add(h22)
+      h12.Add(h32)
   
-    ci = TColor.GetColor(mc['color'])  
+    ci = TColor.GetColor(mc['ColorLabel']['color'])  
     h12.SetLineColor(ci)
+    #h122.SetLineColor(ci)
   
     histograms[name]={"h1":copy.deepcopy(h1),"color":color,"exp":h1.Integral(),"h11":copy.deepcopy(h11),"h12":copy.deepcopy(h12)}
-    #print "FINAL "+name
-  
+    #print "FINAL2 "+name+"  "+str(histograms[name]["exp"])
+
+
+  print str(histograms.keys())
+
+  f.Close()
   #for datesmaples
+  WeightData = Weight1.replace("csvweight_","")
+  WeightData2 = Weight1
+  if not Weight in ["JES_Up","JES_Down"]:
+    WeightData="NOM"
+    WeightData2="NOM"
+  f2 = TFile.Open(loc+"/hist_"+WeightData2+".root")
   for i in range(1):
     name_ = "DATA"
-    color = mc['color'] 
-    h1 = f.Get("h2_MuMu1_"+HN+"_mm_"+Step2).Clone("h2_"+name_+"_"+Step2+"LL")
+    color = mc['ColorLabel']['color'] 
+    print "MuMu1/"+WeightData+"/h2_MuMu1_"+HN+"_mm_"+Step+"_"+WeightData+""
+
+    h1 = f2.Get("MuMu1/"+WeightData+"/h2_MuMu1_"+HN+"_mm_"+Step+"_"+WeightData+"").Clone("h2_"+name_+"_"+Step+"LL"+"_"+WeightData+"")
     h1.Reset()
-    for j in range(1,4):
-      h11 = f.Get("h2_MuMu"+str(j)+"_"+HN+"_mm_"+Step2)
-      h2  = f.Get("h2_ElEl"+str(j)+"_"+HN+"_ee_"+Step2)
-      h3  = f.Get("h2_MuEl"+str(j)+"_"+HN+"_em_"+Step2)
+    for j in range(1,3):
+      h11 = f2.Get("MuMu"+str(j)+"/"+WeightData+"/h2_MuMu"+str(j)+"_"+HN+"_mm_"+Step+"_"+WeightData+"")
+      h2  = f2.Get("ElEl"+str(j)+"/"+WeightData+"/h2_ElEl"+str(j)+"_"+HN+"_ee_"+Step+"_"+WeightData+"")
+      h3  = f2.Get("MuEl"+str(j)+"/"+WeightData+"/h2_MuEl"+str(j)+"_"+HN+"_em_"+Step+"_"+WeightData+"")
       h1.Add(h11)
       h1.Add(h2)
       h1.Add(h3)
-    histograms[name_]={"h1":copy.deepcopy(h1),"color":kBlack,"exp":h1.Integral()}
+    histograms2[name_]={"h1":copy.deepcopy(h1),"color":kBlack,"exp":h1.Integral()}
   
-  #print str(type(histograms))
-  #print str(histograms[GEN+"ttbb"]["color"])
-  #print str(histograms[GEN+"ttbb"]["exp"])
-  #print ""
-  #print str(histograms["DATA"]["color"])
-  #print str(histograms["DATA"]["exp"])
-  
-  #signals1= [GEN+'ttbb', GEN+'ttb']
+  signals1= [GEN+'ttbb', GEN+'ttb']
   signals2= [GEN+'ttcc', GEN+'ttlf']#, GEN+'ttot']
   backgrounds1= [GEN+"ttot"]
   backgrounds2= ['TTWlNu', 'TTWqq', 'TTZll', 'TTZqq', 'STbt', 'STt', 'STbtW', 'STtW', 'WJets', 'WW', 'WZ', 'ZZ']
   backgrounds3= [ 'DYJets','DYJets10']
   higgs= ['ttH2non', 'ttH2bb']
-  
+ 
+  #signals1up= ["up"+GEN+'ttbb', "up"+GEN+'ttb']
+  #signals1dw= ["dw"+GEN+'ttbb', "dw"+GEN+'ttb']
+  #signals2up = ["up"+GEN+'ttcc', "up"+GEN+'ttlf']
+  #signals2dw = ["dw"+GEN+'ttcc', "dw"+GEN+'ttlf']
+  #backgrounds1up= ["up"+GEN+"ttot"]
+  #backgrounds1dw= ["dw"+GEN+"ttot"]
   bkghist = histograms[GEN+'ttot']["h1"].Clone("bkghist")
   bkghist.Reset()
   ddbkghist = histograms[GEN+'ttot']["h1"].Clone("ddbkghist")
@@ -202,25 +234,39 @@ def loadHistogram(arg1, arg2, Step):
   
   ttcclfhist = histograms[GEN+'ttot']["h1"].Clone("ttcclfhist")
   ttcclfhist.Reset()
+
+  for hh in signals1:
+    h = histograms[scale+hh]
+    #h = histograms[hh]
+    histograms2[hh]=h 
+ 
   for hh in signals2:
-    h = histograms[hh]["h1"]
+    h = histograms[scale+hh]["h1"]
+    #h = histograms[hh]["h1"]
+    h2 = histograms[scale+hh]
     ttcclfhist.Add(h)
-  histograms[GEN+"ttcclf"]={"h1":copy.deepcopy(ttcclfhist),"color":kOrange,"exp":ttcclfhist.Integral()}
-  
+    histograms2[hh]=h2
+  histograms2[GEN+"ttcclf"]={"h1":copy.deepcopy(ttcclfhist),"color":kOrange,"exp":ttcclfhist.Integral()}
+
+  for hh in backgrounds1:
+    h = histograms[scale+hh]
+    #h = histograms[hh]
+    histograms2[GEN+"ttot"]=h
+
   for hh in backgrounds2:
     h = histograms[hh]["h1"]
     bkghist.Add(h)
     #print "FINAL "+hh
-  histograms["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
+  histograms2["bkg"]={"h1":copy.deepcopy(bkghist),"color":kGray,"exp":bkghist.Integral()}
 
   for hh in backgrounds3:
     h = histograms[hh]["h1"]
     ddbkghist.Add(h)
     #print "FINAL "+hh
-  histograms["ddbkg"]={"h1":copy.deepcopy(ddbkghist),"color":kGray,"exp":ddbkghist.Integral()}
+  histograms2["ddbkg"]={"h1":copy.deepcopy(ddbkghist),"color":kGray,"exp":ddbkghist.Integral()}
 
-  f.Close()
-  return histograms, freeTTB, freeTTCC,GEN
+  f2.Close()
+  return histograms2, freeTTB, freeTTCC,GEN
 
 ##############################################
 ##############################################
@@ -329,7 +375,8 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   print "n_bkg:"+str(n_bkg)
   print "n_ddbkg:"+str(n_ddbkg)
   print "n_data:"+str(n_data)
-  
+  #print "FINAL2 :"+str(n_ttjj)
+
   
   rttbb = n_ttbb/n_ttjj
   rttb  = n_ttb/n_ttjj
@@ -441,7 +488,7 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   }
   #return result
   #result2=resultPrint(result, freeTTB, freeTTCC, GEN)
-  result2=resultPrint2(result, freeTTB, freeTTCC, GEN, False)
+  result2=resultPrint2(result, freeTTB, freeTTCC, GEN, True)
   recoR=result2["recoR"]
   recoRerror=result2["recoRerror"]
   recoR2=result2["recoR2"]
@@ -802,72 +849,84 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
 
 ################
 ################
+def roundStr(val,n):
+  return str(round(val*pow(10,n))/pow(10,n))
+
+def roundStrP(val,n):
+  return str(round(val*pow(10,n+2))/pow(10,n))+" \\%"
+
+
+def resultPrint(result, genInfo):
+
+  #eR = genInfo["eR"]
+  #acP = genInfo["acP"]
+  ttjjAcp = genInfo["Acceptance"]["ttjj"]
+  ttbbAcp = genInfo["Acceptance"]["ttbb"]
+
+  ttjjEff = genInfo["effciency"]["ttjj"]
+  ttbbEff = genInfo["effciency"]["ttbb"]
+
+  rttbb= result["rttbb"][0]
+
+  n_ttjj = result["n_ttbb"] + result["n_ttb"] + result["n_ttcc"] + result["n_ttlf"]
+  print "FINAL2:  "+str(result["n_ttbb"]) +"  "+ str(result["n_ttb"]) +"  "+ str(result["n_ttcc"]) +"   "+ str(result["n_ttlf"])
+  print "FINAL2: "+str(n_ttjj)
+
+  #eR=ttjjEff/ttbbEff
+  recoR = result["recoR"] 
+  recoRerror = result["recoRerror"] 
+  genR = result["recoR"] * (ttjjEff/ttbbEff)
+  genRerror = recoR*(ttjjEff/ttbbEff)*recoRerror/recoR
+
+  #print "FINAL2: n_ttjj:"+str(type(n_ttjj))+", rttbb:"+str(rttbb)+", "+str(type(rttbb))
+
+  NewNttbb = n_ttjj * result["kVal"]*result["recoR"]  #(result["n_ttbb"] * result["recoR"] * result["kVal"]) / rttbb
+  NewNttjj = n_ttjj * result["kVal"]
+
+  NewCXttbbvis = NewNttbb/(lumi * ttbbEff )
+  NewCXttjjvis = NewNttjj/(lumi * ttjjEff )
+  NewCXttbbfull = NewNttbb/(lumi * ttbbEff * ttbbAcp )
+  NewCXttjjfull = NewNttjj/(lumi * ttjjEff * ttjjAcp )
+
+  print "FINAL2: ---------------------"
+
+  print "FINAL2: $R_{Full}$ & "+roundStrP(genInfo["Rfull"],4)+" \\\\ \\hline "
+  print "FINAL2: $R_{vis}$ & " +roundStrP(genInfo["Rvis"],4)+" \\\\ \\hline \\hline "
+
+  print "FINAL2: Acceptance ttjj : "+roundStrP(ttjjAcp,4)+"  "
+  print "FINAL2: Acceptance ttbb : "+roundStrP(ttbbAcp,4)+"  "
+
+  print "FINAL2: efficiency ttjj : "+roundStrP(ttjjEff,4)+" "
+  print "FINAL2: efficiency ttbb : "+roundStrP(ttbbEff,4)+" "
+
+  print "FINAL2: ---------------------"
+
+  print "FINAL2: #ttjj prefit = "+str(round(n_ttjj*100)/100)+"  "
+  print "FINAL2: #ttjj fitting = "+str(round(NewNttjj*100)/100)+"  "
+  print "FINAL2: #ttbb fitting = "+str(round(NewNttbb*100)/100)+"  "
+
+
+  print "FINAL2:Reco  R = "+ str(round(recoR*10000)/10000)+" \pm "+str(round(recoRerror*10000)/10000)+" "
+  print "FINAL2:vis   R = "+ str(round(genR*10000)/10000)+" \pm "+str(round(genRerror*10000)/10000)+" "
+  fullR    = (genR*ttjjAcp/ttbbAcp)
+  fullRerr = (genR*ttjjAcp/ttbbAcp)*(genRerror/genR)
+  print "FINAL2:full  R = "+ str(round(fullR*10000)/10000)+" \pm "+str(round(fullRerr*10000)/10000)+" "
+
+  print "FINAL2:vis   ttbb :"+str(NewCXttbbvis)+" pb"
+  print "FINAL2:vis   ttjj :"+str(NewCXttjjvis)+" pb"
+
+  print "FINAL2:full   ttbb :"+str(NewCXttbbfull)+" pb"
+  print "FINAL2:full   ttjj :"+str(NewCXttjjfull)+" pb"
+
+
 ################
-def pulltest(histograms,freeTTB, freeTTCC, GEN):
-  #a = []
-  hpull = TH1F("recoR_pull","pull test for recoR",80,-2,2)
-  #hpull = TH1F("recoR_pull","pull test for recoR",100,0,100)
-  #hpull2= TH1F("recoR_pull2","pull test for recoR",100,0,100)
-  orig_r,orig_err,result=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
-  for i in range(500):
-    r,r_err,result = fitting(histograms, freeTTB, freeTTCC, GEN,True,True)
-    #a.append( {i, result})
-    hpull.Fill((orig_r-r)/r_err)
-    #hpull.SetBinContent(i+1,r)
-    #hpull.SetBinError(i+1,r_err)
-  
- #0.0316 \pm 0.007
-  #hpull2.SetBinContent(50,0.0316)
-  #hpull2.SetBinError(50,0.007)
-  #hpull2.SetLineColor(kRed)
-  #hpull2.SetMarkerColor(kRed)
-
-  #print "test : "+str(a)
-  cpull = TCanvas("cpull", "cpull", 1)
-  #hpull.GetXaxis().SetTitle("Counts")
-  #hpull.GetYaxis().SetTitle("recoR")
-  hpull.GetYaxis().SetTitle("Counts ")
-  hpull.GetXaxis().SetTitle("(R_orig-R_i)/Rerr_i")
-  pt = addLegendCMS()
-  pt2 = addDecayMode("LL")
-  pt3 = addLegend("Madgraph")
-  if GEN == "POW": pt3=addLegend("Powheg")
-  if GEN == "AMC": pt3=addLegend("aMC@NLO")
-  hpull.Draw()
-  hpull.Fit("gaus","0")
-  #hpull2.Draw("same")
-  fit1 = hpull.GetFunction("gaus")
-  fit1.SetLineColor(kRed)
-  fit1.Draw("same")
-  mytext= ("Mean: "+str(round(fit1.GetParameter(1)*1000)/1000))
-  mytext2= ("Sigma: "+str(round(fit1.GetParameter(2)*10000)/10000))
-  mytext3= ("R_orig: "+str(round(orig_r*10000)/10000))
-  mytext4= ("R_orig_err: "+str(round(orig_err*10000)/10000))
-  
-  pt4 = addLegend2(mytext,0.6,0.8)
-  pt5 = addLegend2(mytext2,0.6,0.75)
-  pt6 = addLegend2(mytext3,0.2,0.5)
-  pt7 = addLegend2(mytext4,0.2,0.45)
-  pt4.Draw()
-  pt5.Draw()
-  pt6.Draw()
-  pt7.Draw()
-  pt = addLegendCMS()
-  pt2 = addDecayMode("LL")
-  pt3 = addLegend("Madgraph")
-  if GEN == "POW": pt3=addLegend("Powheg")
-  if GEN == "AMC": pt3=addLegend("aMC@NLO")
-
-
-  pt.Draw()
-  pt2.Draw()
-  pt3.Draw()
-
-  cpull.Print("plots/recoR_pull_test"+GEN+".eps")
-  cpull.Print("plots/recoR_pull_test"+GEN+".png")
-
-
-
+################
+################
+################
+################
+################
+################
+################
 ################
 ################
 ################
@@ -875,31 +934,49 @@ def pulltest(histograms,freeTTB, freeTTCC, GEN):
 ################
 #POWHEG
 ttjjRatioTTPOW=(121044.0/19757190.0)
-ttjjAcceptancePOW=(121044.0/766823.0)
-ttbbAcceptancePOW=(1609.0/8700.0)
-ttjjEffPOW=(11855.0/121044.0)
-ttbbEffPOW=(400.0/1609.0)
+
+ttjjAcceptancePOW=((5270.0+ 20017.0+ 9858.0+ 350490.0)/(16560.0+ 55874.0+ 33288.0+ 1101990.0)) # (121044.0/766823.0)
+ttbbAcceptancePOW=(5270.0/16560.0) # (1609.0/8700.0)
+ttjjEffPOW=(46043.0/385635.0)##(11855.0/121044.0)
+ttbbEffPOW=(1465.0/5270.0) #(400.0/1609.0)
+
+RfullPOW = (16560.0)/(16560.0+ 55874.0+ 33288.0+ 1101990.0)#(8700.0/766823.0)
+RvisPOW  = (5270.0)/(5270.0+ 20017.0+ 9858.0+ 350490.0) #(1609.0/121044.0)
 
 #aMC@NLO
-ttjjRatioTTAMC=(98110.0/14188545.0)
-ttjjAcceptanceAMC=(98110.0/645759.0)
-ttbbAcceptanceAMC=(1279.0/7203.0)
-ttjjEffAMC=(8766.0/98110.0)
-ttbbEffAMC=(264.0/1279.0)
+#ttjjRatioTTAMC=(98110.0/14188545.0)
+#ttjjAcceptanceAMC=(98110.0/645759.0)
+#ttbbAcceptanceAMC=(1279.0/7203.0)
+#ttjjEffAMC=(8766.0/98110.0)
+#ttbbEffAMC=(264.0/1279.0)
+#RfullAMC = (7203.0/645759.0 )
+#RvisAMC  = ( 1279.0/98110.0 )
 
 #MG5
 ttjjRatioTTMG5=(81283.0/11344206.0)
 ttjjAcceptanceMG5=(81283.0/496640.0)
 ttbbAcceptanceMG5=(1068.0/5520.0)
+#ttjjAcceptanceMG5= (5270.+ 20017.+ 9858.+ 350490.)/(55874.+ 16560.+ 33288.+ 1101990.)
+#ttbbAcceptanceMG5=(5270./16560.)
+
 ttjjEffMG5=(8425.0/81283.0)
 ttbbEffMG5=(280.0/1068.0)
+RfullMG5 = (5520.0 /496640.0 )
+RvisMG5  = (1068.0 /81283.0 )
 
-eRPOW = ttjjEffPOW/ttbbEffPOW #ttjjAcceptancePOW/ttbbAcceptancePOW
-eRAMC = ttjjEffAMC/ttbbEffAMC #ttjjAcceptanceAMC/ttbbAcceptanceAMC
-eRMG5 = ttjjEffMG5/ttbbEffMG5 #ttjjAcceptanceMG5/ttbbAcceptanceMG5
+eRPOW = ttjjEffPOW/ttbbEffPOW 
+acPPOW = ttjjAcceptancePOW/ttbbAcceptancePOW
+#eRAMC = ttjjEffAMC/ttbbEffAMC 
+#acPAMC = ttjjAcceptanceAMC/ttbbAcceptanceAMC
+eRMG5 = ttjjEffMG5/ttbbEffMG5 
+acPMG5 = ttjjAcceptanceMG5/ttbbAcceptanceMG5
+
+genInfoPOW = {"Acceptance":{"ttjj":ttjjAcceptancePOW,"ttbb":ttbbAcceptancePOW }, "effciency":{ "ttjj":ttjjEffPOW,"ttbb":ttbbEffPOW  }, "eR":eRPOW, "acP":acPPOW, "Rfull": RfullPOW, "Rvis":RvisPOW }
+#genInfoAMC = {"Acceptance":{"ttjj":ttjjAcceptanceAMC,"ttbb":ttbbAcceptanceAMC }, "effciency":{ "ttjj":ttjjEffAMC,"ttbb":ttbbEffAMC  }, "eR":eRAMC, "acP":acPAMC, "Rfull": RfullAMC, "Rvis":RvisAMC  }
+genInfoMG5 = {"Acceptance":{"ttjj":ttjjAcceptanceMG5,"ttbb":ttbbAcceptanceMG5 }, "effciency":{ "ttjj":ttjjEffMG5,"ttbb":ttbbEffMG5  }, "eR":eRMG5, "acP":acPMG5, "Rfull": RfullMG5, "Rvis":RvisMG5  }
 
 print "FINAL2: POW eR= "+str(eRPOW)+"  , acceptance ttjj:"+str(ttjjAcceptancePOW)+", (effS6: "+str(ttjjEffPOW)+")  ,  ttbb:"+str(ttbbAcceptancePOW)+", (effS6: "+str(ttbbEffPOW)+")"
-print "FINAL2: AMC eR= "+str(eRAMC)+"  , acceptance ttjj:"+str(ttjjAcceptanceAMC)+", (effS6: "+str(ttjjEffAMC)+")  ,  ttbb:"+str(ttbbAcceptanceAMC)+", (effS6: "+str(ttbbEffAMC)+")"
+#print "FINAL2: AMC eR= "+str(eRAMC)+"  , acceptance ttjj:"+str(ttjjAcceptanceAMC)+", (effS6: "+str(ttjjEffAMC)+")  ,  ttbb:"+str(ttbbAcceptanceAMC)+", (effS6: "+str(ttbbEffAMC)+")"
 print "FINAL2: MG5 eR= "+str(eRMG5)+"  , acceptance ttjj:"+str(ttjjAcceptanceMG5)+", (effS6: "+str(ttjjEffMG5)+")  ,  ttbb:"+str(ttbbAcceptanceMG5)+", (effS6: "+str(ttbbEffMG5)+")"
 
 ################
@@ -920,19 +997,26 @@ if len(sys.argv) > 3:
 
 #StepSys = ["csvweight_JES_Up","csvweight_JES_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down"]
 
-StepSys = ["csvweight_JES_Up","csvweight_JES_Down","JER_up","JER_dw","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down","puweightUp","puweightDown"]
+StepSys = ["csvweight_JES_Up","csvweight_JES_Down","JER_Up","JER_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down","PuWeightUp","PUWeightDN"]
 StepSys2 = {"JES":["csvweight_JES","JER"],"LF":["csvweight_LF","csvweight_HF_Stats1","csvweight_HF_Stats2"],"HF":["csvweight_HF","csvweight_LF_Stats1","csvweight_LF_Stats2"],"Charm":["csvweight_Charm_Err1","csvweight_Charm_Err2"],"pileup":["puweight"]}
 
-histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2,"S6csvweight")
-histogramsMG5,freeTTB5,freeTTCC5,GEN5=loadHistogram("0", "0","S6csvweight")
+from sysWeight_cfi import mceventweight
+sysWeights =  [i["name"] for i in mceventweight]
+sysWeights.remove("woLep")
+sysWeights.append("Scale_Up")
+sysWeights.append("Scale_Down")
+
+histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2,"S6","csvweight")
+histogramsMG5,freeTTB5,freeTTCC5,GEN5=loadHistogram("0", "0","S6","csvweight")
 histogramSys = {}
-for sys in StepSys:
-  histograms2,freeTTB2,freeTTCC2,GEN2=loadHistogram(arg1, arg2,"S6"+sys)
+for sys in sysWeights:
+  histograms2,freeTTB2,freeTTCC2,GEN2=loadHistogram(arg1, arg2,"S6",sys)
   histogramSys[sys] = copy.deepcopy(histograms2)
 
 orig_r = 0.0316 # MG5
 orig_err=0.00001#
 SystematicUnc={}
+SystematicUnck={}
 #StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats1","Charm_Err1","Charm_Err2"]
 
 from math import *
@@ -940,50 +1024,71 @@ if int(arg3)==0:
   cR10, cR00, cR11, cR12, cNLLContourb,cNLLContourc, cN, cN2=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
 elif int(arg3)==2:
   orig_r,orig_err,result=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
-  print "FINAL2: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
-  genR      = orig_r*eRPOW;
+  #print "FINAL2: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
+  genR      = orig_r*eRPOW
+  resultPrint(result,genInfoPOW)
   genRerror = orig_r*eRPOW*orig_err/orig_r
-  print "FINAL2: csvweight: gen R $= "+ str(round(genR*10000)/10000)+" \pm "+str(round(genRerror*10000)/10000)+"$"
+  #print "FINAL2: csvweight: gen R $= "+ str(round(genR*10000)/10000)+" \pm "+str(round(genRerror*10000)/10000)+"$"
+  genRF      = orig_r*eRPOW*acPPOW
+  genRerrorF = orig_r*eRPOW*acPPOW*orig_err/orig_r
+  kVal = result["kVal"] 
+  print "FINAL2: csvweight: full gen R $= "+ str(round(genRF*10000)/10000)+" \pm "+str(round(genRerrorF*10000)/10000)+"$"
+  print "FINAL2: csvweight: k $="+str(round(result["kVal"]*10000)/100)+": "+str(round(result["kValerror"]*10000)/10000)+" "
 
-  for sys in StepSys:
+  for sys in sysWeights:
     orig_r2,orig_err2,result2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
     sysUnc = (orig_r-orig_r2)/orig_r
-    print "FINAL2: "+(sys.rjust(30))+": "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
+    sysUnck = (kVal-result2["kVal"])/kVal
+
+    print "FINAL2: "+(sys.rjust(30))+": R "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
+    print "FINAL2: "+(sys.rjust(30))+": k "+str(round(sysUnck*10000)/100)+" %     ,     k = "+ str(round(result2["kVal"]*10000)/10000)+" "
     SystematicUnc[sys]=copy.deepcopy(sysUnc)
+    SystematicUnck[sys]=copy.deepcopy(sysUnck)
   print "FINAL2: ---- "+str(SystematicUnc)+"------"
   orig_r3,orig_err3,result3 = fitting(histograms, True, False, GEN,True,False)
   orig_r4,orig_err4,result4 = fitting(histograms, False, True, GEN,True,False)
   orig_r5,orig_err5,result5 = fitting(histogramsMG5, False, False, "MG5",True,False)
-  sysUnc3 = (orig_r-orig_r3)/orig_r
-  sysUnc4 = (orig_r-orig_r4)/orig_r
 
+  sysUnc3 = (orig_r-orig_r3)/orig_r
+  sysUnc3k = (result3["kVal"]-kVal)/kVal
+  sysUnc4 = (orig_r-orig_r4)/orig_r
+  sysUnc4k = (result4["kVal"]-kVal)/kVal
   sysUnc5 = (genR-orig_r5*eRMG5)/genR
+  sysUnc5k = (result5["kVal"]-kVal)/kVal
 
   sysUnc=0.
   for sys2 in StepSys2.keys():
-    sysUnc1=0.
+    sysUnc1=[]
+    sysUnc1k=[]
     for sys3 in StepSys2[sys2]:
       if sys3.find("JER")>-1:
-        up=SystematicUnc[sys3+"_up"] 
-        dw=SystematicUnc[sys3+"_dw"] 
+        up=SystematicUnc[sys3+"_Up"] 
+        upk=SystematicUnck[sys3+"_Up"] 
+        dw=SystematicUnc[sys3+"_Down"] 
+        dwk=SystematicUnck[sys3+"_Down"] 
       elif sys3.find("puweight")>-1:
-        up=SystematicUnc[sys3+"Up"] 
-        dw=SystematicUnc[sys3+"Down"] 
+        up=SystematicUnc["PuWeightUp"] 
+        upk=SystematicUnck["PuWeightUp"] 
+        dw=SystematicUnc["PUWeightDN"] 
+        dwk=SystematicUnck["PUWeightDN"] 
       else:
         up=SystematicUnc[sys3+"_Up"] 
+        upk=SystematicUnck[sys3+"_Up"] 
         dw=SystematicUnc[sys3+"_Down"] 
-      sysUnc1 += up*up+dw*dw
-    sysUnc = sqrt(sysUnc1)
-    print "FINAL2: "+sys2.rjust(10)+" : "+str(round(sysUnc*10000)/100)+" % "
+        dwk=SystematicUnck[sys3+"_Down"] 
+      sysUnc1.append(max(abs(up),abs(dw)))
+      sysUnc1k.append(max(abs(upk),abs(dwk)))
+
+    sysUnc = max(sysUnc1)
+    sysUnck = max(sysUnc1k)
+    print "FINAL2: "+sys2.rjust(10)+" : "+str(round(sysUnc*10000)/100)+" % ,     k="+str(round(sysUnck*10000)/100)+" % "
     sysUnc = 0.
 
-  print "FINAL2: "+("TTB").rjust(5)+" : "+str(round(sysUnc3*10000)/100)+" % "
-  print "FINAL2: "+("TTCC").rjust(5)+" : "+str(round(sysUnc4*10000)/100)+" % "
-  print "FINAL2: "+("GEN").rjust(5)+" : "+str(round(sysUnc5*10000)/100)+" % "
+  print "FINAL2: "+("TTB").rjust(5)+" : "+str(round(sysUnc3*10000)/100)+" % ,     k="+str(round(sysUnc3k*10000)/100)+" % " 
+  print "FINAL2: "+("TTCC").rjust(5)+" : "+str(round(sysUnc4*10000)/100)+" % ,     k="+str(round(sysUnc4k*10000)/100)+" % "
+  print "FINAL2: "+("GEN").rjust(5)+" : "+str(round(sysUnc5*10000)/100)+" % ,     k="+str(round(sysUnc5k*10000)/100)+" % "
   print "FINAL2: ---------------- "#+str(SystematicUnc)+"------"
 
-else:
-  pulltest(histograms,freeTTB, freeTTCC, GEN)
 
 
 
