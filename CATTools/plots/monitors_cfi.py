@@ -4,7 +4,7 @@ monitors = [
   { "name":"nGoodPV",      "unit":"# of vertex ",             "var":"nvertex",   "xbin_set":[30,0,30]    },
 #]
 #fff=[
-  { "name":"Weight",         "unit":"Weight",             "var":"weight",      "xbin_set":[50,0,10]    },
+  { "name":"Weight",         "unit":"Weight",             "var":"weight",      "xbin_set":[50,-5,5]    },
   { "name":"PuWeight",       "unit":"PuWeight",             "var":"puweight",    "xbin_set":[50,0,10]    },
   { "name":"LepWeight",      "unit":"LepWeight",             "var":"lepweight",   "xbin_set":[50,0,10]    },
   { "name":"CsvWeight",      "unit":"CSVWeight",             "var":"csvweight",   "xbin_set":[50,0,10]    },
@@ -13,7 +13,6 @@ monitors = [
 #fff=[
   { "name":"MET",          "unit":"Missing E_{T} (GeV)","var":"met",   "xbin_set":[30,0,300]  },
   { "name":"ZMass",        "unit":"Dilepton mass (GeV/c^{2}) ",    "var":"ll_m",  "xbin_set":[60,0,300]  },
-
 
   { "name":"METPHI",       "unit":"Missing E_{T} without HF #phi", "var":"metphi","xbin_set":[20,-4,4]    },
 

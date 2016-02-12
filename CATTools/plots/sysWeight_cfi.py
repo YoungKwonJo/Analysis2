@@ -1,34 +1,33 @@
 
 baseWeight = "weight*puweight*lepweight"
 mceventweight=[
-{"name":"NOM",                 "var": "("+baseWeight+")"},
-{"name":"woLep",               "var": "(weight*puweight)"},
-{"name":"csvweight",           "var": "("+baseWeight+"*csvweight)"},
-{"name":"PuWeightUp",          "var": "(weight*puweightUp*lepweight*csvweight)"},
-{"name":"PUWeightDN",          "var": "(weight*puweightDown*lepweight*csvweight)"},
-{"name":"JER_Up",              "var": "("+baseWeight+"*csvweight)"},
-{"name":"JER_Down",            "var": "("+baseWeight+"*csvweight)"},
-{"name":"csvweight_JES_Up",    "var": "("+baseWeight+"*csvweight_JES_Up)"},        
-{"name":"csvweight_JES_Down",  "var": "("+baseWeight+"*csvweight_JES_Down)"},      
-{"name":"csvweight_LF_Up",     "var": "("+baseWeight+"*csvweight_LF_Up)"},         
-{"name":"csvweight_LF_Down",   "var": "("+baseWeight+"*csvweight_LF_Down)"},       
+{"name":"CEN",       "var": "("+baseWeight+")"},
+{"name":"csvweight", "var": "("+baseWeight+"*csvweights[0])"},
+{"name":"PW_Up",     "var": "(weight*puweightUp*lepweight*csvweights[0])"},
+{"name":"PW_Down",   "var": "(weight*puweightDown*lepweight*csvweights[0])"},
+{"name":"JER_NOM",   "var": "("+baseWeight+"*csvweights[0])"},
+{"name":"JER_Up",    "var": "("+baseWeight+"*csvweights[0])"},
+{"name":"JER_Down",  "var": "("+baseWeight+"*csvweights[0])"},
+{"name":"JES_Up",    "var": "("+baseWeight+"*csvweights[1])"},        
+{"name":"JES_Down",  "var": "("+baseWeight+"*csvweights[2])"},      
+{"name":"LF_Up",     "var": "("+baseWeight+"*csvweights[3])"},         
+{"name":"LF_Down",   "var": "("+baseWeight+"*csvweights[4])"},       
 #]
-#ddddd=[
-{"name":"csvweight_HF_Up",           "var": "("+baseWeight+"*csvweight_HF_Up)"},           
-{"name":"csvweight_HF_Down",         "var": "("+baseWeight+"*csvweight_HF_Down)"},         
-{"name":"csvweight_HF_Stats1_Up",    "var": "("+baseWeight+"*csvweight_HF_Stats1_Up)"},    
-{"name":"csvweight_HF_Stats1_Down",  "var": "("+baseWeight+"*csvweight_HF_Stats1_Down)"},  
-{"name":"csvweight_HF_Stats2_Up",    "var": "("+baseWeight+"*csvweight_HF_Stats2_Up)"},    
-{"name":"csvweight_HF_Stats2_Down",  "var": "("+baseWeight+"*csvweight_HF_Stats2_Down)"},  
-{"name":"csvweight_LF_Stats1_Up",    "var": "("+baseWeight+"*csvweight_LF_Stats1_Up)"},    
-{"name":"csvweight_LF_Stats1_Down",  "var": "("+baseWeight+"*csvweight_LF_Stats1_Down)"},  
-{"name":"csvweight_LF_Stats2_Up",    "var": "("+baseWeight+"*csvweight_LF_Stats2_Up)"},    
-{"name":"csvweight_LF_Stats2_Down",  "var": "("+baseWeight+"*csvweight_LF_Stats2_Down)"},  
-{"name":"csvweight_Charm_Err1_Up",   "var": "("+baseWeight+"*csvweight_Charm_Err1_Up)"},   
-{"name":"csvweight_Charm_Err1_Down", "var": "("+baseWeight+"*csvweight_Charm_Err1_Down)"}, 
-{"name":"csvweight_Charm_Err2_Up",   "var": "("+baseWeight+"*csvweight_Charm_Err2_Up)"},   
-{"name":"csvweight_Charm_Err2_Down", "var": "("+baseWeight+"*csvweight_Charm_Err2_Down)"} 
-#"csvt_sf","csvm_sf","csvl_sf","csvt_sfup","csvt_sfdw","csvm_sfup","csvm_sfdw","csvl_sfup","csvl_sfdw"
+#=[
+{"name":"HF_Up",           "var": "("+baseWeight+"*csvweights[5])"},           
+{"name":"HF_Down",         "var": "("+baseWeight+"*csvweights[6])"},         
+{"name":"HF_Stats1_Up",    "var": "("+baseWeight+"*csvweights[7])"},    
+{"name":"HF_Stats1_Down",  "var": "("+baseWeight+"*csvweights[8])"},  
+{"name":"HF_Stats2_Up",    "var": "("+baseWeight+"*csvweights[9])"},    
+{"name":"HF_Stats2_Down",  "var": "("+baseWeight+"*csvweights[10])"},  
+{"name":"LF_Stats1_Up",    "var": "("+baseWeight+"*csvweights[11])"},    
+{"name":"LF_Stats1_Down",  "var": "("+baseWeight+"*csvweights[12])"},  
+{"name":"LF_Stats2_Up",    "var": "("+baseWeight+"*csvweights[13])"},    
+{"name":"LF_Stats2_Down",  "var": "("+baseWeight+"*csvweights[14])"},  
+{"name":"CQ_Err1_Up",      "var": "("+baseWeight+"*csvweights[15])"},   
+{"name":"CQ_Err1_Down",    "var": "("+baseWeight+"*csvweights[16])"}, 
+{"name":"CQ_Err2_Up",      "var": "("+baseWeight+"*csvweights[17])"},   
+{"name":"CQ_Err2_Down",    "var": "("+baseWeight+"*csvweights[18])"} 
 ]
 
 

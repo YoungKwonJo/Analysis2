@@ -44,4 +44,19 @@ mm_cutsQCD = copy.deepcopy(mm_cuts)
 ee_cutsQCD = copy.deepcopy(ee_cuts)
 em_cutsQCD = copy.deepcopy(em_cuts)
 
+def cut_maker(cuts_,ii):
+  cuts  = {}
+  for i,cut in enumerate(cuts_["cut"]):
+    if i==0 :
+      cuts["S%d"%i]=cut
+    else:
+      cuts["S%d"%i]= cuts["S%d"%(i-1)] + " * " + cut
+
+  cuts2  = {}
+  cuts2["S%d"%ii] = cuts["S%d"%ii]
+  #cutsN = {"channel":cuts_["channel"],"cut":cuts2}
+  cutsN = {"channel":cuts_["channel"],"cut":cuts2}
+  #print cutsN
+  return cutsN
+
 

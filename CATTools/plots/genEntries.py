@@ -43,7 +43,8 @@ def ntuple2entries(files,name):
   """
 
   trigger = "((channel==3||(channel==2)||(channel==1)) && (tri==1)&&(filtered==1))"
-  S1 = trigger+"&&( (step1==1) &&((channel==3)&&(lep1_RelIso<0.15 && lep2_RelIso<0.15)) ||((channel==2)&&(lep1_RelIso<0.12 && lep2_RelIso<0.12)) ||((channel==1)&&(lep1_RelIso<0.12 && lep2_RelIso<0.15)) )"
+  #S1 = trigger+"&&( (step1==1) &&((channel==3)&&(lep1_RelIso<0.15 && lep2_RelIso<0.15)) ||((channel==2)&&(lep1_RelIso<0.12 && lep2_RelIso<0.12)) ||((channel==1)&&(lep1_RelIso<0.12 && lep2_RelIso<0.15)) )"
+  S1 = trigger+"&&( (step1==1) && ((channel==3) ||(channel==2) ||(channel==1)) )"
   S6 = "("+S1+"&&(step2==1)&&(step3==1)&&(step4==1)&&(step5==1))"
 
   chain = TChain("cattree/nom")
@@ -63,26 +64,26 @@ def ntuple2entries(files,name):
 
   summary["ratio"]={"events":summary["ttbb"]["GEN"]["events"]/summary["ttjj"]["GEN"]["events"],"integral":summary["ttbb"]["GEN"]["integral"]/summary["ttjj"]["GEN"]["integral"],"eventsS6":summary["ttbb"]["S6"]["events"]/summary["ttjj"]["S6"]["events"],"integralS6":summary["ttbb"]["S6"]["integral"]/summary["ttjj"]["S6"]["integral"]}
   
-  summary['fullphaseTTBB']=getDictionary(tree, "fullphaseTTBB", "2", vvv, tt+"*"+fullphaseTTBB, tt+"*"+fullphaseTTBB+"*"+S6, "fullphaseTTBB ")
-  summary['fullphaseTTJJ']=getDictionary(tree, "fullphaseTTJJ", "2", vvv, tt+"*"+fullphaseTTJJ, tt+"*"+fullphaseTTJJ+"*"+S6, "fullphaseTTJJ ")
-  summary["ratio2"]={"events":summary["fullphaseTTBB"]["GEN"]["events"]/summary["fullphaseTTJJ"]["GEN"]["events"],"integral":summary["fullphaseTTBB"]["GEN"]["integral"]/summary["fullphaseTTJJ"]["GEN"]["integral"],"eventsS6":summary["fullphaseTTBB"]["S6"]["events"]/summary["fullphaseTTJJ"]["S6"]["events"],"integralS6":summary["fullphaseTTBB"]["S6"]["integral"]/summary["fullphaseTTJJ"]["S6"]["integral"]}
+  #summary['fullphaseTTBB']=getDictionary(tree, "fullphaseTTBB", "2", vvv, tt+"*"+fullphaseTTBB, tt+"*"+fullphaseTTBB+"*"+S6, "fullphaseTTBB ")
+  #summary['fullphaseTTJJ']=getDictionary(tree, "fullphaseTTJJ", "2", vvv, tt+"*"+fullphaseTTJJ, tt+"*"+fullphaseTTJJ+"*"+S6, "fullphaseTTJJ ")
+  #summary["ratio2"]={"events":summary["fullphaseTTBB"]["GEN"]["events"]/summary["fullphaseTTJJ"]["GEN"]["events"],"integral":summary["fullphaseTTBB"]["GEN"]["integral"]/summary["fullphaseTTJJ"]["GEN"]["integral"],"eventsS6":summary["fullphaseTTBB"]["S6"]["events"]/summary["fullphaseTTJJ"]["S6"]["events"],"integralS6":summary["fullphaseTTBB"]["S6"]["integral"]/summary["fullphaseTTJJ"]["S6"]["integral"]}
   return summary
 
 
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
 ttbarPOW = "TT_powheg"
-loc = "/store/user/youngjo/Cattools/v7-4-6v4/"
-z="v4GenTop"
+loc = "/store/user/youngjo/Cattools/v7-6-1v3/"
+z="v2"#GenTop"
 
 mg5=ntuple2entries(files(loc + ttbarMG5+z),ttbarMG5)
-amc=ntuple2entries(files(loc + ttbarAMC+z),ttbarAMC)
-pow=ntuple2entries(files(loc + ttbarPOW+z),ttbarPOW)
+#amc=ntuple2entries(files(loc + ttbarAMC+z),ttbarAMC)
+#pow=ntuple2entries(files(loc + ttbarPOW+z),ttbarPOW)
 
 allsummary={}
 allsummary["MG5"]=mg5
-allsummary["AMC"]=amc
-allsummary["POW"]=pow
+#allsummary["AMC"]=amc
+#allsummary["POW"]=pow
 
 print str(allsummary)
 

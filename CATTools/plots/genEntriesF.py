@@ -131,8 +131,9 @@ gROOT.ProcessLine(".L tdrStyle.C")
 setTDRStyle()
 
 ttbarPOW = "TT_powheg"
-loc = "/store/user/youngjo/Cattools/v7-6-1v2/"
-z="v5"
+#ttbarPOW = "TTJets_MG5"
+loc = "/store/user/youngjo/Cattools/v7-6-2v1/"
+z="v2"
 
 tree=loadfiles(files(loc + ttbarPOW+z))
 #tree=loadfiles(["/cms/home/chanwook/work/ttbb/cattools/src/CATTools/CatAnalyzer/test/TTBBGenAnalyzer_TT_powheg.root"])
@@ -158,8 +159,8 @@ TTNN ={
 
 ETC = "(!"+dileptonic0+" && !"+semiLeptonic0+" && !"+allHadronic+")"
 CHANNEL ={
-  "dileptonic": dileptonic0,
-  "semileptonic": semiLeptonic0,
+  "dileptonic": dileptonicm1,
+  "semileptonic": semiLeptonicm1,
   "hadronic": allHadronic,
   "etc": ETC
 }
@@ -196,12 +197,13 @@ ttjjSemiLeptonVis = "((((lepton1_pt>20 && abs(lepton1_eta)<2.4) && !(lepton2_pt>
 #################
 #################
 #################
-#pow0=loadSel(tree,"(1)",CHANNEL)
-#pow1=loadSel(tree,dileptonic0,TTNN)
+pow0=loadSel(tree,"(1)",CHANNEL)
+#pow1=loadSel(tree,"(1)",TTNN)
+pow11=loadSel(tree,dileptonicm1,TTNN)
 #pow2=loadSel(tree,semiLeptonic0,TTNN)
 #pow3=loadSel(tree,allHadronic,TTNN)
 
-pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
+#pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
 #pow5=loadSel(tree,ttjjSemiLeptonVis,TTNNvis)
 
 #pow6=loadSel(tree,dilepH,TTNNH)
@@ -210,12 +212,13 @@ pow4=loadSel(tree,ttjjDiLeptonVis,TTNNvis)
 #pow8=loadSel(tree,dilepHv,TTNNH)
 #pow9=loadSel(tree,semilepHv,TTNNH)
 #################
-#SavePDF(pow0,"POWttbarall")
-#SavePDF(pow1,"POWttbarDileptonicFullPhase")
+SavePDF(pow0,"POWttbarall")
+#SavePDF(pow1,"POWttbarFullPhase")
+SavePDF(pow11,"POWttbarDileptonicFullPhase")
 #SavePDF(pow2,"POWttbarSemileptonicFullPhase")
 #SavePDF(pow3,"POWttbarHadronicFullphase")
 
-SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
+#SavePDF(pow4,"POWttbarDileptonicVisiblePhase")
 #SavePDF(pow5,"POWttbarSemileptonicVisiblePhase")
 
 #SavePDF(pow6,"POWttbarDileptonicTTHFull")

@@ -24,7 +24,7 @@ def h1_set(name,monitor,cutname):
         }
   return mon
 
-def h_all_maker(tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts, eventweight,Ntot,hN_maker):
+def h_all_maker(tree2,mc, monitors, cuts, eventweight,Ntot,hN_maker):
   hh = {}
   h=[]
   aWeight=eventweight["name"]
@@ -36,25 +36,11 @@ def h_all_maker(tree2,tree3, tree4, tree5, tree6,mc, monitors, cuts, eventweight
         else  : continue
       cut = "("+cuts["cut"][cutname]+" * "+mc['selection'] +")*("+eventweight["var"]+"/"+str(Ntot)+")"
 
-      #if(cutname.find("S6")>-1 or cutname.find("S7")>-1 or cutname.find("S8")>-1 ) or aWeight is "CEN" or aWeight is "csvweight":
-      if aWeight.find("JER_Up")>-1:
-        h2 = hN_maker(tree5,mon,cut)
-        h.append(copy.deepcopy(h2))
-      elif aWeight.find("JER_Down")>-1:
-        h2 = hN_maker(tree6,mon,cut)
-        h.append(copy.deepcopy(h2))
-      elif aWeight.find("JES_Up")>-1:
-        h2 = hN_maker(tree3,mon,cut)
-        h.append(copy.deepcopy(h2))
-      elif aWeight.find("JES_Down")>-1:
-        h2 = hN_maker(tree4,mon,cut)
-        h.append(copy.deepcopy(h2))
-      else :
-        h2 = hN_maker(tree2,mon,cut)
-        h.append(copy.deepcopy(h2))
+      h2 = hN_maker(tree2,mon,cut)
+      h.append(copy.deepcopy(h2))
 
       #making shape for dy estimation
-      if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)) and aWeight is "NOM" :
+      if monitors[i]['name'].find("ZMass")>-1 and ((mc['name'].find("DYJets")>-1) or (mc['name'].find("Mu")>-1) or (mc['name'].find("El")>-1)) and aWeight is "CEN" :
         incut = "((ll_m > 76) * (ll_m < 106))"
         outcut ="(!((ll_m > 76) * (ll_m < 106)))"
         monIN = h1_set(mc['name'],monitors[i], cuts["channel"]+"_"+cutname+"_in")
@@ -106,65 +92,52 @@ def ntuple2hist(json,cuts,mcweight,mon,hN_maker):
   #monitors=json['monitors']
   monitors=json[mon]
   datasamples = json['datasamples']
+  aWeight=mceventweight["name"]
+  nom2 = "cattree/nom2"
+  if   aWeight.find("JER_Up")>-1:    nom2 = "cattree/nomJER_up"
+  elif aWeight.find("JER_NOM")>-1:   nom2 = "cattree/nomJER_n"
+  elif aWeight.find("JER_Down")>-1:  nom2 = "cattree/nomJER_dw"
+  elif aWeight.find("JES_Up")>-1:    nom2 = "cattree/nomJES_up"
+  elif aWeight.find("JES_Down")>-1:  nom2 = "cattree/nomJES_dw"
+  else :                             nom2 = "cattree/nom2"
+
   for i,mc in enumerate(mcsamples):
-    chain = TChain("cattree/nom")
-    chain2 = TChain("cattree/nom2")
-    chain3 = TChain("cattree/nomJES_up")
-    chain4 = TChain("cattree/nomJES_dw")
-    chain5 = TChain("cattree/nomJER_up")
-    chain6 = TChain("cattree/nomJER_dw")
+    #chain = TChain("cattree/nom")
+    chain2 = TChain(nom2)
     for afile in mcsamples[i]['file']:
       f = TFile.Open(afile)
       if None == f: continue
-      chain.Add(afile)
+      #chain.Add(afile)
       chain2.Add(afile)
-      chain3.Add(afile)
-      chain4.Add(afile)
-      chain5.Add(afile)
-      chain6.Add(afile)
-    tree = chain
+    #tree = chain
     tree2 = chain2
-    tree3 = chain3
-    tree4 = chain4
-    tree5 = chain5
-    tree6 = chain6
 
-    htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
-    tree.Project("htemp"+mcsamples[i]['name'],"1","weight")#/abs(weight)")
-    Ntot = htemp.GetBinContent(1)
-
-    h[mcsamples[i]['name']]=h_all_maker(tree2,tree3, tree4, tree5, tree6,mcsamples[i],monitors,cuts,mceventweight,Ntot,hN_maker)
+    #htemp = TH1D("htemp"+mcsamples[i]['name'],"",1,-2,2)
+    #tree.Project("htemp"+mcsamples[i]['name'],"1","weight")#/abs(weight)")
+    #Ntot = htemp.GetBinContent(1)
+    Ntot = mc["sumWeight"]
+    h[mcsamples[i]['name']]=h_all_maker(tree2,mcsamples[i],monitors,cuts,mceventweight,Ntot,hN_maker)
     #f.Close()
-  for i,mc in enumerate(datasamples):
-    chain = TChain("cattree/nom")
-    chain2 = TChain("cattree/nom2")
-    chain3 = TChain("cattree/nomJES_up")
-    chain4 = TChain("cattree/nomJES_dw")
-    chain5 = TChain("cattree/nomJER_up")
-    chain6 = TChain("cattree/nomJER_dw")
-    for afile in datasamples[i]['file']:
-      f = TFile.Open(afile)
-      if None == f: continue
-      chain.Add(afile)
-      chain2.Add(afile)
-      chain3.Add(afile)
-      chain4.Add(afile)
-      chain5.Add(afile)
-      chain6.Add(afile)
-    tree = chain
-    tree2 = chain2
-    tree3 = chain3
-    tree4 = chain4
-    tree5 = chain5
-    tree6 = chain6
 
-    Ntot = 1 #htot.GetBinContent(1)
-    dataweight = {"name":"NOM","var":"(1)"}
-    if mceventweight["name"].find("JES_Up")>-1   : dataweight = {"name":"JES_Up","var":"(1)"}
-    if mceventweight["name"].find("JES_Down")>-1 : dataweight = {"name":"JES_Down","var":"(1)"}
-
-    if mceventweight["name"].find("JES")>-1 or mceventweight["name"].find("NOM")>-1:
-      h[datasamples[i]['name']]=h_all_maker(tree2,tree3, tree4, tree5, tree6,datasamples[i],monitors,cuts,dataweight,1,hN_maker)
+  if nom2 in ["cattree/nom2","cattree/nomJES_up","cattree/nomJES_dw"]:
+    for i,mc in enumerate(datasamples):
+      #chain = TChain("cattree/nom")
+      chain2 = TChain(nom2)
+      for afile in datasamples[i]['file']:
+        f = TFile.Open(afile)
+        if None == f: continue
+        #chain.Add(afile)
+        chain2.Add(afile)
+      #tree = chain
+      tree2 = chain2
+    
+      Ntot = 1 #htot.GetBinContent(1)
+      dataweight = {"name":"CEN","var":"(1)"}
+      if mceventweight["name"].find("JES_Up")>-1   : dataweight = {"name":"JES_Up","var":"(1)"}
+      if mceventweight["name"].find("JES_Down")>-1 : dataweight = {"name":"JES_Down","var":"(1)"}
+    
+      if mceventweight["name"].find("JES")>-1 or mceventweight["name"].find("CEN")>-1:
+        h[datasamples[i]['name']]=h_all_maker(tree2,datasamples[i],monitors,cuts,dataweight,1,hN_maker)
     #f.Close()
 
   return h
@@ -188,21 +161,6 @@ def makeoutput(outputname, h):
 #########################################
 #########################################
 #########################################
-def cut_maker(cuts_,ii):
-  cuts  = {}
-  for i,cut in enumerate(cuts_["cut"]):
-    if i==0 :
-      cuts["S%d"%i]=cut
-    else:
-      cuts["S%d"%i]= cuts["S%d"%(i-1)] + " * " + cut
-
-  cuts2  = {}
-  cuts2["S%d"%ii] = cuts["S%d"%ii]
-  #cutsN = {"channel":cuts_["channel"],"cut":cuts2}
-  cutsN = {"channel":cuts_["channel"],"cut":cuts2}
-  if log : print cutsN
-  return cutsN
-
 #########################################
 #########################################
 #########################################
