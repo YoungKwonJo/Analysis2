@@ -7,7 +7,7 @@ monitors = [
   { "name":"Weight",         "unit":"Weight",             "var":"weight",      "xbin_set":[50,-5,5]    },
   { "name":"PuWeight",       "unit":"PuWeight",             "var":"puweight",    "xbin_set":[50,0,10]    },
   { "name":"LepWeight",      "unit":"LepWeight",             "var":"lepweight",   "xbin_set":[50,0,10]    },
-  { "name":"CsvWeight",      "unit":"CSVWeight",             "var":"csvweight",   "xbin_set":[50,0,10]    },
+  { "name":"CsvWeight",      "unit":"CSVWeight",             "var":"csvweights[0]",   "xbin_set":[50,0,10]    },
 
 #]
 #fff=[
