@@ -26,7 +26,7 @@ sysweight=0
 
 
 echo BEGIN `date` python ntuple2hist.py ${SECTION} ${sysweight} -b
-outputpath=root://cms-xrdr.sdfarm.kr:1094///xrd//store/user/youngjo/Cattools/v7-6-1v3/hist20160208 
+outputpath=root://cms-xrdr.sdfarm.kr:1094///xrd//store/user/youngjo/Cattools/v7-6-2v1/hist20160211
 python ntuple2hist.py ${SECTION} ${sysweight} -b 
 xrdcp hist_mon${SECTION}ee.root $outputpath/hist_${sysweight}/hist_mon${SECTION}ee.root
 xrdcp hist_mon${SECTION}mm.root $outputpath/hist_${sysweight}/hist_mon${SECTION}mm.root
