@@ -1,0 +1,30 @@
+#[youngjo@ui10 src]$ python -i plots/sysWeight_cfi.py
+#>>> for i,ii in enumerate(mceventweight):
+#...   print "nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_"+str(ii['name'])+".root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_"+str(i)+"/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log"+str(i)+".txt &"
+#... 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_CEN.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_0/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log0.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_csvweight.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_1/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log1.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_PW_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_2/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log2.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_PW_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_3/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log3.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_JER_NOM.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_4/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log4.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_JER_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_5/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log5.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_JER_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_6/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log6.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_JES_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_7/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log7.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_JES_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_8/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log8.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_LF_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_9/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log9.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_LF_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_10/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log10.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_HF_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_11/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log11.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_HF_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_12/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log12.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_HF_Stats1_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_13/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log13.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_HF_Stats1_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_14/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log14.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_HF_Stats2_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_15/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log15.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_HF_Stats2_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_16/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log16.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_LF_Stats1_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_17/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log17.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_LF_Stats1_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_18/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log18.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_LF_Stats2_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_19/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log19.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_LF_Stats2_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_20/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log20.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_CQ_Err1_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_21/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log21.txt 
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_CQ_Err1_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_22/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log22.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_CQ_Err2_Up.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_23/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log23.txt &
+nohup hadd /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_CQ_Err2_Down.root /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/hist_24/* >& /xrootd/store/user/youngjo/Cattools/v7-6-2v1/hist20160211/log24.txt &
+
