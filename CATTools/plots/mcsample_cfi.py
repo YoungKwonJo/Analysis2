@@ -9,11 +9,11 @@ import os,commands
 import subprocess
 
 def files(path):
-    import socket
-    hostname = socket.gethostname()
-    if hostname.find("ui10")==-1:
-      llll = [""]
-      return llll
+    #import socket
+    #hostname = socket.gethostname()
+    #if hostname.find("ui10")==-1:
+    #  llll = [""]
+    #  return llll
 
     cmd, xrdbase = "xrd cms-xrdr.sdfarm.kr ls ","/xrd"
     size = 0
@@ -61,9 +61,9 @@ def sumWeight(files):
 #loc = "../"
 #loc = "/xrootd/store/user/youngjo/Cattools/v7-4-6v2/"
 loc = "/store/user/youngjo/Cattools/v7-6-2v1/"
-z  ="v1" # bkg
+z  ="v3" # bkg
 zz ="v1" # data
-zzz="v1" # ttbar
+zzz="v3" # ttbar
 
 ttbarMG5 = "TTJets_MG5"
 ttbarAMC = "TTJets_aMC"
@@ -144,6 +144,33 @@ fileList={}
 sumWeights['DYJets']=81241963.0
 sumWeights['DYJets_10to50']=22607337.5977
 sumWeights['DYJets_MG']=15979580.1392
+sumWeights['DYJets_MG_5to50']=0.0
+sumWeights['WJets']=16521037.0153
+sumWeights['TTJets_MG5']=12823209.1143
+sumWeights['TTJets_aMC']=12589035.0
+sumWeights['TTJets_scaleup']=14151457.0
+sumWeights['TTJets_scaledown']=12784367.0
+sumWeights['TT_powheg']=97958681.0
+sumWeights['TT_powheg_scaledown']=9933507.0
+sumWeights['TT_powheg_scaleup']=9920425.0
+sumWeights['SingleTbar_tW']=999470.0
+sumWeights['SingleTop_tW']=1000071.0
+sumWeights['SingleTbar_t']=1630906.0
+sumWeights['SingleTop_t']=3299208.0
+sumWeights['SingleTop_s']=621947.962929
+sumWeights['WW']=988491.589993
+sumWeights['WZ']=1000015.0
+sumWeights['ZZ']=985622.0
+sumWeights['ttH_bb']=3772268.0
+sumWeights['ttH_nonbb']=3946498.0
+sumWeights['ttWJetsToQQ']=429626.0
+sumWeights['ttWJetsToLNu']=129020.0
+sumWeights['ttZToLLNuNu']=0.0
+sumWeights['ttZToQQ']=350131.0
+"""
+sumWeights['DYJets']=81241963.0
+sumWeights['DYJets_10to50']=22607337.5977
+sumWeights['DYJets_MG']=15979580.1392
 sumWeights['DYJets_MG_5to50']=1.0
 sumWeights['WJets']=16521037.0153
 sumWeights['TTJets_MG5']=11936486.0664
@@ -167,6 +194,7 @@ sumWeights['ttWJetsToQQ']=429626.0
 sumWeights['ttWJetsToLNu']=129020.0
 sumWeights['ttZToLLNuNu']=1.0
 sumWeights['ttZToQQ']=350131.0
+"""
 #############
 if len(sumWeights.keys()) is 0 : 
   cx,sumWeights,fileList = getValues(data,True)

@@ -33,13 +33,13 @@ mcweight=mceventweight[kk]
 mon1=[]
 if iijj<len(monitors) :
   mon1 = [monitors[iijj]]
-  #print monitors[ii]
+  print str(mon1)
 
 mon2=[]
 for mon22 in monitors2d.keys():
   if mon22 == ("Mon%d"%iijj) :
     mon2+=monitors2d[ ("Mon%d"%iijj) ]
-    #print "++"+str(mon2)+"++"
+    print "++"+str(mon2)+"++"
 
 
 jsonMM = {
