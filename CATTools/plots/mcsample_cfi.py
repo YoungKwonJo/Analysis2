@@ -9,11 +9,11 @@ import os,commands
 import subprocess
 
 def files(path):
-    #import socket
-    #hostname = socket.gethostname()
-    #if hostname.find("home")>-1:
-    #  llll = [""]
-    #  return llll
+    import socket
+    hostname = socket.gethostname()
+    if hostname.find("ui10")==-1:
+      llll = [""]
+      return llll
 
     cmd, xrdbase = "xrd cms-xrdr.sdfarm.kr ls ","/xrd"
     size = 0
@@ -106,27 +106,7 @@ def GW(sel="1"):
 ttothers = op_(visible)
 #########
 
-#    [ ttbb,     ttb,       ttcc,      ttc,       ttlf,     tt others ]
-ColorLabelSet = {}
-ColorLabelSet["ttbb"] = {"color":"#660000",  "label":"t#bar{t}+b#bar{b}      " }
-ColorLabelSet["ttb"]  = {"color":"#ffcc00",  "label":"t#bar{t}+b        "      }
-ColorLabelSet["ttcc"] = {"color":"#cc6600",  "label":"t#bar{t}+c#bar{c}      " }
-ColorLabelSet["ttlf"] = {"color":"#ff0000",  "label":"t#bar{t}+lf       "      }
-ColorLabelSet["ttot"] = {"color":"#ff6565",  "label":"t#bar{t} others"         }
-ColorLabelSet["ttall"] = {"color":"#ff6565",  "label":"t#bar{t} all"         }
 
-ColorLabelSet["Singlet"] = {"color":"#ff00ff",  "label":"Single t"            } 
-ColorLabelSet["VV"]      = {"color":"#ffffff",  "label":"VV            "      }
-ColorLabelSet["WJets"]   = {"color":"#33cc33",  "label":"WJets      "         }
-ColorLabelSet["ZJets"]   = {"color":"#3366ff",  "label":"DYJets    "          }
-ColorLabelSet["ttV"]     = {"color":"#7676ff",  "label":"t#bar{t}V          " }
-ColorLabelSet["ttH"]     = {"color":"#7676ff",  "label":"t#bar{t}H         "  }
-ColorLabelSet["DATA"]    = {"color":"#000000",  "label":"DATA "               }
-
-
-#     [ Single t,   VV,        WJets,    Z+Jets ,   ttV
-#BCS = ["#ff00ff",   "#ffffff", "#33cc33","#3366ff", "#7676ff" ]
-########
 import json
 
 def loadJson(name):
@@ -152,8 +132,8 @@ def getValues(data,doSumWeight):
         print "sumWeights['"+aa["name"]+"']="+str(sumWeights[aa["name"]])
     elif aa["name"] in ["DoubleEG_Run2015C","DoubleEG_Run2015D","DoubleMuon_Run2015C","DoubleMuon_Run2015D","MuonEG_Run2015C","MuonEG_Run2015D"]:
       fileList[aa["name"]]   = files(loc + aa["name"] + zz)
-  if doSumWeight : return fileList,sumWeights,fileList
-  else           : return fileList,fileList
+  if doSumWeight : return cx,sumWeights,fileList
+  else           : return cx,fileList
 
 
 data = loadJson('dataset.json')
@@ -197,75 +177,75 @@ else :
 
 
 mcsamples=[
-{"name":"MG5ttbb",  "selection": GW(ttbb),       "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttbb"]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
-{"name":"MG5ttb",   "selection": GW(ttb),        "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttb"]   ,"sumWeight": sumWeights["TTJets_MG5"]  },
-{"name":"MG5ttcc",  "selection": GW(ttcc),       "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttcc"]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
-{"name":"MG5ttlf",  "selection": GW(ttlf),       "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttlf"]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
-{"name":"MG5ttot",  "selection": GW(ttothers),   "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5], "ColorLabel": ColorLabelSet["ttot"]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
-                                                                                                                                                                              
-{"name":"AMCttbb",  "selection": GW(ttbb),       "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttbb"]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
-{"name":"AMCttb",   "selection": GW(ttb),        "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttb"]   ,"sumWeight": sumWeights["TTJets_aMC"]  },
-{"name":"AMCttcc",  "selection": GW(ttcc),       "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttcc"]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
-{"name":"AMCttlf",  "selection": GW(ttlf),       "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttlf"]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
-{"name":"AMCttot",  "selection": GW(ttothers),   "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC], "ColorLabel": ColorLabelSet["ttot"]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
+{"name":"MG5ttbb",  "selection": GW(ttbb),       "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
+{"name":"MG5ttb",   "selection": GW(ttb),        "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
+{"name":"MG5ttcc",  "selection": GW(ttcc),       "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
+{"name":"MG5ttlf",  "selection": GW(ttlf),       "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
+{"name":"MG5ttot",  "selection": GW(ttothers),   "file": fileList["TTJets_MG5"], "cx":cx[ttbarMG5]  ,"sumWeight": sumWeights["TTJets_MG5"]  },
+                                                                                                                                         
+{"name":"AMCttbb",  "selection": GW(ttbb),       "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
+{"name":"AMCttb",   "selection": GW(ttb),        "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
+{"name":"AMCttcc",  "selection": GW(ttcc),       "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
+{"name":"AMCttlf",  "selection": GW(ttlf),       "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
+{"name":"AMCttot",  "selection": GW(ttothers),   "file": fileList["TTJets_aMC"], "cx":cx[ttbarAMC]  ,"sumWeight": sumWeights["TTJets_aMC"]  },
 
-{"name":"upPOWAll",   "selection": "(1)",        "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttall"]  ,"sumWeight": sumWeights["TT_powheg_scaleup"]  },
-{"name":"upPOWttbb",  "selection": GW(ttbb),     "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]   ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
-{"name":"upPOWttb",   "selection": GW(ttb),      "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttb"]    ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
-{"name":"upPOWttcc",  "selection": GW(ttcc),     "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttcc"]   ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
-{"name":"upPOWttlf",  "selection": GW(ttlf),     "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttlf"]   ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
-{"name":"upPOWttot",  "selection": GW(ttothers), "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]   ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
+{"name":"upPOWAll",   "selection": "(1)",        "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaleup"]  },
+{"name":"upPOWttbb",  "selection": GW(ttbb),     "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
+{"name":"upPOWttb",   "selection": GW(ttb),      "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
+{"name":"upPOWttcc",  "selection": GW(ttcc),     "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
+{"name":"upPOWttlf",  "selection": GW(ttlf),     "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
+{"name":"upPOWttot",  "selection": GW(ttothers), "file": fileList["TT_powheg_scaleup"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaleup"] },
 
-{"name":"dwPOWAll",   "selection": "(1)",        "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttall"]  ,"sumWeight": sumWeights["TT_powheg_scaledown"]  },
-{"name":"dwPOWttbb",  "selection": GW(ttbb),     "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]   ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
-{"name":"dwPOWttb",   "selection": GW(ttb),      "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttb"]    ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
-{"name":"dwPOWttcc",  "selection": GW(ttcc),     "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttcc"]   ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
-{"name":"dwPOWttlf",  "selection": GW(ttlf),     "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttlf"]   ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
-{"name":"dwPOWttot",  "selection": GW(ttothers), "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]   ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
+{"name":"dwPOWAll",   "selection": "(1)",        "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaledown"]  },
+{"name":"dwPOWttbb",  "selection": GW(ttbb),     "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
+{"name":"dwPOWttb",   "selection": GW(ttb),      "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
+{"name":"dwPOWttcc",  "selection": GW(ttcc),     "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
+{"name":"dwPOWttlf",  "selection": GW(ttlf),     "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
+{"name":"dwPOWttot",  "selection": GW(ttothers), "file": fileList["TT_powheg_scaledown"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg_scaledown"] },
 
-{"name":"sysPOWAll","selection": "(1)",          "file": fileList["TT_powheg"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttall"]  ,"sumWeight": sumWeights["TT_powheg"] },
-{"name":"POWttbb",  "selection": GW(ttbb),       "file": fileList["TT_powheg"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttbb"]   ,"sumWeight": sumWeights["TT_powheg"] },
-{"name":"POWttb",   "selection": GW(ttb),        "file": fileList["TT_powheg"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttb"]    ,"sumWeight": sumWeights["TT_powheg"] },
-{"name":"POWttcc",  "selection": GW(ttcc),       "file": fileList["TT_powheg"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttcc"]   ,"sumWeight": sumWeights["TT_powheg"] },
-{"name":"POWttlf",  "selection": GW(ttlf),       "file": fileList["TT_powheg"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttlf"]   ,"sumWeight": sumWeights["TT_powheg"] },
-{"name":"POWttot",  "selection": GW(ttothers),   "file": fileList["TT_powheg"], "cx":cx[ttbarPOW], "ColorLabel": ColorLabelSet["ttot"]   ,"sumWeight": sumWeights["TT_powheg"] },
+{"name":"sysPOWAll","selection": "(1)",          "file": fileList["TT_powheg"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg"] },
+{"name":"POWttbb",  "selection": GW(ttbb),       "file": fileList["TT_powheg"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg"] },
+{"name":"POWttb",   "selection": GW(ttb),        "file": fileList["TT_powheg"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg"] },
+{"name":"POWttcc",  "selection": GW(ttcc),       "file": fileList["TT_powheg"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg"] },
+{"name":"POWttlf",  "selection": GW(ttlf),       "file": fileList["TT_powheg"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg"] },
+{"name":"POWttot",  "selection": GW(ttothers),   "file": fileList["TT_powheg"], "cx":cx[ttbarPOW]  ,"sumWeight": sumWeights["TT_powheg"] },
 
-{"name":"TTWlNu", "selection": "(1)", "file": fileList["ttWJetsToLNu"],  "cx":cx["ttWJetsToLNu"], "ColorLabel": ColorLabelSet["ttV"]       ,"sumWeight": sumWeights["ttWJetsToLNu"]   },
-{"name":"TTWqq",  "selection": "(1)", "file": fileList["ttWJetsToQQ"],   "cx":cx["ttWJetsToQQ"],  "ColorLabel": ColorLabelSet["ttV"]       ,"sumWeight": sumWeights["ttWJetsToQQ"]    },
-{"name":"TTZll",  "selection": "(1)", "file": fileList["ttZToLLNuNu"],   "cx":cx["ttZToLLNuNu"],  "ColorLabel": ColorLabelSet["ttV"]       ,"sumWeight": sumWeights["ttZToLLNuNu"]    },
-{"name":"TTZqq",  "selection": "(1)", "file": fileList["ttZToQQ"],       "cx":cx["ttZToQQ"],      "ColorLabel": ColorLabelSet["ttV"]       ,"sumWeight": sumWeights["ttZToQQ"]        },
+{"name":"TTWlNu", "selection": "(1)", "file": fileList["ttWJetsToLNu"],  "cx":cx["ttWJetsToLNu"]   ,"sumWeight": sumWeights["ttWJetsToLNu"]   },
+{"name":"TTWqq",  "selection": "(1)", "file": fileList["ttWJetsToQQ"],   "cx":cx["ttWJetsToQQ"]    ,"sumWeight": sumWeights["ttWJetsToQQ"]    },
+{"name":"TTZll",  "selection": "(1)", "file": fileList["ttZToLLNuNu"],   "cx":cx["ttZToLLNuNu"]    ,"sumWeight": sumWeights["ttZToLLNuNu"]    },
+{"name":"TTZqq",  "selection": "(1)", "file": fileList["ttZToQQ"],       "cx":cx["ttZToQQ"]        ,"sumWeight": sumWeights["ttZToQQ"]        },
                                                                                                                                                                                      
-{"name":"STbt",   "selection": "(1)", "file": fileList["SingleTbar_t"],  "cx":cx["SingleTbar_t"],  "ColorLabel": ColorLabelSet["Singlet"]  ,"sumWeight": sumWeights["SingleTbar_t"]   },
-{"name":"STt",    "selection": "(1)", "file": fileList["SingleTop_t"],   "cx":cx["SingleTop_t"],   "ColorLabel": ColorLabelSet["Singlet"]  ,"sumWeight": sumWeights["SingleTop_t"]    },
-{"name":"STbtW",  "selection": "(1)", "file": fileList["SingleTbar_tW"], "cx":cx["SingleTbar_tW"], "ColorLabel": ColorLabelSet["Singlet"]  ,"sumWeight": sumWeights["SingleTbar_tW"]  },
-{"name":"STtW",   "selection": "(1)", "file": fileList["SingleTop_tW"],  "cx":cx["SingleTop_tW"],  "ColorLabel": ColorLabelSet["Singlet"]  ,"sumWeight": sumWeights["SingleTop_tW"]   },
-{"name":"WW",     "selection": "(1)", "file": fileList["WW"],            "cx":cx["WW"],            "ColorLabel": ColorLabelSet["VV"]       ,"sumWeight": sumWeights["WW"]             },
-{"name":"WZ",     "selection": "(1)", "file": fileList["WZ"],            "cx":cx["WZ"],            "ColorLabel": ColorLabelSet["VV"]       ,"sumWeight": sumWeights["WZ"]             },
-{"name":"ZZ",     "selection": "(1)", "file": fileList["ZZ"],            "cx":cx["ZZ"],            "ColorLabel": ColorLabelSet["VV"]       ,"sumWeight": sumWeights["ZZ"]             },
-                                                                                                                                                                                     
-{"name":"WJets",  "selection": "(1)", "file": fileList["WJets"],         "cx":cx["WJets"],         "ColorLabel": ColorLabelSet["WJets"]    ,"sumWeight": sumWeights["WJets"]          },
-                                                                                                                                                                                     
-{"name":"DYJets", "selection": "(1)", "file": fileList["DYJets"],        "cx":cx["DYJets"],        "ColorLabel": ColorLabelSet["ZJets"]    ,"sumWeight": sumWeights["DYJets"]         },
-{"name":"DYJets10", "selection": "(1)","file": fileList["DYJets_10to50"],"cx":cx["DYJets_10to50"], "ColorLabel": ColorLabelSet["ZJets"]    ,"sumWeight": sumWeights["DYJets_10to50"]  },
+{"name":"STbt",   "selection": "(1)", "file": fileList["SingleTbar_t"],  "cx":cx["SingleTbar_t"]    ,"sumWeight": sumWeights["SingleTbar_t"]   },
+{"name":"STt",    "selection": "(1)", "file": fileList["SingleTop_t"],   "cx":cx["SingleTop_t"]     ,"sumWeight": sumWeights["SingleTop_t"]    },
+{"name":"STbtW",  "selection": "(1)", "file": fileList["SingleTbar_tW"], "cx":cx["SingleTbar_tW"]   ,"sumWeight": sumWeights["SingleTbar_tW"]  },
+{"name":"STtW",   "selection": "(1)", "file": fileList["SingleTop_tW"],  "cx":cx["SingleTop_tW"]    ,"sumWeight": sumWeights["SingleTop_tW"]   },
+{"name":"WW",     "selection": "(1)", "file": fileList["WW"],            "cx":cx["WW"]              ,"sumWeight": sumWeights["WW"]             },
+{"name":"WZ",     "selection": "(1)", "file": fileList["WZ"],            "cx":cx["WZ"]              ,"sumWeight": sumWeights["WZ"]             },
+{"name":"ZZ",     "selection": "(1)", "file": fileList["ZZ"],            "cx":cx["ZZ"]              ,"sumWeight": sumWeights["ZZ"]             },
+                                                                                                                                               
+{"name":"WJets",  "selection": "(1)", "file": fileList["WJets"],         "cx":cx["WJets"]           ,"sumWeight": sumWeights["WJets"]          },
+                                                                                                                                               
+{"name":"DYJets", "selection": "(1)", "file": fileList["DYJets"],        "cx":cx["DYJets"]          ,"sumWeight": sumWeights["DYJets"]         },
+{"name":"DYJets10", "selection": "(1)","file": fileList["DYJets_10to50"],"cx":cx["DYJets_10to50"]   ,"sumWeight": sumWeights["DYJets_10to50"]  },
 
-{"name":"ttH2non", "selection": "(1)", "file": fileList["ttH_nonbb"],  "cx":cx["ttH_nonbb"],       "ColorLabel": ColorLabelSet["ttH"],   "isStack":False  ,"sumWeight": sumWeights["ttH_nonbb"] },
-{"name":"ttH2bb",  "selection": "(1)", "file": fileList["ttH_bb"],     "cx":cx["ttH_bb"],          "ColorLabel": ColorLabelSet["ttH"],   "isStack":False  ,"sumWeight": sumWeights["ttH_bb"]    },
+{"name":"ttH2non", "selection": "(1)", "file": fileList["ttH_nonbb"],  "cx":cx["ttH_nonbb"]         ,"sumWeight": sumWeights["ttH_nonbb"] },
+{"name":"ttH2bb",  "selection": "(1)", "file": fileList["ttH_bb"],     "cx":cx["ttH_bb"]            ,"sumWeight": sumWeights["ttH_bb"]    },
 ]
 
 mcsamples2=[
-{"name":"DYJets", "selection": "(1)", "file": fileList["DYJets"],        "cx":cx["DYJets"],        "ColorLabel": ColorLabelSet["ZJets"]    ,"sumWeight": sumWeights["DYJets"]           },
-{"name":"DYJets10", "selection": "(1)", "file": fileList["DYJets_10to50"],"cx":cx["DYJets_10to50"], "ColorLabel": ColorLabelSet["ZJets"]   ,"sumWeight": sumWeights["DYJets_10to50"]    },
+{"name":"DYJets", "selection": "(1)", "file": fileList["DYJets"],         "cx":cx["DYJets"]         ,"sumWeight": sumWeights["DYJets"]           },
+{"name":"DYJets10", "selection": "(1)", "file": fileList["DYJets_10to50"],"cx":cx["DYJets_10to50"]  ,"sumWeight": sumWeights["DYJets_10to50"]    },
 ]
 datasamples=[
 
-{"name":"MuMu1", "selection": "(1)", "file": fileList["DoubleMuon_Run2015C"],  "ColorLabel": ColorLabelSet["DATA"] },
-{"name":"MuMu2", "selection": "(1)", "file": fileList["DoubleMuon_Run2015D"],  "ColorLabel": ColorLabelSet["DATA"] },
+{"name":"MuMu1", "selection": "(1)", "file": fileList["DoubleMuon_Run2015C"]   },
+{"name":"MuMu2", "selection": "(1)", "file": fileList["DoubleMuon_Run2015D"]   },
 
-{"name":"ElEl1", "selection": "(1)", "file": fileList["DoubleEG_Run2015C"],    "ColorLabel": ColorLabelSet["DATA"] },
-{"name":"ElEl2", "selection": "(1)", "file": fileList["DoubleEG_Run2015D"],    "ColorLabel": ColorLabelSet["DATA"] },
+{"name":"ElEl1", "selection": "(1)", "file": fileList["DoubleEG_Run2015C"]     },
+{"name":"ElEl2", "selection": "(1)", "file": fileList["DoubleEG_Run2015D"]     },
 
-{"name":"MuEl1", "selection": "(1)", "file": fileList["MuonEG_Run2015C"],      "ColorLabel": ColorLabelSet["DATA"] },
-{"name":"MuEl2", "selection": "(1)", "file": fileList["MuonEG_Run2015D"],      "ColorLabel": ColorLabelSet["DATA"] },
+{"name":"MuEl1", "selection": "(1)", "file": fileList["MuonEG_Run2015C"]       },
+{"name":"MuEl2", "selection": "(1)", "file": fileList["MuonEG_Run2015D"]       },
 
 ]
 
