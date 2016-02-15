@@ -10,4 +10,4 @@ when_to_transfer_output = ON_EXIT
 output = log/job_$(Process).log
 error = log/job_$(Process).err
 transfer_input_files = ../job.tgz
-queue 264
+queue 220
