@@ -81,9 +81,9 @@ def aCavas(mon,step,decay,isLogy,Weight):
 
   if isLogy : 
     DATA.SetMinimum( 0.04 )
-    DATA.SetMaximum( 100.0*DATA.GetMaximum() )
+    DATA.SetMaximum( 100.0*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
   else :
-    DATA.SetMaximum( 2.4*DATA.GetMaximum() )
+    DATA.SetMaximum( 2.4*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
 
   DATA.Draw()
   hs.Draw("same,hist")
@@ -111,12 +111,13 @@ def main():
 
   from monitors_cfi import monitors,monitors2d
   #mon = monitors[34]
-  mon = monitors[5]
-  aaa=aCavas(mon,"S4","LL",True,"csvweight")
-  bbb=aCavas(mon,"S5","LL",True,"csvweight")
-  ccc=aCavas(mon,"S6","LL",True,"csvweight")
+  mon = monitors[11]
+  aaa = {}
+  aaa[0]=aCavas(mon,"S4","LL",True,"csvweight")
+  aaa[1]=aCavas(mon,"S5","LL",True,"csvweight")
+  aaa[2]=aCavas(mon,"S6","LL",True,"csvweight")
 
-  return aaa,bbb,ccc
+  return aaa
 
 
 if __name__ == "__main__":

@@ -9,11 +9,11 @@ import os,commands
 import subprocess
 
 def files(path):
-    #import socket
-    #hostname = socket.gethostname()
-    #if hostname.find("ui10")==-1:
-    #  llll = [""]
-    #  return llll
+    import socket
+    hostname = socket.gethostname()
+    if hostname.find("sdf")==-1:
+      llll = [""]
+      return llll
 
     cmd, xrdbase = "xrd cms-xrdr.sdfarm.kr ls ","/xrd"
     size = 0

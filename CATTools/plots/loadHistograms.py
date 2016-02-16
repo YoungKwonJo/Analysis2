@@ -9,7 +9,7 @@ import copy
 
 
 lumi = 2260.0
-loc = "/Users/youngkwonjo/Documents/CMS/Analysis/20160212_762/histogram_20160211/"
+loc = "/Users/youngkwonjo/Documents/CMS/Analysis/20160212_762/histogram_20160215/"
 
 def loadHistogramMC(mc, mon, Step, Weight,DYsf):
   HN = mon["name"]
