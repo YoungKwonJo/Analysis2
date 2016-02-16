@@ -119,7 +119,7 @@ def StackHist(channel, histograms2, plotSet):
         h[aa]=copy.deepcopy(histograms2[aa]["h1"][bb])
       else :
         h[aa].Add(copy.deepcopy(histograms2[aa]["h1"][bb]))
-    h[aa].SetFillColor( TColor.GetColor(histograms2[aa]["color"]) )
+    h[aa].SetFillColor( TColor.GetColor(histograms2[aa]["FillColor"]) )
     hs.Add(copy.deepcopy(h[aa]))
   for aa in plotSet["bkg"]:
     h={}
@@ -128,7 +128,7 @@ def StackHist(channel, histograms2, plotSet):
         h[aa]=copy.deepcopy(histograms2[aa]["h1"][bb])
       else :
         h[aa].Add(copy.deepcopy(histograms2[aa]["h1"][bb]))
-    h[aa].SetFillColor( TColor.GetColor(histograms2[aa]["color"]) )
+    h[aa].SetFillColor( TColor.GetColor(histograms2[aa]["FillColor"]) )
     hs.Add(copy.deepcopy(h[aa]))
 
   return hs
@@ -145,14 +145,19 @@ def AddHist(channel,histograms):
       h["aa"]=copy.deepcopy(histograms["h1"][bb])
     else :
       h["aa"].Add(copy.deepcopy(histograms["h1"][bb]))
-  if "color"       in histograms.keys(): h["aa"].SetLineColor( TColor.GetColor(histograms["color"])  )
-  if "LineStyle"   in histograms.keys(): h["aa"].SetLineStyle(  histograms["LineStyle"]   )
-  if "MarkerStyle" in histograms.keys(): h["aa"].SetMarkerStyle(histograms["MarkerStyle"] )
-  if "MarkerSize"  in histograms.keys(): h["aa"].SetMarkerSize( histograms["MarkerSize"]  )
-  if "FillColor"   in histograms.keys(): h["aa"].SetFillColor(  TColor.GetColor(histograms["FillColor"]) )
-
   return h["aa"]
 
+def StyleUp(histograms):
+  for aa in histograms.keys():
+    for bb in [0,1,2]:
+      cc=histograms[aa]["h1"]["hMM"]
+      if bb==1 : cc=histograms[aa]["h1"]["hEE"]
+      if bb==2 : cc=histograms[aa]["h1"]["hME"] 
+      if "Linecolor"   in histograms[aa].keys(): cc.SetLineColor( TColor.GetColor(histograms[aa]["LineColor"])  )
+      if "LineStyle"   in histograms[aa].keys(): cc.SetLineStyle(  histograms[aa]["LineStyle"]   )
+      if "MarkerStyle" in histograms[aa].keys(): cc.SetMarkerStyle(histograms[aa]["MarkerStyle"] )
+      if "MarkerSize"  in histograms[aa].keys(): cc.SetMarkerSize( histograms[aa]["MarkerSize"]  )
+      if "FillColor"   in histograms[aa].keys(): cc.SetFillColor(  TColor.GetColor(histograms[aa]["FillColor"]) )
 
 ######################################
 ######################################
@@ -161,6 +166,7 @@ def aCavas(mon,step,decay,isLogy,Weight):
   from makeMCHistSet import makeMCHistSet,load1stHistograms
   histograms=load1stHistograms(mon,step,Weight)
   histograms2,plotSet=makeMCHistSet(histograms)
+  StyleUp(histograms2)
 
   #decay = "LL"
   #isLogy = False
@@ -172,14 +178,7 @@ def aCavas(mon,step,decay,isLogy,Weight):
   pad2 = myPad2(canvasname+"pad2")
   pad1.Draw()
   pad1.cd()
-  legx1 = 0.8
-  wid=0.12
-  legx2 = 0.67
-  leg  = make_legend(legx1,0.64, legx1+wid,0.88)
-  leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
-  leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
   if isLogy : pad1.SetLogy()
-
   ########################
   ########################
   ########################
@@ -189,12 +188,14 @@ def aCavas(mon,step,decay,isLogy,Weight):
   MCtot3 =  AddHist(decay,histograms2["MCtot3"])
   hs = StackHist(decay,histograms2,plotSet)
 
+  ########################
   if isLogy : 
     DATA.SetMinimum( 0.04 )
     DATA.SetMaximum( 100.0*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
   else :
     DATA.SetMaximum( 2.4*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
 
+  ########################
   DATA.Draw()
   hs.Draw("same,hist")
   MCtot1.Draw("same")
@@ -210,6 +211,27 @@ def aCavas(mon,step,decay,isLogy,Weight):
   pt.Draw()
   pt2.Draw()
   pt3.Draw()
+  ############
+  legx1 = 0.8
+  wid=0.12
+  legx2 = 0.67
+  leg  = make_legend(legx1,0.64, legx1+wid,0.88)
+  leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
+  leg3 = make_legend(legx1,0.56, legx1+wid,0.63)
+  #leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
+  for aa in plotSet["ttbars"]:
+    leg.AddEntry(histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "f")
+  leg.AddEntry(histograms2["DATA"]["h1"]["hMM"], histograms2["DATA"]["label"], "p")
+  for aa in plotSet["bkg"]:
+    leg2.AddEntry( histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "f")
+
+  for aa in plotSet["others"]:
+    leg3.AddEntry(histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "l")
+  #leg3.AddEntry(histograms2["ttH"]["h1"]["hMM"], histograms2["ttH"]["label"], "l")
+  ###############
+  leg.Draw()
+  leg2.Draw()
+  leg3.Draw()
   pad1.Modified()
   c1.cd()
   pad2.Draw()
@@ -222,7 +244,7 @@ def aCavas(mon,step,decay,isLogy,Weight):
   c1.Modified()
   c1.cd()
 
-  return c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3
+  return c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3,leg,leg2,leg3
 
 def main():
   gROOT.SetStyle("Plain")
