@@ -8,8 +8,9 @@ from array import array
 import copy
 
 
-lumi = 2170.
-loc = "/Users/youngkwonjo/Documents/CMS/Analysis/20160204_ttbb_roofit/histogram/"
+lumi = 2260.
+#loc = "/Users/youngkwonjo/Documents/CMS/Analysis/20160204_ttbb_roofit/histogram/"
+loc = "/Users/youngkwonjo/Documents/CMS/Analysis/20160212_762/histogram_20160215/"
 
 def make_legend(xmin,ymin,xmax,ymax):
   #leg = TLegend(0.65,0.7, 0.89,0.89)
@@ -189,14 +190,14 @@ def loadHistogram(arg1, arg2, Step, Weight):
 
 
   print str(histograms.keys())
-
+  print "closingg... f "
   f.Close()
   #for datesmaples
   WeightData = Weight1.replace("csvweight_","")
   WeightData2 = Weight1
   if not Weight in ["JES_Up","JES_Down"]:
-    WeightData="NOM"
-    WeightData2="NOM"
+    WeightData="CEN"
+    WeightData2="CEN"
   f2 = TFile.Open(loc+"/hist_"+WeightData2+".root")
   for i in range(1):
     name_ = "DATA"
@@ -213,6 +214,7 @@ def loadHistogram(arg1, arg2, Step, Weight):
       h1.Add(h2)
       h1.Add(h3)
     histograms2[name_]={"h1":copy.deepcopy(h1),"color":kBlack,"exp":h1.Integral()}
+  f2.Close()
   
   signals1= [GEN+'ttbb', GEN+'ttb']
   signals2= [GEN+'ttcc', GEN+'ttlf']#, GEN+'ttot']
@@ -265,7 +267,6 @@ def loadHistogram(arg1, arg2, Step, Weight):
     #print "FINAL "+hh
   histograms2["ddbkg"]={"h1":copy.deepcopy(ddbkghist),"color":kGray,"exp":ddbkghist.Integral()}
 
-  f2.Close()
   return histograms2, freeTTB, freeTTCC,GEN
 
 ##############################################
@@ -1077,14 +1078,13 @@ arg3="0"
 if len(sys.argv) > 3:
   arg3 = sys.argv[3]
 
-#StepSys = ["csvweight_JES_Up","csvweight_JES_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down"]
 
-StepSys = ["csvweight_JES_Up","csvweight_JES_Down","JER_Up","JER_Down","csvweight_LF_Up", "csvweight_LF_Down", "csvweight_HF_Up", "csvweight_HF_Down", "csvweight_HF_Stats1_Up","csvweight_HF_Stats1_Down","csvweight_HF_Stats2_Up","csvweight_HF_Stats2_Down","csvweight_LF_Stats1_Up","csvweight_LF_Stats1_Down","csvweight_LF_Stats2_Up","csvweight_LF_Stats2_Down","csvweight_Charm_Err1_Up", "csvweight_Charm_Err1_Down", "csvweight_Charm_Err2_Up", "csvweight_Charm_Err2_Down","PuWeightUp","PUWeightDN"]
-StepSys2 = {"JES":["csvweight_JES","JER"],"LF":["csvweight_LF","csvweight_HF_Stats1","csvweight_HF_Stats2"],"HF":["csvweight_HF","csvweight_LF_Stats1","csvweight_LF_Stats2"],"Charm":["csvweight_Charm_Err1","csvweight_Charm_Err2"],"pileup":["puweight"]}
+StepSys = ["JES_Up","JES_Down","JER_NOM","JER_Up","JER_Down","LF_Up", "LF_Down", "HF_Up", "HF_Down", "HF_Stats1_Up","HF_Stats1_Down","HF_Stats2_Up","HF_Stats2_Down","LF_Stats1_Up","LF_Stats1_Down","LF_Stats2_Up","LF_Stats2_Down","CQ_Err1_Up", "CQ_Err1_Down", "CQ_Err2_Up", "CQ_Err2_Down","PW_Up","PW_Down"]
+StepSys2 = {"JES":["JES","JER"],"LF":["LF","HF_Stats1","HF_Stats2"],"HF":["HF","LF_Stats1","LF_Stats2"],"CQ":["CQ_Err1","CQ_Err2"],"pileup":["PW"]}
 
 from sysWeight_cfi import mceventweight
 sysWeights =  [i["name"] for i in mceventweight]
-sysWeights.remove("woLep")
+#sysWeights.remove("woLep")
 sysWeights.append("Scale_Up")
 sysWeights.append("Scale_Down")
 
@@ -1150,11 +1150,6 @@ elif int(arg3)==2:
         upk=SystematicUnck[sys3+"_Up"] 
         dw=SystematicUnc[sys3+"_Down"] 
         dwk=SystematicUnck[sys3+"_Down"] 
-      elif sys3.find("puweight")>-1:
-        up=SystematicUnc["PuWeightUp"] 
-        upk=SystematicUnck["PuWeightUp"] 
-        dw=SystematicUnc["PUWeightDN"] 
-        dwk=SystematicUnck["PUWeightDN"] 
       else:
         up=SystematicUnc[sys3+"_Up"] 
         upk=SystematicUnck[sys3+"_Up"] 
