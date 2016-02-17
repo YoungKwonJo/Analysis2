@@ -23,14 +23,17 @@ def addLegendLumi():#lumi):
   #lumi2 = str(round(lumi/100)/10)
   title  = TLatex(-20.,50.,"CMS #sqrt{s} = 13TeV, L = 2.26 fb^{-1}")
   title.SetNDC(),        title.SetTextAlign(12),   title.SetX(0.20),      title.SetY(0.83)
-  title.SetTextFont(42), title.SetTextSize(0.05),  title.SetTextSizePixels(24)
+  title.SetTextFont(42)#, title.SetTextSize(0.05),  title.SetTextSizePixels(24)
+  #title.SetTextFont(42), title.SetTextSize(0.1),  title.SetTextSizePixels(24)
+  title.Draw()
   return title
 
 def addLegendCMS():
   #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
   tex2 = TLatex(-20.,50.,"Preliminary")
   tex2.SetNDC(),          tex2.SetTextAlign(12),  tex2.SetX(0.25),        tex2.SetY(0.93)
-  tex2.SetTextColor(2),   tex2.SetTextFont(42),   tex2.SetTextSize(0.05), tex2.SetTextSizePixels(24)
+  tex2.SetTextColor(2),   tex2.SetTextFont(42) #,   tex2.SetTextSize(0.2), tex2.SetTextSizePixels(24)
+  #tex2.SetTextColor(2),   tex2.SetTextFont(42),   tex2.SetTextSize(0.05), tex2.SetTextSizePixels(24)
   return tex2
 
 def addDecayMode(ll):
@@ -40,7 +43,8 @@ def addDecayMode(ll):
   if ll.find("EE")>-1 : ll2="e^{#mp}e^{#pm} channel"
   chtitle = TLatex(-20.,50.,ll2)
   chtitle.SetNDC(),         chtitle.SetTextAlign(12),   chtitle.SetX(0.20),  chtitle.SetY(0.75)
-  chtitle.SetTextFont(42),  chtitle.SetTextSize(0.05),  chtitle.SetTextSizePixels(24)
+  chtitle.SetTextFont(42) #,  chtitle.SetTextSize(0.05),  chtitle.SetTextSizePixels(24)
+  #chtitle.SetTextFont(42),  chtitle.SetTextSize(0.05),  chtitle.SetTextSizePixels(24)
 
   return chtitle
 
@@ -72,6 +76,28 @@ def StyleUp(histograms):
       if "MarkerStyle" in histograms[aa].keys(): cc.SetMarkerStyle(histograms[aa]["MarkerStyle"] )
       if "MarkerSize"  in histograms[aa].keys(): cc.SetMarkerSize( histograms[aa]["MarkerSize"]  )
       if "FillColor"   in histograms[aa].keys(): cc.SetFillColor(  TColor.GetColor(histograms[aa]["FillColor"]) )
+def copyStyleUp(hist, hist2):
+  hist.SetLineColor(   hist2.GetLineColor()  )
+  hist.SetLineStyle(   hist2.GetLineStyle()  )
+  hist.SetFillStyle(   hist2.GetFillStyle()  )
+  hist.SetMarkerStyle( hist2.GetMarkerStyle())
+  hist.SetMarkerSize(  hist2.GetMarkerSize() )
+  hist.SetFillColor(   hist2.GetFillColor()  )
+
+def myDataHistStyleUp(hdata):
+  hdata.GetYaxis().SetTitle("Events")
+  hdata.GetYaxis().SetTitleOffset(1.2)
+  hdata.GetYaxis().SetTitleSize(0.07)
+  hdata.GetYaxis().SetLabelSize(0.055)
+  hdata.GetYaxis().SetNdivisions(607)
+  #hdata.GetYaxis().SetLabelSize(0.05)
+  #hYaxis = hdata.GetYaxis()
+  #hYaxis.SetMaxDigits(3)
+  hdata.GetXaxis().SetLabelSize(0.0)
+  #hdata.GetXaxis().SetTitle("")
+
+  hdata.SetMarkerStyle(20)
+  hdata.SetMarkerSize(0.7)
 
 def myHist2TGraphError(hist1):
   xx,xxer,yy,yyer=[],[],[],[]
@@ -87,6 +113,45 @@ def myHist2TGraphError(hist1):
   gr.SetLineColor( hist1.GetFillColor() )
 
   return gr
+
+def styleBottomUp(hdata):
+  hdata.SetMarkerStyle(20)
+  hdata.SetMarkerSize(0.5)
+  hdata.SetMarkerColor(1)
+  hdata.SetLineColor(1)
+  hdata.SetLineWidth(1)
+  hdata.SetMaximum(2)
+  hdata.SetMinimum(0)
+  hdata.SetTitle("")
+  
+  hdata.GetYaxis().SetTitle("Obs/Exp")
+  hdata.GetYaxis().CenterTitle()
+  hdata.GetYaxis().SetTitleOffset(0.45)
+  hdata.GetYaxis().SetTitleSize(0.16)
+  hdata.GetYaxis().SetLabelSize(0.15)
+  hdata.GetYaxis().SetNdivisions(402)
+  hdata.GetXaxis().SetNdivisions(509)
+  hdata.GetXaxis().SetTitleOffset(1.1)
+  hdata.GetXaxis().SetLabelSize(0.20)
+  hdata.GetXaxis().SetTitleSize(0.16)
+  
+  hdata.SetMinimum(0.6)
+  hdata.SetMaximum(1.4)
+
+def myRatioSyst(hdata):
+  RatioSyst = hdata.Clone("ratioSyst")
+
+  for b_r in range(1,RatioSyst.GetNbinsX()+1):
+    RatioSyst.SetBinContent(b_r,1.0)
+
+  thegraphRatioSyst = TGraphErrors(RatioSyst)
+  thegraphRatioSyst.SetFillStyle( 1001 )
+  thegraphRatioSyst.SetLineColor( hdata.GetLineColor() )
+  thegraphRatioSyst.SetFillColor( TColor.GetColor("#cccccc") )
+  thegraphRatioSyst.SetName("thegraphRatioSyst")
+
+  return thegraphRatioSyst
+
 
 
 ##############################
@@ -160,30 +225,35 @@ def aCanvas(mon,step,decay,isLogy,Weight):
   MCtot2 =  AddHist(decay,histograms2["MCtot2"])
   MCtot3 =  AddHist(decay,histograms2["MCtot3"])
   hs = StackHist(decay,histograms2,plotSet)
-
-
+  
   ####################################
   if isLogy : 
-    DATA.SetMinimum( 0.04 )
     scale = MCtot1.GetMaximum()
-    maxY=0.
+    maxY,minY=0., 1.
     for i in range(int(DATA.GetNbinsX()*0.7)+1, DATA.GetNbinsX()+2):
        if maxY<DATA.GetBinContent(i): maxY=DATA.GetBinContent(i)
+       if DATA.GetBinContent(i)>0 and minY>DATA.GetBinContent(i): minY=DATA.GetBinContent(i)
+
     DATA.SetMaximum(maxY*10000)
     if maxY*10000 < scale*140 : DATA.SetMaximum(scale*140)
+    if minY>1       :  DATA.SetMinimum( 4.0 )
+    elif minY>0.4   :  DATA.SetMinimum( 0.4 )
+    elif minY>0.04  :  DATA.SetMinimum( 0.04 )
+    elif minY<0.04  :  DATA.SetMinimum( 0.004 )
   else :
     DATA.SetMaximum( 2.2*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
 
   ##################################
+  myDataHistStyleUp(DATA)
+  DATA.GetYaxis().SetTitle("Events")
+  DATA.GetXaxis().SetTitle("")
   DATA.Draw(), hs.Draw("same,hist"), MCtot1gr.Draw("e2same"), MCtot2.Draw("same"), MCtot3.Draw("same")
   DATA.Draw("same")
 
   ########################
   ########################
   pt,pt2,pt3 = addLegendLumi(),addLegendCMS(),addDecayMode(decay)
-  pt.Draw()
-  pt2.Draw()
-  pt3.Draw()
+  pt.Draw(),  pt2.Draw(),  pt3.Draw()
   ########################
   ########################
   legx1 = 0.8
@@ -207,12 +277,26 @@ def aCanvas(mon,step,decay,isLogy,Weight):
   pad1.Modified()
   c1.cd(),  pad2.Draw(),  pad2.cd()
   ########################
+  ########################
+  ratio3,ratio2,ratio1 = DATA.Clone("AMC"),DATA.Clone("MG5"),DATA.Clone("POW")
+  ratio1.Divide(MCtot1),  copyStyleUp(ratio1, MCtot1) 
+  ratio2.Divide(MCtot2),  copyStyleUp(ratio2, MCtot2) 
+  ratio3.Divide(MCtot3),  copyStyleUp(ratio3, MCtot3) 
+  styleBottomUp(ratio1)
+  ratio1.GetXaxis().SetTitle(mon['unit'])
+  ratio1.Draw()
+  ratioSyst=myRatioSyst(ratio1)
+  ratioSyst.Draw("e2")
+  ratio1.Draw("e1SAME")
+  ratio2.Draw("histSAME")
+  ratio3.Draw("histSAME")
 
+  ########################
   ########################
   pad2.Modified()
   c1.cd(), c1.Modified(), c1.cd()
 
-  return c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3,leg,leg2,leg3
+  return c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3,leg,leg2,leg3,ratio1,ratio2,ratio3,ratioSyst
 
 ##################################
 ##################################
@@ -227,22 +311,20 @@ def aCanvas(mon,step,decay,isLogy,Weight):
 ##################################
 def main():
   gROOT.SetStyle("Plain")
-  gStyle.SetOptFit(1000)
-  gStyle.SetOptStat("emruo")
+  gStyle.SetOptFit(1000),    gStyle.SetOptStat("emruo")
   gStyle.SetOptStat(kFALSE)
-  gStyle.SetPadTickY(1)
-  gStyle.SetPadTickX(1)
+  gStyle.SetPadTickY(1),     gStyle.SetPadTickX(1)
   
   gROOT.ProcessLine(".L tdrStyle.C")
   setTDRStyle()
 
   from monitors_cfi import monitors,monitors2d
-  #mon = monitors[34]
-  mon = monitors[11]
+  mon = monitors[34]
+  #mon = monitors[11]
   aaa = {}
-  aaa[0]=aCanvas(mon,"S4","LL",True,"csvweight")
-  aaa[1]=aCanvas(mon,"S5","LL",True,"csvweight")
-  aaa[2]=aCanvas(mon,"S6","LL",True,"csvweight")
+  #aaa[0]=aCanvas(mon,"S4","LL",True,"csvweight")
+  #aaa[1]=aCanvas(mon,"S5","LL",True,"csvweight")
+  aaa[2]=aCanvas(mon,"S6","LL",True,"CEN")
 
   return aaa
 
