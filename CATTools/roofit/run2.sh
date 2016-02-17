@@ -1,1 +1,1 @@
-python roofitCSV.py 0 1 2 -b | grep FINAL 
+python roofitCSV.py 0 1 2 -b | grep FINAL2 
