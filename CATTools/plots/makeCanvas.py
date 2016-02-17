@@ -211,7 +211,7 @@ def aCanvas(mon,step,decay,isLogy,Weight):
   histograms2,plotSet=makeMCHistSet(histograms)
   StyleUp(histograms2)
 
-  canvasname=mon["name"]+step
+  canvasname=mon["name"]+step+decay
   c1,pad1,pad2 = myCanvas(canvasname), myPad1(canvasname+"pad1"), myPad2(canvasname+"pad2")
   c1.Divide(1,2)
   pad1.Draw(), pad1.cd()
@@ -319,12 +319,17 @@ def main():
   setTDRStyle()
 
   from monitors_cfi import monitors,monitors2d
-  mon = monitors[34]
+  mon = monitors[11]
+  #mon = monitors[34]
   #mon = monitors[11]
   aaa = {}
   #aaa[0]=aCanvas(mon,"S4","LL",True,"csvweight")
   #aaa[1]=aCanvas(mon,"S5","LL",True,"csvweight")
-  aaa[2]=aCanvas(mon,"S6","LL",True,"CEN")
+  aaa[2]=aCanvas(mon,"S4","LL",True,"csvweight")
+  aaa[3]=aCanvas(mon,"S4","MM",True,"csvweight")
+  aaa[4]=aCanvas(mon,"S4","EE",True,"csvweight")
+  aaa[5]=aCanvas(mon,"S4","ME",True,"csvweight")
+  #aaa[2]=aCanvas(mon,"S6","LL",True,"CEN")
 
   return aaa
 

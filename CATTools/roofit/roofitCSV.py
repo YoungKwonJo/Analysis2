@@ -890,8 +890,8 @@ def resultPrint(result, genInfo):
 
   print "FINAL2: ---------------------"
 
-  print "FINAL2: $R_{Full}$ & "+roundStrP(genInfo["Rfull"],4)+" \\\\ \\hline "
-  print "FINAL2: $R_{vis}$ & " +roundStrP(genInfo["Rvis"],4)+" \\\\ \\hline \\hline "
+  print "FINAL2: R full : "+roundStrP(genInfo["Rfull"],4)+"  "
+  print "FINAL2: R_vis : " +roundStrP(genInfo["Rvis"],4)+"  "
 
   print "FINAL2: Acceptance ttjj : "+roundStrP(ttjjAcp,4)+"  "
   print "FINAL2: Acceptance ttbb : "+roundStrP(ttbbAcp,4)+"  "
@@ -922,6 +922,11 @@ def resultPrint(result, genInfo):
 ################
 ################
 ################
+def quardsum(aaa):
+  bbb=0.0
+  for i in aaa:
+    bbb+= i*i
+  return sqrt(bbb)
 ################
 ################
 ################
@@ -933,15 +938,68 @@ def resultPrint(result, genInfo):
 ################
 ################
 #POWHEG
-ttjjRatioTTPOW=(121044.0/19757190.0)
+#ttjjRatioTTPOW=(121044.0/19757190.0)
 
+ttbarall = 97789736.0
+"""
+ttbbF = 509785.0
+ttbjF = 1884100.0
+ttccF = 7294102.0
+ttlfF = 40047953.0
+ttjjF = ttbbF+ttbjF+ttccF+ttlfF
+ttjjRatioTTPOW = (ttjjF/ttbarall)
+"""
+
+"""
+ttbbF = 510654.0
+ttbjF = 1567880.0
+ttccF = 5149457.0
+ttlfF = 27020796.0
+ttjjF = ttbbF+ttbjF+ttccF+ttlfF
+ttjjRatioTTPOW = (ttjjF/ttbarall)
+"""
+#m1
+ttbbF = 43181.0
+ttbjF = 160433.0
+ttccF = 91034.0
+ttlfF = 3637828.0
+ttjjF = ttbbF+ttbjF+ttccF+ttlfF
+ttjjRatioTTPOW = (ttjjF/ttbarall)
+
+#0
+"""
+ttbbF = 25720.0
+ttbjF = 89127.0
+ttccF = 52904.0
+ttlfF = 1776525.0
+ttjjF = ttbbF+ttbjF+ttccF+ttlfF
+ttjjRatioTTPOW = (ttjjF/ttbarall)
+"""
+
+ttbbVll = 8185.0
+ttbjVll = 31086.0
+ttccVll = 15352.0
+ttlfVll = 545976.0
+ttjjVll = ttbbVll+ttbjVll+ttccVll+ttlfVll
+
+ttbbS6 = 2243.0
+ttjjS6 = 71471.0
+
+ttjjAcceptancePOW = (ttjjVll/ttjjF)
+ttbbAcceptancePOW = (ttbbVll/ttbbF)
+ttjjEffPOW = ttjjS6 / ttjjVll
+ttbbEffPOW = ttbbS6 / ttbbVll
+RfullPOW = ttbbF/ttjjF
+RvisPOW =  ttbbVll/ttjjVll
+
+"""
 ttjjAcceptancePOW=((5270.0+ 20017.0+ 9858.0+ 350490.0)/(16560.0+ 55874.0+ 33288.0+ 1101990.0)) # (121044.0/766823.0)
 ttbbAcceptancePOW=(5270.0/16560.0) # (1609.0/8700.0)
 ttjjEffPOW=(46043.0/385635.0)##(11855.0/121044.0)
 ttbbEffPOW=(1465.0/5270.0) #(400.0/1609.0)
-
 RfullPOW = (16560.0)/(16560.0+ 55874.0+ 33288.0+ 1101990.0)#(8700.0/766823.0)
 RvisPOW  = (5270.0)/(5270.0+ 20017.0+ 9858.0+ 350490.0) #(1609.0/121044.0)
+"""
 
 #aMC@NLO
 #ttjjRatioTTAMC=(98110.0/14188545.0)
@@ -953,16 +1011,40 @@ RvisPOW  = (5270.0)/(5270.0+ 20017.0+ 9858.0+ 350490.0) #(1609.0/121044.0)
 #RvisAMC  = ( 1279.0/98110.0 )
 
 #MG5
-ttjjRatioTTMG5=(81283.0/11344206.0)
-ttjjAcceptanceMG5=(81283.0/496640.0)
-ttbbAcceptanceMG5=(1068.0/5520.0)
-#ttjjAcceptanceMG5= (5270.+ 20017.+ 9858.+ 350490.)/(55874.+ 16560.+ 33288.+ 1101990.)
-#ttbbAcceptanceMG5=(5270./16560.)
+MG5ttbarall = 10215131.0
+MG5ttbbF = 240483.0
+MG5ttbjF = 888185.0
+MG5ttccF = 801364.0
+MG5ttlfF = 3949310.0
+MG5ttjjF = MG5ttbbF+MG5ttbjF+MG5ttccF+MG5ttlfF
+MG5ttjjRatioTT = (MG5ttjjF/MG5ttbarall)
 
-ttjjEffMG5=(8425.0/81283.0)
-ttbbEffMG5=(280.0/1068.0)
-RfullMG5 = (5520.0 /496640.0 )
-RvisMG5  = (1068.0 /81283.0 )
+MG5ttbbVll = 948.0
+MG5ttbjVll = 3759.0
+MG5ttccVll = 1883.0
+MG5ttlfVll = 66360.0
+MG5ttjjVll = MG5ttbbVll+MG5ttbjVll+MG5ttccVll+MG5ttlfVll
+
+MG5ttbbS6 = 261.0
+MG5ttjjS6 = 9008.0
+
+ttjjAcceptanceMG5= (MG5ttjjVll/MG5ttjjF)
+ttbbAcceptanceMG5= (MG5ttbbVll/MG5ttbbF)
+ttjjEffMG5 = (MG5ttjjS6/MG5ttjjVll)
+ttbbEffMG5 = (MG5ttbbS6/MG5ttbbVll)
+RfullMG5   = (MG5ttbbF/MG5ttjjF)
+RvisMG5    = (MG5ttbbVll/MG5ttjjVll)
+
+#ttjjRatioTTMG5=(81283.0/11344206.0)
+#ttjjAcceptanceMG5=(81283.0/496640.0)
+#ttbbAcceptanceMG5=(1068.0/5520.0)
+##ttjjAcceptanceMG5= (5270.+ 20017.+ 9858.+ 350490.)/(55874.+ 16560.+ 33288.+ 1101990.)
+##ttbbAcceptanceMG5=(5270./16560.)
+
+#ttjjEffMG5=(8425.0/81283.0)
+#ttbbEffMG5=(280.0/1068.0)
+#RfullMG5 = (5520.0 /496640.0 )
+#RvisMG5  = (1068.0 /81283.0 )
 
 eRPOW = ttjjEffPOW/ttbbEffPOW 
 acPPOW = ttjjAcceptancePOW/ttbbAcceptancePOW
@@ -1033,7 +1115,7 @@ elif int(arg3)==2:
   genRerrorF = orig_r*eRPOW*acPPOW*orig_err/orig_r
   kVal = result["kVal"] 
   print "FINAL2: csvweight: full gen R $= "+ str(round(genRF*10000)/10000)+" \pm "+str(round(genRerrorF*10000)/10000)+"$"
-  print "FINAL2: csvweight: k $="+str(round(result["kVal"]*10000)/100)+": "+str(round(result["kValerror"]*10000)/10000)+" "
+  print "FINAL2: csvweight: k $="+str(round(result["kVal"]*10000)/10000)+": "+str(round(result["kValerror"]*10000)/10000)+" "
 
   for sys in sysWeights:
     orig_r2,orig_err2,result2=fitting(histogramSys[sys], freeTTB, freeTTCC, GEN,True,False)
@@ -1041,19 +1123,21 @@ elif int(arg3)==2:
     sysUnck = (kVal-result2["kVal"])/kVal
 
     print "FINAL2: "+(sys.rjust(30))+": R "+ str(round(sysUnc*10000)/100)+" %     ,     R = "+ str(round(orig_r2*10000)/10000)+" "
-    print "FINAL2: "+(sys.rjust(30))+": k "+str(round(sysUnck*10000)/100)+" %     ,     k = "+ str(round(result2["kVal"]*10000)/10000)+" "
+    print "FINAL2: "+(sys.rjust(30))+": k "+str(round(sysUnck*10000)/100)+"      ,     k = "+ str(round(result2["kVal"]*10000)/10000)+" "
     SystematicUnc[sys]=copy.deepcopy(sysUnc)
     SystematicUnck[sys]=copy.deepcopy(sysUnck)
   print "FINAL2: ---- "+str(SystematicUnc)+"------"
   orig_r3,orig_err3,result3 = fitting(histograms, True, False, GEN,True,False)
   orig_r4,orig_err4,result4 = fitting(histograms, False, True, GEN,True,False)
   orig_r5,orig_err5,result5 = fitting(histogramsMG5, False, False, "MG5",True,False)
+  print "FINAL2: ----MG5 k="+str(result5["kVal"])
 
   sysUnc3 = (orig_r-orig_r3)/orig_r
   sysUnc3k = (result3["kVal"]-kVal)/kVal
   sysUnc4 = (orig_r-orig_r4)/orig_r
   sysUnc4k = (result4["kVal"]-kVal)/kVal
-  sysUnc5 = (genR-orig_r5*eRMG5)/genR
+  #sysUnc5 = (genR-orig_r5*eRMG5)/genR
+  sysUnc5 = (orig_r-orig_r5)/orig_r
   sysUnc5k = (result5["kVal"]-kVal)/kVal
 
   sysUnc=0.
@@ -1079,8 +1163,8 @@ elif int(arg3)==2:
       sysUnc1.append(max(abs(up),abs(dw)))
       sysUnc1k.append(max(abs(upk),abs(dwk)))
 
-    sysUnc = max(sysUnc1)
-    sysUnck = max(sysUnc1k)
+    sysUnc = quardsum(sysUnc1)
+    sysUnck = quardsum(sysUnc1k)
     print "FINAL2: "+sys2.rjust(10)+" : "+str(round(sysUnc*10000)/100)+" % ,     k="+str(round(sysUnck*10000)/100)+" % "
     sysUnc = 0.
 
@@ -1088,6 +1172,7 @@ elif int(arg3)==2:
   print "FINAL2: "+("TTCC").rjust(5)+" : "+str(round(sysUnc4*10000)/100)+" % ,     k="+str(round(sysUnc4k*10000)/100)+" % "
   print "FINAL2: "+("GEN").rjust(5)+" : "+str(round(sysUnc5*10000)/100)+" % ,     k="+str(round(sysUnc5k*10000)/100)+" % "
   print "FINAL2: ---------------- "#+str(SystematicUnc)+"------"
+  
 
 
 
