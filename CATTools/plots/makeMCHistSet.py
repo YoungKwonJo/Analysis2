@@ -31,25 +31,25 @@ def makeMCHistSet(histograms):
   MCtot3 = AMCttbar+Bkg1
   
   histograms2 = {}
-  histograms2["ttbb"] = { "h1":histograms["POWttbb"],   "FillColor":"#660000",  "label":"t#bar{t}+b#bar{b}      " }
-  histograms2["ttb"]  = { "h1":histograms["POWttb"],    "FillColor":"#ffcc00",  "label":"t#bar{t}+b        "      }
-  histograms2["ttcc"] = { "h1":histograms["POWttcc"],   "FillColor":"#cc6600",  "label":"t#bar{t}+c#bar{c}      " }
-  histograms2["ttlf"] = { "h1":histograms["POWttlf"],   "FillColor":"#ff0000",  "label":"t#bar{t}+lf       "      }
-  histograms2["ttot"] = { "h1":histograms["POWttot"],   "FillColor":"#ff6565",  "label":"t#bar{t} others"         }
-  #histograms2["ttall"] = {"h1":histograms["POWttal"],   "FillColor":"#ff6565",  "label":"t#bar{t} all"            }
+  histograms2["ttbb"] = { "h1":histograms["POWttbb"],   "FillColor":"#660000", "LineColor":"#000000",  "label":"t#bar{t}+b#bar{b}      " }
+  histograms2["ttb"]  = { "h1":histograms["POWttb"],    "FillColor":"#ffcc00", "LineColor":"#000000",  "label":"t#bar{t}+b        "      }
+  histograms2["ttcc"] = { "h1":histograms["POWttcc"],   "FillColor":"#cc6600", "LineColor":"#000000",  "label":"t#bar{t}+c#bar{c}      " }
+  histograms2["ttlf"] = { "h1":histograms["POWttlf"],   "FillColor":"#ff0000", "LineColor":"#000000",  "label":"t#bar{t}+lf       "      }
+  histograms2["ttot"] = { "h1":histograms["POWttot"],   "FillColor":"#ff6565", "LineColor":"#000000",  "label":"t#bar{t} others"         }
+  #histograms2["ttall"] = {"h1":histograms["POWttal"],   "FillColor":"#ff6565", "LineColor":"#000000",  "label":"t#bar{t} all"            }
 
-  histograms2["Singlet"] = {"h1":mergesHistograms(ST,    histograms),    "FillColor":"#ff00ff",  "label":"Single t"            } 
-  histograms2["VV"]      = {"h1":mergesHistograms(VV,    histograms),    "FillColor":"#ffffff",  "label":"VV            "      }
-  histograms2["WJets"]   = {"h1":mergesHistograms(WJets, histograms),    "FillColor":"#33cc33",  "label":"WJets      "         }
-  histograms2["ZJets"]   = {"h1":mergesHistograms(ZJets, histograms),    "FillColor":"#3366ff",  "label":"DYJets    "          }
-  histograms2["ttV"]     = {"h1":mergesHistograms(ttV,   histograms),    "FillColor":"#7676ff",  "label":"t#bar{t}V          " }
-  histograms2["ttH"]     = {"h1":mergesHistograms(ttH,   histograms),    "LineColor":"#7676ff",  "label":"t#bar{t}H         "  }
+  histograms2["Singlet"] = {"h1":mergesHistograms(ST,    histograms),    "FillColor":"#ff00ff",  "LineColor":"#000000", "label":"Single t"            } 
+  histograms2["VV"]      = {"h1":mergesHistograms(VV,    histograms),    "FillColor":"#ffffff",  "LineColor":"#000000", "label":"VV            "      }
+  histograms2["WJets"]   = {"h1":mergesHistograms(WJets, histograms),    "FillColor":"#33cc33",  "LineColor":"#000000", "label":"WJets      "         }
+  histograms2["ZJets"]   = {"h1":mergesHistograms(ZJets, histograms),    "FillColor":"#3366ff",  "LineColor":"#000000", "label":"DYJets    "          }
+  histograms2["ttV"]     = {"h1":mergesHistograms(ttV,   histograms),    "FillColor":"#7676ff",  "LineColor":"#000000", "label":"t#bar{t}V          " }
+  histograms2["ttH"]     = {"h1":mergesHistograms(ttH,   histograms),    "LineColor":"#7676ff",  "FillColor":"#ffffff", "label":"t#bar{t}H         "  }
   
-  histograms2["DATA"]    = {"h1":histograms["DATA"],                     "LineColor":"#000000",  "label":"DATA "    ,"MarkerStyle":20,  "MarkerSize": 0.7        }
+  histograms2["DATA"]    = {"h1":histograms["DATA"],                     "LineColor":"#000000",  "FillColor":"#ffffff", "label":"DATA "    ,"MarkerStyle":20,  "MarkerSize": 0.7        }
 
-  histograms2["MCtot1"]  = {"h1":mergesHistograms(MCtot1,  histograms),  "LineColor":"#afc6c6",  "label":""         ,"LineStyle": 1001,  "FillColor":"#afc6c6" } 
-  histograms2["MCtot2"]  = {"h1":mergesHistograms(MCtot2,  histograms),  "LineColor":"#59d354",  "label":"Madgraph" ,"LineStyle": 3   ,  "FillColor":"#ffffff" } 
-  histograms2["MCtot3"]  = {"h1":mergesHistograms(MCtot3,  histograms),  "LineColor":"#ff00ff",  "label":"MC@NLO"   ,"LineStyle": 2   ,  "FillColor":"#ffffff" } 
+  histograms2["MCtot1"]  = {"h1":mergesHistograms(MCtot1,  histograms),  "LineColor":"#afc6c6",  "FillColor":"#afc6c6",  "label":""         ,"FillStyle": 1001 } 
+  histograms2["MCtot2"]  = {"h1":mergesHistograms(MCtot2,  histograms),  "LineColor":"#59d354",  "FillColor":"#ffffff",  "label":"Madgraph" ,"LineStyle": 3    } 
+  histograms2["MCtot3"]  = {"h1":mergesHistograms(MCtot3,  histograms),  "LineColor":"#ff00ff",  "FillColor":"#ffffff",  "label":"MC@NLO"   ,"LineStyle": 2    } 
   ttbarlist = ["ttbb","ttb","ttcc","ttlf","ttot"]
   bkglist=["ttV","Singlet","VV","WJets","ZJets"]
   fullmc =["MCtot1"]

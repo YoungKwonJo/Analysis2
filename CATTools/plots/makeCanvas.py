@@ -15,61 +15,32 @@ import copy
 def make_legend(xmin,ymin,xmax,ymax):
   #leg = TLegend(0.65,0.7, 0.89,0.89)
   leg = TLegend(xmin,ymin,xmax,ymax)
-  leg.SetFillColor(0)
-  leg.SetLineColor(1)
-  leg.SetTextFont(62)
-  leg.SetTextSize(0.03)
-
-  leg.SetBorderSize(1)
-  leg.SetLineStyle(1)
-  leg.SetLineWidth(1)
-  leg.SetLineColor(0)
-
+  leg.SetFillColor(0),  leg.SetLineColor(1), leg.SetTextFont(62),  leg.SetTextSize(0.03)
+  leg.SetBorderSize(1), leg.SetLineStyle(1), leg.SetLineWidth(1),  leg.SetLineColor(0)
   return leg
 
 def addLegendLumi():#lumi):
   #lumi2 = str(round(lumi/100)/10)
   title  = TLatex(-20.,50.,"CMS #sqrt{s} = 13TeV, L = 2.26 fb^{-1}")
-  title.SetNDC()
-  title.SetTextAlign(12)
-  title.SetX(0.20)
-  title.SetY(0.83)
-  title.SetTextFont(42)
-  title.SetTextSize(0.05)
-  title.SetTextSizePixels(24)
-  title.Draw()
-
+  title.SetNDC(),        title.SetTextAlign(12),   title.SetX(0.20),      title.SetY(0.83)
+  title.SetTextFont(42), title.SetTextSize(0.05),  title.SetTextSizePixels(24)
   return title
 
 def addLegendCMS():
   #tex2 = TLatex(0.3715952,0.9146667,"Preliminary")
   tex2 = TLatex(-20.,50.,"Preliminary")
-  tex2.SetNDC()
-  tex2.SetTextAlign(12)
-  tex2.SetX(0.25)
-  tex2.SetY(0.93)
-  tex2.SetTextColor(2)
-  tex2.SetTextFont(42)
-  tex2.SetTextSize(0.05)
-  tex2.SetTextSizePixels(24)
-  tex2.Draw()
-
+  tex2.SetNDC(),          tex2.SetTextAlign(12),  tex2.SetX(0.25),        tex2.SetY(0.93)
+  tex2.SetTextColor(2),   tex2.SetTextFont(42),   tex2.SetTextSize(0.05), tex2.SetTextSizePixels(24)
   return tex2
 
 def addDecayMode(ll):
   ll2="l^{#mp}l^{#pm} channel"
-  if ll.find("em")>-1 : ll2="e^{#mp}#mu^{#pm} channel"
-  if ll.find("mm")>-1 : ll2="#mu^{#mp}#mu^{#pm} channel"
-  if ll.find("ee")>-1 : ll2="e^{#mp}e^{#pm} channel"
-
+  if ll.find("ME")>-1 : ll2="e^{#mp}#mu^{#pm} channel"
+  if ll.find("MM")>-1 : ll2="#mu^{#mp}#mu^{#pm} channel"
+  if ll.find("EE")>-1 : ll2="e^{#mp}e^{#pm} channel"
   chtitle = TLatex(-20.,50.,ll2)
-  chtitle.SetNDC()
-  chtitle.SetTextAlign(12)
-  chtitle.SetX(0.20)
-  chtitle.SetY(0.75)
-  chtitle.SetTextFont(42)
-  chtitle.SetTextSize(0.05)
-  chtitle.SetTextSizePixels(24)
+  chtitle.SetNDC(),         chtitle.SetTextAlign(12),   chtitle.SetX(0.20),  chtitle.SetY(0.75)
+  chtitle.SetTextFont(42),  chtitle.SetTextSize(0.05),  chtitle.SetTextSizePixels(24)
 
   return chtitle
 
@@ -78,25 +49,44 @@ def myCanvas(name):
   return c1
 def myPad1(name):
   pad1 = TPad(name, "",0,0.3,1,1)
-  pad1.SetPad(0.01, 0.23, 0.99, 0.99)
-  pad1.SetTopMargin(0.1)
-  pad1.SetRightMargin(0.04)
-
+  pad1.SetPad(0.01, 0.23, 0.99, 0.99), pad1.SetTopMargin(0.1), pad1.SetRightMargin(0.04)
   return pad1
-
 def myPad2(name):
   pad2 = TPad(name, "",0,0,1,0.3)
-  pad2.SetPad(0.01, 0.02, 0.99, 0.3)
-  #gStyle.SetGridWidth(0.5)
-  gStyle.SetGridWidth(1)
-  gStyle.SetGridColor(14)
-  pad2.SetGridx()
-  pad2.SetGridy()
-  pad2.SetTopMargin(0.05)
-  pad2.SetBottomMargin(0.4)
-  pad2.SetRightMargin(0.04)
-
+  pad2.SetPad(0.01, 0.02, 0.99, 0.3),  gStyle.SetGridWidth(1),  gStyle.SetGridColor(14)
+  pad2.SetGridx(),  pad2.SetGridy(),   pad2.SetTopMargin(0.05)
+  pad2.SetBottomMargin(0.4),           pad2.SetRightMargin(0.04)
   return pad2
+
+##################################################
+##################################################
+def StyleUp(histograms):
+  for aa in histograms.keys():
+    for bb in [0,1,2]:
+      cc=histograms[aa]["h1"]["hMM"]
+      if bb==1 : cc=histograms[aa]["h1"]["hEE"]
+      if bb==2 : cc=histograms[aa]["h1"]["hME"] 
+      if "LineColor"   in histograms[aa].keys(): cc.SetLineColor( TColor.GetColor(histograms[aa]["LineColor"])  )
+      if "LineStyle"   in histograms[aa].keys(): cc.SetLineStyle(  histograms[aa]["LineStyle"]   )
+      if "FillStyle"   in histograms[aa].keys(): cc.SetFillStyle(  histograms[aa]["FillStyle"]   )
+      if "MarkerStyle" in histograms[aa].keys(): cc.SetMarkerStyle(histograms[aa]["MarkerStyle"] )
+      if "MarkerSize"  in histograms[aa].keys(): cc.SetMarkerSize( histograms[aa]["MarkerSize"]  )
+      if "FillColor"   in histograms[aa].keys(): cc.SetFillColor(  TColor.GetColor(histograms[aa]["FillColor"]) )
+
+def myHist2TGraphError(hist1):
+  xx,xxer,yy,yyer=[],[],[],[]
+  for i in range(0, hist1.GetNbinsX()+2 ):
+    yy.append(  float(hist1.GetBinContent(i)))
+    yyer.append(float(hist1.GetBinError(i)))
+    xx.append(  float(hist1.GetBinCenter(i)))
+    xxer.append(float(hist1.GetBinWidth(i)/2))
+  x,xer,y,yer   = array("d",xx), array("d",xxer), array("d",yy), array("d",yyer)
+  gr = TGraphErrors(len(x), x,y,xer,yer)
+  gr.SetFillStyle(1001)
+  gr.SetFillColor( hist1.GetLineColor() )
+  gr.SetLineColor( hist1.GetFillColor() )
+
+  return gr
 
 
 ##############################
@@ -147,71 +137,55 @@ def AddHist(channel,histograms):
       h["aa"].Add(copy.deepcopy(histograms["h1"][bb]))
   return h["aa"]
 
-def StyleUp(histograms):
-  for aa in histograms.keys():
-    for bb in [0,1,2]:
-      cc=histograms[aa]["h1"]["hMM"]
-      if bb==1 : cc=histograms[aa]["h1"]["hEE"]
-      if bb==2 : cc=histograms[aa]["h1"]["hME"] 
-      if "Linecolor"   in histograms[aa].keys(): cc.SetLineColor( TColor.GetColor(histograms[aa]["LineColor"])  )
-      if "LineStyle"   in histograms[aa].keys(): cc.SetLineStyle(  histograms[aa]["LineStyle"]   )
-      if "MarkerStyle" in histograms[aa].keys(): cc.SetMarkerStyle(histograms[aa]["MarkerStyle"] )
-      if "MarkerSize"  in histograms[aa].keys(): cc.SetMarkerSize( histograms[aa]["MarkerSize"]  )
-      if "FillColor"   in histograms[aa].keys(): cc.SetFillColor(  TColor.GetColor(histograms[aa]["FillColor"]) )
-
 ######################################
 ######################################
 ######################################
-def aCavas(mon,step,decay,isLogy,Weight):
+def aCanvas(mon,step,decay,isLogy,Weight):
   from makeMCHistSet import makeMCHistSet,load1stHistograms
   histograms=load1stHistograms(mon,step,Weight)
   histograms2,plotSet=makeMCHistSet(histograms)
   StyleUp(histograms2)
 
-  #decay = "LL"
-  #isLogy = False
   canvasname=mon["name"]+step
-  c1 = myCanvas(canvasname) 
-  #c1 = TCanvas()
+  c1,pad1,pad2 = myCanvas(canvasname), myPad1(canvasname+"pad1"), myPad2(canvasname+"pad2")
   c1.Divide(1,2)
-  pad1 = myPad1(canvasname+"pad1")
-  pad2 = myPad2(canvasname+"pad2")
-  pad1.Draw()
-  pad1.cd()
+  pad1.Draw(), pad1.cd()
   if isLogy : pad1.SetLogy()
   ########################
   ########################
   ########################
   DATA   =  AddHist(decay,histograms2["DATA"])
   MCtot1 =  AddHist(decay,histograms2["MCtot1"])
+  MCtot1gr =  myHist2TGraphError(MCtot1)
   MCtot2 =  AddHist(decay,histograms2["MCtot2"])
   MCtot3 =  AddHist(decay,histograms2["MCtot3"])
   hs = StackHist(decay,histograms2,plotSet)
 
-  ########################
+
+  ####################################
   if isLogy : 
     DATA.SetMinimum( 0.04 )
-    DATA.SetMaximum( 100.0*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
+    scale = MCtot1.GetMaximum()
+    maxY=0.
+    for i in range(int(DATA.GetNbinsX()*0.7)+1, DATA.GetNbinsX()+2):
+       if maxY<DATA.GetBinContent(i): maxY=DATA.GetBinContent(i)
+    DATA.SetMaximum(maxY*10000)
+    if maxY*10000 < scale*140 : DATA.SetMaximum(scale*140)
   else :
-    DATA.SetMaximum( 2.4*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
+    DATA.SetMaximum( 2.2*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
 
-  ########################
-  DATA.Draw()
-  hs.Draw("same,hist")
-  MCtot1.Draw("same")
-  MCtot2.Draw("same")
-  MCtot3.Draw("same")
+  ##################################
+  DATA.Draw(), hs.Draw("same,hist"), MCtot1gr.Draw("e2same"), MCtot2.Draw("same"), MCtot3.Draw("same")
   DATA.Draw("same")
 
   ########################
   ########################
-  pt = addLegendLumi()#lumi)
-  pt2 = addLegendCMS()
-  pt3 = addDecayMode(decay)
+  pt,pt2,pt3 = addLegendLumi(),addLegendCMS(),addDecayMode(decay)
   pt.Draw()
   pt2.Draw()
   pt3.Draw()
-  ############
+  ########################
+  ########################
   legx1 = 0.8
   wid=0.12
   legx2 = 0.67
@@ -229,23 +203,28 @@ def aCavas(mon,step,decay,isLogy,Weight):
     leg3.AddEntry(histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "l")
   #leg3.AddEntry(histograms2["ttH"]["h1"]["hMM"], histograms2["ttH"]["label"], "l")
   ###############
-  leg.Draw()
-  leg2.Draw()
-  leg3.Draw()
+  leg.Draw(),  leg2.Draw(),  leg3.Draw()
   pad1.Modified()
-  c1.cd()
-  pad2.Draw()
-  pad2.cd()
+  c1.cd(),  pad2.Draw(),  pad2.cd()
   ########################
 
   ########################
   pad2.Modified()
-  c1.cd()
-  c1.Modified()
-  c1.cd()
+  c1.cd(), c1.Modified(), c1.cd()
 
   return c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3,leg,leg2,leg3
 
+##################################
+##################################
+##################################
+##################################
+##################################
+##################################
+##################################
+##################################
+##################################
+##################################
+##################################
 def main():
   gROOT.SetStyle("Plain")
   gStyle.SetOptFit(1000)
@@ -261,9 +240,9 @@ def main():
   #mon = monitors[34]
   mon = monitors[11]
   aaa = {}
-  aaa[0]=aCavas(mon,"S4","LL",True,"csvweight")
-  aaa[1]=aCavas(mon,"S5","LL",True,"csvweight")
-  aaa[2]=aCavas(mon,"S6","LL",True,"csvweight")
+  aaa[0]=aCanvas(mon,"S4","LL",True,"csvweight")
+  aaa[1]=aCanvas(mon,"S5","LL",True,"csvweight")
+  aaa[2]=aCanvas(mon,"S6","LL",True,"csvweight")
 
   return aaa
 
