@@ -137,7 +137,7 @@ def loadHistogram(arg1, arg2, Step, Weight):
     name = mc['name']
     color = mc['ColorLabel']['color'] 
     #histnameMM = "h2_"+name+"_"+HN+"_mm_"+Step
-    print name
+    #print name
     #print name+"/"+Weight+"/h2_"+name+"_"+HN+"_mm_"+Step+"_"+Weight
     h1 = f.Get(name+"/"+Weight1+"/h2_"+name+"_"+HN+"_mm_"+Step+"_"+Weight1).Clone("h2_"+name+"_"+Step+"LL"+"_"+Weight1)
     h2 = f.Get(name+"/"+Weight1+"/h2_"+name+"_"+HN+"_ee_"+Step+"_"+Weight1)
@@ -189,8 +189,8 @@ def loadHistogram(arg1, arg2, Step, Weight):
     #print "FINAL2 "+name+"  "+str(histograms[name]["exp"])
 
 
-  print str(histograms.keys())
-  print "closingg... f "
+  #print str(histograms.keys())
+  #print "closingg... f "
   f.Close()
   #for datesmaples
   WeightData = Weight1.replace("csvweight_","")
@@ -797,7 +797,9 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   cN = TCanvas("cN", "cN", 1)
   #histograms[GEN+"ttcc"]["h11"].Add(histograms[GEN+"ttc"]["h11"])
   
-  histograms[GEN+"ttbb"]["h11"].DrawNormalized("HIST")
+  normH1=histograms[GEN+"ttbb"]["h11"].DrawNormalized()
+  normH1.SetMaximum(normH1.GetMaximum()*2.0)
+  normH1.Draw("HIST")
   histograms[GEN+"ttb"]["h11"].DrawNormalized("sameHIST")
   histograms[GEN+"ttcc"]["h11"].DrawNormalized("sameHIST")
   histograms[GEN+"ttlf"]["h11"].DrawNormalized("sameHIST")
@@ -823,7 +825,9 @@ def fitting(histograms, freeTTB, freeTTCC, GEN, onlyPrint, isPullTest):
   cN2 = TCanvas("cN2", "cN2", 1)
   #histograms[GEN+"ttcc"]["h12"].Add(histograms[GEN+"ttc"]["h12"])
   
-  histograms[GEN+"ttbb"]["h12"].DrawNormalized("HIST")
+  normH2=histograms[GEN+"ttbb"]["h12"].DrawNormalized()
+  normH2.SetMaximum(normH2.GetMaximum()*2.8)
+  normH2.Draw("HIST")
   histograms[GEN+"ttb"]["h12"].DrawNormalized("sameHIST")
   histograms[GEN+"ttcc"]["h12"].DrawNormalized("sameHIST")
   histograms[GEN+"ttlf"]["h12"].DrawNormalized("sameHIST")
@@ -916,8 +920,12 @@ def resultPrint(result, genInfo):
   print "FINAL2:vis   ttbb :"+str(NewCXttbbvis)+" pb"
   print "FINAL2:vis   ttjj :"+str(NewCXttjjvis)+" pb"
 
-  print "FINAL2:full   ttbb :"+str(NewCXttbbfull)+" pb"
-  print "FINAL2:full   ttjj :"+str(NewCXttjjfull)+" pb"
+  print "FINAL2:full ll   ttbb :"+str(NewCXttbbfull)+" pb"
+  print "FINAL2:full ll  ttjj :"+str(NewCXttjjfull)+" pb"
+  print "FINAL2:ll r : "+str(RdilepPOW)
+  print "FINAL2:full   ttbb :"+str(NewCXttbbfull/RdilepPOW)+" pb"
+  print "FINAL2:full   ttjj :"+str(NewCXttjjfull/RdilepPOW)+" pb"
+ 
 
 
 ################
@@ -938,114 +946,45 @@ def quardsum(aaa):
 ################
 ################
 ################
-#POWHEG
-#ttjjRatioTTPOW=(121044.0/19757190.0)
+#POWHEG###################################
+POWhadronic,POWdileptonic,POWsemileptonic,POWetc=44760741.,10286981.,42910959.,13251918.
+POWttbbF,POWttbjF,POWttccF,POWttlfF=43181.,160433.,91034.,3637828.
+POWttbbV,POWttbjV,POWttccV,POWttlfV=8204.,31131.,15380.,546875.
+POWttbarall    =POWhadronic+POWdileptonic+POWsemileptonic+POWetc
+POWttjjF = POWttbbF+POWttbjF+POWttccF+POWttlfF
+ttjjRatioTTPOW = (POWttjjF/POWttbarall)
+POWttjjV = POWttbbV+POWttbjV+POWttccV+POWttlfV
 
-ttbarall = 97789736.0
-"""
-ttbbF = 509785.0
-ttbjF = 1884100.0
-ttccF = 7294102.0
-ttlfF = 40047953.0
-ttjjF = ttbbF+ttbjF+ttccF+ttlfF
-ttjjRatioTTPOW = (ttjjF/ttbarall)
-"""
+POWttbbS6 = 2248.0
+POWttjjS6 = 71719.0
 
-"""
-ttbbF = 510654.0
-ttbjF = 1567880.0
-ttccF = 5149457.0
-ttlfF = 27020796.0
-ttjjF = ttbbF+ttbjF+ttccF+ttlfF
-ttjjRatioTTPOW = (ttjjF/ttbarall)
-"""
-#m1
-ttbbF = 43181.0
-ttbjF = 160433.0
-ttccF = 91034.0
-ttlfF = 3637828.0
-ttjjF = ttbbF+ttbjF+ttccF+ttlfF
-ttjjRatioTTPOW = (ttjjF/ttbarall)
+ttjjAcceptancePOW = (POWttjjV/POWttjjF)
+ttbbAcceptancePOW = (POWttbbV/POWttbbF)
+ttjjEffPOW = POWttjjS6 / POWttjjV
+ttbbEffPOW = POWttbbS6 / POWttbbV
+RfullPOW = POWttbbF/POWttjjF
+RvisPOW =  POWttbbV/POWttjjV
+RdilepPOW = POWdileptonic/POWttbarall
 
-#0
-"""
-ttbbF = 25720.0
-ttbjF = 89127.0
-ttccF = 52904.0
-ttlfF = 1776525.0
-ttjjF = ttbbF+ttbjF+ttccF+ttlfF
-ttjjRatioTTPOW = (ttjjF/ttbarall)
-"""
-
-ttbbVll = 8185.0
-ttbjVll = 31086.0
-ttccVll = 15352.0
-ttlfVll = 545976.0
-ttjjVll = ttbbVll+ttbjVll+ttccVll+ttlfVll
-
-ttbbS6 = 2243.0
-ttjjS6 = 71471.0
-
-ttjjAcceptancePOW = (ttjjVll/ttjjF)
-ttbbAcceptancePOW = (ttbbVll/ttbbF)
-ttjjEffPOW = ttjjS6 / ttjjVll
-ttbbEffPOW = ttbbS6 / ttbbVll
-RfullPOW = ttbbF/ttjjF
-RvisPOW =  ttbbVll/ttjjVll
-
-"""
-ttjjAcceptancePOW=((5270.0+ 20017.0+ 9858.0+ 350490.0)/(16560.0+ 55874.0+ 33288.0+ 1101990.0)) # (121044.0/766823.0)
-ttbbAcceptancePOW=(5270.0/16560.0) # (1609.0/8700.0)
-ttjjEffPOW=(46043.0/385635.0)##(11855.0/121044.0)
-ttbbEffPOW=(1465.0/5270.0) #(400.0/1609.0)
-RfullPOW = (16560.0)/(16560.0+ 55874.0+ 33288.0+ 1101990.0)#(8700.0/766823.0)
-RvisPOW  = (5270.0)/(5270.0+ 20017.0+ 9858.0+ 350490.0) #(1609.0/121044.0)
-"""
-
-#aMC@NLO
-#ttjjRatioTTAMC=(98110.0/14188545.0)
-#ttjjAcceptanceAMC=(98110.0/645759.0)
-#ttbbAcceptanceAMC=(1279.0/7203.0)
-#ttjjEffAMC=(8766.0/98110.0)
-#ttbbEffAMC=(264.0/1279.0)
-#RfullAMC = (7203.0/645759.0 )
-#RvisAMC  = ( 1279.0/98110.0 )
-
-#MG5
-MG5ttbarall = 10215131.0
-MG5ttbbF = 240483.0
-MG5ttbjF = 888185.0
-MG5ttccF = 801364.0
-MG5ttlfF = 3949310.0
+#MG5 ########################################
+MG5hadronic,MG5dileptonic,MG5semileptonic,MG5etc=4542315.,1135379.,4538140.,1416369.0
+MG5ttbbF,MG5ttbjF,MG5ttccF,MG5ttlfF=4911.,18816.,10817.,428760.
+MG5ttbbV,MG5ttbjV,MG5ttccV,MG5ttlfV=949.,3758.,1881.,66365.
+MG5ttbarall = MG5hadronic+MG5dileptonic+MG5semileptonic+MG5etc
 MG5ttjjF = MG5ttbbF+MG5ttbjF+MG5ttccF+MG5ttlfF
 MG5ttjjRatioTT = (MG5ttjjF/MG5ttbarall)
-
-MG5ttbbVll = 948.0
-MG5ttbjVll = 3759.0
-MG5ttccVll = 1883.0
-MG5ttlfVll = 66360.0
-MG5ttjjVll = MG5ttbbVll+MG5ttbjVll+MG5ttccVll+MG5ttlfVll
+MG5ttjjV = MG5ttbbV+MG5ttbjV+MG5ttccV+MG5ttlfV
 
 MG5ttbbS6 = 261.0
-MG5ttjjS6 = 9008.0
+MG5ttjjS6 = 9017.0
 
-ttjjAcceptanceMG5= (MG5ttjjVll/MG5ttjjF)
-ttbbAcceptanceMG5= (MG5ttbbVll/MG5ttbbF)
-ttjjEffMG5 = (MG5ttjjS6/MG5ttjjVll)
-ttbbEffMG5 = (MG5ttbbS6/MG5ttbbVll)
+ttjjAcceptanceMG5= (MG5ttjjV/MG5ttjjF)
+ttbbAcceptanceMG5= (MG5ttbbV/MG5ttbbF)
+ttjjEffMG5 = (MG5ttjjS6/MG5ttjjV)
+ttbbEffMG5 = (MG5ttbbS6/MG5ttbbV)
 RfullMG5   = (MG5ttbbF/MG5ttjjF)
-RvisMG5    = (MG5ttbbVll/MG5ttjjVll)
-
-#ttjjRatioTTMG5=(81283.0/11344206.0)
-#ttjjAcceptanceMG5=(81283.0/496640.0)
-#ttbbAcceptanceMG5=(1068.0/5520.0)
-##ttjjAcceptanceMG5= (5270.+ 20017.+ 9858.+ 350490.)/(55874.+ 16560.+ 33288.+ 1101990.)
-##ttbbAcceptanceMG5=(5270./16560.)
-
-#ttjjEffMG5=(8425.0/81283.0)
-#ttbbEffMG5=(280.0/1068.0)
-#RfullMG5 = (5520.0 /496640.0 )
-#RvisMG5  = (1068.0 /81283.0 )
+RvisMG5    = (MG5ttbbV/MG5ttjjV)
+RdilepMG5 = MG5dileptonic/MG5ttbarall
 
 eRPOW = ttjjEffPOW/ttbbEffPOW 
 acPPOW = ttjjAcceptancePOW/ttbbAcceptancePOW
@@ -1054,25 +993,25 @@ acPPOW = ttjjAcceptancePOW/ttbbAcceptancePOW
 eRMG5 = ttjjEffMG5/ttbbEffMG5 
 acPMG5 = ttjjAcceptanceMG5/ttbbAcceptanceMG5
 
-genInfoPOW = {"Acceptance":{"ttjj":ttjjAcceptancePOW,"ttbb":ttbbAcceptancePOW }, "effciency":{ "ttjj":ttjjEffPOW,"ttbb":ttbbEffPOW  }, "eR":eRPOW, "acP":acPPOW, "Rfull": RfullPOW, "Rvis":RvisPOW }
+genInfoPOW = {"Acceptance":{"ttjj":ttjjAcceptancePOW,"ttbb":ttbbAcceptancePOW }, "effciency":{ "ttjj":ttjjEffPOW,"ttbb":ttbbEffPOW  }, "eR":eRPOW, "acP":acPPOW, "Rfull": RfullPOW, "Rvis":RvisPOW ,"Rll":RdilepPOW}
 #genInfoAMC = {"Acceptance":{"ttjj":ttjjAcceptanceAMC,"ttbb":ttbbAcceptanceAMC }, "effciency":{ "ttjj":ttjjEffAMC,"ttbb":ttbbEffAMC  }, "eR":eRAMC, "acP":acPAMC, "Rfull": RfullAMC, "Rvis":RvisAMC  }
-genInfoMG5 = {"Acceptance":{"ttjj":ttjjAcceptanceMG5,"ttbb":ttbbAcceptanceMG5 }, "effciency":{ "ttjj":ttjjEffMG5,"ttbb":ttbbEffMG5  }, "eR":eRMG5, "acP":acPMG5, "Rfull": RfullMG5, "Rvis":RvisMG5  }
+genInfoMG5 = {"Acceptance":{"ttjj":ttjjAcceptanceMG5,"ttbb":ttbbAcceptanceMG5 }, "effciency":{ "ttjj":ttjjEffMG5,"ttbb":ttbbEffMG5  }, "eR":eRMG5, "acP":acPMG5, "Rfull": RfullMG5, "Rvis":RvisMG5, "Rll":RdilepMG5  }
 
-print "FINAL2: POW eR= "+str(eRPOW)+"  , acceptance ttjj:"+str(ttjjAcceptancePOW)+", (effS6: "+str(ttjjEffPOW)+")  ,  ttbb:"+str(ttbbAcceptancePOW)+", (effS6: "+str(ttbbEffPOW)+")"
+#print "FINAL2: POW eR= "+str(eRPOW)+"  , acceptance ttjj:"+str(ttjjAcceptancePOW)+", (effS6: "+str(ttjjEffPOW)+")  ,  ttbb:"+str(ttbbAcceptancePOW)+", (effS6: "+str(ttbbEffPOW)+")"
 #print "FINAL2: AMC eR= "+str(eRAMC)+"  , acceptance ttjj:"+str(ttjjAcceptanceAMC)+", (effS6: "+str(ttjjEffAMC)+")  ,  ttbb:"+str(ttbbAcceptanceAMC)+", (effS6: "+str(ttbbEffAMC)+")"
-print "FINAL2: MG5 eR= "+str(eRMG5)+"  , acceptance ttjj:"+str(ttjjAcceptanceMG5)+", (effS6: "+str(ttjjEffMG5)+")  ,  ttbb:"+str(ttbbAcceptanceMG5)+", (effS6: "+str(ttbbEffMG5)+")"
+#print "FINAL2: MG5 eR= "+str(eRMG5)+"  , acceptance ttjj:"+str(ttjjAcceptanceMG5)+", (effS6: "+str(ttjjEffMG5)+")  ,  ttbb:"+str(ttbbAcceptanceMG5)+", (effS6: "+str(ttbbEffMG5)+")"
 
-################
-################
-################
-################
+##############################################################################
+##############################################################################
+##############################################################################
+##############################################################################
 
 import sys
 if len(sys.argv) < 3:
   sys.exit()
 
 arg1 = sys.argv[1] # default, freeB, freeC and, (freeB and freeC)
-arg2 = sys.argv[2] # MG5, AMC, POW
+arg2 = sys.argv[2] # MG5, POW
 
 arg3="0"
 if len(sys.argv) > 3:
@@ -1082,29 +1021,31 @@ if len(sys.argv) > 3:
 StepSys = ["JES_Up","JES_Down","JER_NOM","JER_Up","JER_Down","LF_Up", "LF_Down", "HF_Up", "HF_Down", "HF_Stats1_Up","HF_Stats1_Down","HF_Stats2_Up","HF_Stats2_Down","LF_Stats1_Up","LF_Stats1_Down","LF_Stats2_Up","LF_Stats2_Down","CQ_Err1_Up", "CQ_Err1_Down", "CQ_Err2_Up", "CQ_Err2_Down","PW_Up","PW_Down"]
 StepSys2 = {"JES":["JES","JER"],"LF":["LF","HF_Stats1","HF_Stats2"],"HF":["HF","LF_Stats1","LF_Stats2"],"CQ":["CQ_Err1","CQ_Err2"],"pileup":["PW"]}
 
+import sys,os
+sys.path.append('../plots')
+#sys.path.insert(0, os.path.abspath('..'))
 from sysWeight_cfi import mceventweight
+
 sysWeights =  [i["name"] for i in mceventweight]
-#sysWeights.remove("woLep")
 sysWeights.append("Scale_Up")
 sysWeights.append("Scale_Down")
 
 histograms,freeTTB,freeTTCC,GEN=loadHistogram(arg1, arg2,"S6","csvweight")
-histogramsMG5,freeTTB5,freeTTCC5,GEN5=loadHistogram("0", "0","S6","csvweight")
-histogramSys = {}
-for sys in sysWeights:
-  histograms2,freeTTB2,freeTTCC2,GEN2=loadHistogram(arg1, arg2,"S6",sys)
-  histogramSys[sys] = copy.deepcopy(histograms2)
-
-orig_r = 0.0316 # MG5
-orig_err=0.00001#
-SystematicUnc={}
-SystematicUnck={}
+orig_r,orig_err = 0.,0. 
+#SystematicUnck={}
 #StepSys2 = ["JES","LF","HF","HF_Stats1","HF_Stats2","LF_Stats1","LF_Stats1","Charm_Err1","Charm_Err2"]
 
 from math import *
 if int(arg3)==0:
   cR10, cR00, cR11, cR12, cNLLContourb,cNLLContourc, cN, cN2=fitting(histograms, freeTTB, freeTTCC, GEN,False,False)
 elif int(arg3)==2:
+  SystematicUnc,SystematicUnck ={},{}
+  histogramsMG5,freeTTB5,freeTTCC5,GEN5=loadHistogram("0", "0","S6","csvweight")
+  histogramSys = {}
+  for sys in sysWeights:
+    histograms2,freeTTB2,freeTTCC2,GEN2=loadHistogram(arg1, arg2,"S6",sys)
+    histogramSys[sys] = copy.deepcopy(histograms2)
+
   orig_r,orig_err,result=fitting(histograms, freeTTB, freeTTCC, GEN,True,False)
   #print "FINAL2: csvweight: R = "+ str(round(orig_r*10000)/10000)+" \pm "+str(round(orig_err*10000)/10000)+"$"
   genR      = orig_r*eRPOW

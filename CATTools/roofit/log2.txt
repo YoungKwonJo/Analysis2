@@ -1,126 +1,100 @@
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:MG5
-FINAL: prefit: R=0.0373
-FINAL: $R = 0.0433 \pm 0.0085$
+FINAL: prefit: R=0.0333
+FINAL: $R = 0.055 \pm 0.0071$
 FINAL: freeTTB : False
-FINAL: prefit: R2=0.0938
-FINAL: $R2 = 0.1089
+FINAL: prefit: R2=0.084
+FINAL: $R2 = 0.1385
 FINAL: freeTTCC : False
-FINAL: prefit: Rcc=0.0384
-FINAL: $k = 0.7614 \pm 0.0276$
+FINAL: prefit: Rcc=0.0418
+FINAL: $k = 0.6838 \pm 0.0209$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:MG5
-FINAL: prefit: R=0.0373
-FINAL: $R = 0.0746 \pm 0.0227$
+FINAL: prefit: R=0.0333
+FINAL: $R = 0.0958 \pm 0.0243$
 FINAL: freeTTB : True
-FINAL: prefit: R2=0.0938
-FINAL: $R2 = 0.06 \pm 0.0353$
+FINAL: prefit: R2=0.084
+FINAL: $R2 = 0.0669 \pm 0.0403$
 FINAL: freeTTCC : False
-FINAL: prefit: Rcc=0.0384
-FINAL: $k = 0.7612 \pm 0.0276$
+FINAL: prefit: Rcc=0.0418
+FINAL: $k = 0.6838 \pm 0.0209$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:MG5
-FINAL: prefit: R=0.0373
-FINAL: $R = 0.0432 \pm 0.0104$
+FINAL: prefit: R=0.0333
+FINAL: $R = 0.0561 \pm 0.0093$
 FINAL: freeTTB : False
-FINAL: prefit: R2=0.0938
-FINAL: $R2 = 0.1085
+FINAL: prefit: R2=0.084
+FINAL: $R2 = 0.1414
 FINAL: freeTTCC : True
-FINAL: prefit: Rcc=0.0384
-FINAL: $Rcc = 0.0387 \pm 0.0395$
-FINAL: $k = 0.7613 \pm 0.0276$
+FINAL: prefit: Rcc=0.0418
+FINAL: $Rcc = 0.0296 \pm 0.0416$
+FINAL: $k = 0.6838 \pm 0.0209$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:MG5
-FINAL: prefit: R=0.0373
-FINAL: $R = 0.089 \pm 0.0262$
+FINAL: prefit: R=0.0333
+FINAL: $R = 0.0977 \pm 0.0252$
 FINAL: freeTTB : True
-FINAL: prefit: R2=0.0938
-FINAL: $R2 = 0.059 \pm 0.0354$
+FINAL: prefit: R2=0.084
+FINAL: $R2 = 0.0703 \pm 0.042$
 FINAL: freeTTCC : True
-FINAL: prefit: Rcc=0.0384
-FINAL: $Rcc = 0.0 \pm 0.0537$
-FINAL: $k = 0.7613 \pm 0.0276$
+FINAL: prefit: Rcc=0.0418
+FINAL: $Rcc = 0.0278 \pm 0.0409$
+FINAL: $k = 0.6837 \pm 0.0209$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:POW
-FINAL: prefit: R=0.0367
-FINAL: $R = 0.041 \pm 0.0087$
+FINAL: prefit: R=0.0337
+FINAL: $R = 0.0537 \pm 0.0075$
 FINAL: freeTTB : False
-FINAL: prefit: R2=0.0923
-FINAL: $R2 = 0.1029
+FINAL: prefit: R2=0.0827
+FINAL: $R2 = 0.1318
 FINAL: freeTTCC : False
-FINAL: prefit: Rcc=0.0408
-FINAL: $k = 0.9512 \pm 0.0345$
+FINAL: prefit: Rcc=0.04
+FINAL: $k = 0.8209 \pm 0.0251$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:POW
-FINAL: prefit: R=0.0367
-FINAL: $R = 0.0809 \pm 0.0317$
+FINAL: prefit: R=0.0337
+FINAL: $R = 0.0564 \pm 0.0209$
 FINAL: freeTTB : True
-FINAL: prefit: R2=0.0923
-FINAL: $R2 = 0.0466 \pm 0.0437$
+FINAL: prefit: R2=0.0827
+FINAL: $R2 = 0.1269 \pm 0.0391$
 FINAL: freeTTCC : False
-FINAL: prefit: Rcc=0.0408
-FINAL: $k = 0.9514 \pm 0.0345$
+FINAL: prefit: Rcc=0.04
+FINAL: $k = 0.8209 \pm 0.0251$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:POW
-FINAL: prefit: R=0.0367
-FINAL: $R = 0.0348 \pm 0.0114$
+FINAL: prefit: R=0.0337
+FINAL: $R = 0.0594 \pm 0.0102$
 FINAL: freeTTB : False
-FINAL: prefit: R2=0.0923
-FINAL: $R2 = 0.0873
+FINAL: prefit: R2=0.0827
+FINAL: $R2 = 0.1457
 FINAL: freeTTCC : True
-FINAL: prefit: Rcc=0.0408
-FINAL: $Rcc = 0.0742 \pm 0.0421$
-FINAL: $k = 0.9514 \pm 0.0345$
+FINAL: prefit: Rcc=0.04
+FINAL: $Rcc = 0.0 \pm 0.2614$
+FINAL: $k = 0.8209 \pm 0.0251$
+FINAL2: POW eR= 0.434244837501  , acceptance ttjj:0.152727950533, (effS6: 0.118999532134)  ,  ttbb:0.189550959913, (effS6: 0.27403787416)
+FINAL2: MG5 eR= 0.448508740832  , acceptance ttjj:0.0124078510827, (effS6: 0.123481836875)  ,  ttbb:0.00394206659099, (effS6: 0.275316455696)
 FINAL: ----------------------   
 FINAL: MC:POW
-FINAL: prefit: R=0.0367
-FINAL: $R = 0.0729 \pm 0.0356$
+FINAL: prefit: R=0.0337
+FINAL: $R = 0.0621 \pm 0.0225$
 FINAL: freeTTB : True
-FINAL: prefit: R2=0.0923
-FINAL: $R2 = 0.0436 \pm 0.0436$
+FINAL: prefit: R2=0.0827
+FINAL: $R2 = 0.141 \pm 0.0429$
 FINAL: freeTTCC : True
-FINAL: prefit: Rcc=0.0408
-FINAL: $Rcc = 0.0606 \pm 0.0448$
-FINAL: $k = 0.9514 \pm 0.0345$
-FINAL: ----------------------   
-FINAL: MC:AMC
-FINAL: prefit: R=0.0309
-FINAL: $R = 0.1032 \pm 0.0124$
-FINAL: freeTTB : False
-FINAL: prefit: R2=0.0557
-FINAL: $R2 = 0.1857
-FINAL: freeTTCC : False
-FINAL: prefit: Rcc=0.037
-FINAL: $k = 0.9708 \pm 0.0352$
-FINAL: ----------------------   
-FINAL: MC:AMC
-FINAL: prefit: R=0.0309
-FINAL: $R = 0.0994 \pm 0.0226$
-FINAL: freeTTB : True
-FINAL: prefit: R2=0.0557
-FINAL: $R2 = 0.1908 \pm 0.0341$
-FINAL: freeTTCC : False
-FINAL: prefit: Rcc=0.037
-FINAL: $k = 0.9707 \pm 0.0352$
-FINAL: ----------------------   
-FINAL: MC:AMC
-FINAL: prefit: R=0.0309
-FINAL: $R = 0.0759 \pm 0.0125$
-FINAL: freeTTB : False
-FINAL: prefit: R2=0.0557
-FINAL: $R2 = 0.1367
-FINAL: freeTTCC : True
-FINAL: prefit: Rcc=0.037
-FINAL: $Rcc = 0.2166 \pm 0.0353$
-FINAL: $k = 0.9702 \pm 0.0352$
-FINAL: ----------------------   
-FINAL: MC:AMC
-FINAL: prefit: R=0.0309
-FINAL: $R = 0.0801 \pm 0.0231$
-FINAL: freeTTB : True
-FINAL: prefit: R2=0.0557
-FINAL: $R2 = 0.131 \pm 0.0349$
-FINAL: freeTTCC : True
-FINAL: prefit: Rcc=0.037
-FINAL: $Rcc = 0.2174 \pm 0.0355$
-FINAL: $k = 0.97 \pm 0.0352$
+FINAL: prefit: Rcc=0.04
+FINAL: $Rcc = 0.0 \pm 0.2586$
+FINAL: $k = 0.8209 \pm 0.0251$
