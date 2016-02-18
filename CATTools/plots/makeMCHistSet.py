@@ -8,7 +8,7 @@ from array import array
 import copy
 
 
-from loadHistograms import loadHistogramMC,loadHistogramDATA,mergesHistograms
+from loadHistograms import loadHistogramMC,loadHistogramDATA,mergesHistograms,loc
 
 def makeMCHistSet(histograms):
   ttV   = ["TTWlNu","TTWqq","TTZll","TTZqq"]
@@ -38,18 +38,18 @@ def makeMCHistSet(histograms):
   histograms2["ttot"] = { "h1":histograms["POWttot"],   "FillColor":"#ff6565", "LineColor":"#000000",  "label":"t#bar{t} others"         }
   #histograms2["ttall"] = {"h1":histograms["POWttal"],   "FillColor":"#ff6565", "LineColor":"#000000",  "label":"t#bar{t} all"            }
 
-  histograms2["Singlet"] = {"h1":mergesHistograms(ST,    histograms),    "FillColor":"#ff00ff",  "LineColor":"#000000", "label":"Single t"            } 
-  histograms2["VV"]      = {"h1":mergesHistograms(VV,    histograms),    "FillColor":"#ffffff",  "LineColor":"#000000", "label":"VV            "      }
-  histograms2["WJets"]   = {"h1":mergesHistograms(WJets, histograms),    "FillColor":"#33cc33",  "LineColor":"#000000", "label":"WJets      "         }
-  histograms2["ZJets"]   = {"h1":mergesHistograms(ZJets, histograms),    "FillColor":"#3366ff",  "LineColor":"#000000", "label":"DYJets    "          }
-  histograms2["ttV"]     = {"h1":mergesHistograms(ttV,   histograms),    "FillColor":"#7676ff",  "LineColor":"#000000", "label":"t#bar{t}V          " }
-  histograms2["ttH"]     = {"h1":mergesHistograms(ttH,   histograms),    "LineColor":"#7676ff",  "FillColor":"#ffffff", "label":"t#bar{t}H         "  }
+  histograms2["Singlet"] = {"h1":mergesHistograms(ST,    histograms,"ST"),    "FillColor":"#ff00ff",  "LineColor":"#000000", "label":"Single t"            } 
+  histograms2["VV"]      = {"h1":mergesHistograms(VV,    histograms,"VV"),    "FillColor":"#ffffff",  "LineColor":"#000000", "label":"VV            "      }
+  histograms2["WJets"]   = {"h1":histograms["WJets"],                         "FillColor":"#33cc33",  "LineColor":"#000000", "label":"WJets      "         }
+  histograms2["ZJets"]   = {"h1":mergesHistograms(ZJets, histograms,"DYJets"),    "FillColor":"#3366ff",  "LineColor":"#000000", "label":"DYJets    "          }
+  histograms2["ttV"]     = {"h1":mergesHistograms(ttV,   histograms,"ttV"),    "FillColor":"#7676ff",  "LineColor":"#000000", "label":"t#bar{t}V          " }
+  histograms2["ttH"]     = {"h1":mergesHistograms(ttH,   histograms,"ttH"),    "LineColor":"#7676ff",  "FillColor":"#ffffff", "label":"t#bar{t}H         "  }
   
   histograms2["DATA"]    = {"h1":histograms["DATA"],                     "LineColor":"#000000",  "FillColor":"#ffffff", "label":"DATA "    ,"MarkerStyle":20,  "MarkerSize": 0.7        }
 
-  histograms2["MCtot1"]  = {"h1":mergesHistograms(MCtot1,  histograms),  "LineColor":"#afc6c6",  "FillColor":"#afc6c6",  "label":""         ,"FillStyle": 1001 } 
-  histograms2["MCtot2"]  = {"h1":mergesHistograms(MCtot2,  histograms),  "LineColor":"#59d354",  "FillColor":"#ffffff",  "label":"Madgraph" ,"LineStyle": 3    } 
-  histograms2["MCtot3"]  = {"h1":mergesHistograms(MCtot3,  histograms),  "LineColor":"#ff00ff",  "FillColor":"#ffffff",  "label":"MC@NLO"   ,"LineStyle": 2    } 
+  histograms2["MCtot1"]  = {"h1":mergesHistograms(MCtot1,  histograms,"POW"),  "LineColor":"#afc6c6",  "FillColor":"#afc6c6",  "label":""         ,"FillStyle": 1001 } 
+  histograms2["MCtot2"]  = {"h1":mergesHistograms(MCtot2,  histograms,"MG5"),  "LineColor":"#59d354",  "FillColor":"#ffffff",  "label":"Madgraph" ,"LineStyle": 3    } 
+  histograms2["MCtot3"]  = {"h1":mergesHistograms(MCtot3,  histograms,"AMC"),  "LineColor":"#ff00ff",  "FillColor":"#ffffff",  "label":"MC@NLO"   ,"LineStyle": 2    } 
   ttbarlist = ["ttbb","ttb","ttcc","ttlf","ttot"]
   bkglist=["ttV","Singlet","VV","WJets","ZJets"]
   fullmc =["MCtot1"]
@@ -57,13 +57,13 @@ def makeMCHistSet(histograms):
   plotSet = {"ttbars":ttbarlist, "bkg":bkglist, "fullmc":fullmc, "others":others}
   return histograms2,plotSet
 
-def load1stHistograms(mon,step,Weight):
+def load1stHistograms(mon,step,Weight,f,f2):
   from drellYanEstimation import DYsf 
   from mcsample_cfi import mcsamples
   histograms = {}
   for mc in mcsamples:
-    histograms[mc["name"]]=loadHistogramMC(mc, mon,step,Weight,DYsf)
-  histograms["DATA"]=loadHistogramDATA(mon,step,Weight)
+    histograms[mc["name"]]=loadHistogramMC(mc, mon,step,Weight,DYsf,f)
+  histograms["DATA"]=loadHistogramDATA(mon,step,Weight,f2)
 
   return histograms
 
@@ -71,9 +71,12 @@ def load1stHistograms(mon,step,Weight):
 ######################################
 ######################################
 def main():
+  f = TFile.Open(loc+"/hist_csvweight.root")
+  f2 = TFile.Open(loc+"/hist_CEN.root")
+
   from monitors_cfi import monitors,monitors2d
   mon = monitors[7]
-  histograms=load1stHistograms(mon,"S2")
+  histograms=load1stHistograms(mon,"S2",f,f2)
   #c1 = TCanvas()
   #histograms["TTZqq"]["hMM"].Draw()
   #histograms["DATA"]["hEE"].Draw()

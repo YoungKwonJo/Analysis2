@@ -107,12 +107,15 @@ def myHist2TGraphError(hist1):
     xx.append(  float(hist1.GetBinCenter(i)))
     xxer.append(float(hist1.GetBinWidth(i)/2))
   x,xer,y,yer   = array("d",xx), array("d",xxer), array("d",yy), array("d",yyer)
+  return x,y,xer,yer
+  """
   gr = TGraphErrors(len(x), x,y,xer,yer)
   gr.SetFillStyle(1001)
   gr.SetFillColor( hist1.GetLineColor() )
   gr.SetLineColor( hist1.GetFillColor() )
 
-  return gr
+  #return gr
+  """
 
 def styleBottomUp(hdata):
   hdata.SetMarkerStyle(20)
@@ -138,8 +141,11 @@ def styleBottomUp(hdata):
   hdata.SetMinimum(0.6)
   hdata.SetMaximum(1.4)
 
-def myRatioSyst(hdata):
-  RatioSyst = hdata.Clone("ratioSyst")
+def myHistClone(hdata,name):
+  return hdata.Clone(name)
+
+def myRatioSyst(hdata,name, thegraphRatioSyst):
+  RatioSyst = hdata.Clone(name)
 
   for b_r in range(1,RatioSyst.GetNbinsX()+1):
     RatioSyst.SetBinContent(b_r,1.0)
@@ -148,19 +154,18 @@ def myRatioSyst(hdata):
   thegraphRatioSyst.SetFillStyle( 1001 )
   thegraphRatioSyst.SetLineColor( hdata.GetLineColor() )
   thegraphRatioSyst.SetFillColor( TColor.GetColor("#cccccc") )
-  thegraphRatioSyst.SetName("thegraphRatioSyst")
+  thegraphRatioSyst.SetName(name+"TG")
 
-  return thegraphRatioSyst
+  #return thegraphRatioSyst
 
 
-
 ##############################
 ##############################
 ##############################
 ##############################
 ##############################
-def StackHist(channel, histograms2, plotSet):
-  hs = THStack("hs","")
+def StackHist(name,channel, histograms2, plotSet):
+  hs = THStack("hs"+name+channel,"")
   ls=["hMM","hEE","hME"]
   if channel=="MM":   ls = ["hMM"]
   if channel=="EE":   ls = ["hEE"]
@@ -168,23 +173,23 @@ def StackHist(channel, histograms2, plotSet):
   if channel=="MMEE": ls = ["hMM","hEE"]
 
   for aa in plotSet["ttbars"]:
-    h={}
+    h= None
     for bb in ls: 
-      if len(h.keys())==0:
-        h[aa]=copy.deepcopy(histograms2[aa]["h1"][bb])
+      if h is None:
+        h=histograms2[aa]["h1"][bb].Clone( "ttbar"+histograms2[aa]["h1"][bb].GetName()+channel )
       else :
-        h[aa].Add(copy.deepcopy(histograms2[aa]["h1"][bb]))
-    h[aa].SetFillColor( TColor.GetColor(histograms2[aa]["FillColor"]) )
-    hs.Add(copy.deepcopy(h[aa]))
+        h.Add(histograms2[aa]["h1"][bb])
+    h.SetFillColor( TColor.GetColor(histograms2[aa]["FillColor"]) )
+    hs.Add(h)
   for aa in plotSet["bkg"]:
-    h={}
+    h= None
     for bb in ls: 
-      if len(h.keys())==0:
-        h[aa]=copy.deepcopy(histograms2[aa]["h1"][bb])
+      if h is None:
+        h=histograms2[aa]["h1"][bb].Clone( "bkg"+histograms2[aa]["h1"][bb].GetName()+channel )
       else :
-        h[aa].Add(copy.deepcopy(histograms2[aa]["h1"][bb]))
-    h[aa].SetFillColor( TColor.GetColor(histograms2[aa]["FillColor"]) )
-    hs.Add(copy.deepcopy(h[aa]))
+        h.Add(histograms2[aa]["h1"][bb])
+    h.SetFillColor( TColor.GetColor(histograms2[aa]["FillColor"]) )
+    hs.Add(h)
 
   return hs
 
@@ -194,110 +199,139 @@ def AddHist(channel,histograms):
   if channel=="EE":   ls = ["hEE"]
   if channel=="ME":   ls = ["hME"]
   if channel=="MMEE": ls = ["hMM","hEE"]
-  h={}
+  h= None
   for bb in ls: 
-    if len(h.keys())==0:
-      h["aa"]=copy.deepcopy(histograms["h1"][bb])
+    if h is None:
+      h=histograms["h1"][bb].Clone( histograms["h1"][bb].GetName()+channel )
     else :
-      h["aa"].Add(copy.deepcopy(histograms["h1"][bb]))
-  return h["aa"]
+      h.Add(histograms["h1"][bb])
+  return h
 
 ######################################
 ######################################
-######################################
-def aCanvas(mon,step,decay,isLogy,Weight):
-  from makeMCHistSet import makeMCHistSet,load1stHistograms
-  histograms=load1stHistograms(mon,step,Weight)
-  histograms2,plotSet=makeMCHistSet(histograms)
-  StyleUp(histograms2)
+########################
+legx1 = 0.8
+wid=0.12
+legx2 = 0.67
+leg  = make_legend(legx1,0.64, legx1+wid,0.88)
+leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
+leg3 = make_legend(legx1,0.56, legx1+wid,0.63)
+#leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
 
-  canvasname=mon["name"]+step+decay
-  c1,pad1,pad2 = myCanvas(canvasname), myPad1(canvasname+"pad1"), myPad2(canvasname+"pad2")
-  c1.Divide(1,2)
-  pad1.Draw(), pad1.cd()
-  if isLogy : pad1.SetLogy()
-  ########################
-  ########################
-  ########################
-  DATA   =  AddHist(decay,histograms2["DATA"])
-  MCtot1 =  AddHist(decay,histograms2["MCtot1"])
-  MCtot1gr =  myHist2TGraphError(MCtot1)
-  MCtot2 =  AddHist(decay,histograms2["MCtot2"])
-  MCtot3 =  AddHist(decay,histograms2["MCtot3"])
-  hs = StackHist(decay,histograms2,plotSet)
-  
-  ####################################
-  if isLogy : 
-    scale = MCtot1.GetMaximum()
-    maxY,minY=0., 1.
-    for i in range(int(DATA.GetNbinsX()*0.7)+1, DATA.GetNbinsX()+2):
-       if maxY<DATA.GetBinContent(i): maxY=DATA.GetBinContent(i)
-       if DATA.GetBinContent(i)>0 and minY>DATA.GetBinContent(i): minY=DATA.GetBinContent(i)
-
-    DATA.SetMaximum(maxY*10000)
-    if maxY*10000 < scale*140 : DATA.SetMaximum(scale*140)
-    if minY>1       :  DATA.SetMinimum( 4.0 )
-    elif minY>0.4   :  DATA.SetMinimum( 0.4 )
-    elif minY>0.04  :  DATA.SetMinimum( 0.04 )
-    elif minY<0.04  :  DATA.SetMinimum( 0.004 )
-  else :
-    DATA.SetMaximum( 2.2*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
-
-  ##################################
-  myDataHistStyleUp(DATA)
-  DATA.GetYaxis().SetTitle("Events")
-  DATA.GetXaxis().SetTitle("")
-  DATA.Draw(), hs.Draw("same,hist"), MCtot1gr.Draw("e2same"), MCtot2.Draw("same"), MCtot3.Draw("same")
-  DATA.Draw("same")
-
-  ########################
-  ########################
-  pt,pt2,pt3 = addLegendLumi(),addLegendCMS(),addDecayMode(decay)
-  pt.Draw(),  pt2.Draw(),  pt3.Draw()
-  ########################
-  ########################
-  legx1 = 0.8
-  wid=0.12
-  legx2 = 0.67
-  leg  = make_legend(legx1,0.64, legx1+wid,0.88)
-  leg2 = make_legend(legx2,0.68, legx2+wid,0.88)
-  leg3 = make_legend(legx1,0.56, legx1+wid,0.63)
-  #leg3 = make_legend(legx1,0.54, legx1+wid,0.63)
+def AddLegendEntry(plotSet,histograms2):
+  leg.DeleteEntry ()
+  leg2.DeleteEntry ()
+  leg3.DeleteEntry ()
   for aa in plotSet["ttbars"]:
     leg.AddEntry(histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "f")
   leg.AddEntry(histograms2["DATA"]["h1"]["hMM"], histograms2["DATA"]["label"], "p")
   for aa in plotSet["bkg"]:
     leg2.AddEntry( histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "f")
-
+ 
   for aa in plotSet["others"]:
     leg3.AddEntry(histograms2[aa]["h1"]["hMM"], histograms2[aa]["label"], "l")
-  #leg3.AddEntry(histograms2["ttH"]["h1"]["hMM"], histograms2["ttH"]["label"], "l")
-  ###############
-  leg.Draw(),  leg2.Draw(),  leg3.Draw()
-  pad1.Modified()
-  c1.cd(),  pad2.Draw(),  pad2.cd()
-  ########################
-  ########################
-  ratio3,ratio2,ratio1 = DATA.Clone("AMC"),DATA.Clone("MG5"),DATA.Clone("POW")
-  ratio1.Divide(MCtot1),  copyStyleUp(ratio1, MCtot1) 
-  ratio2.Divide(MCtot2),  copyStyleUp(ratio2, MCtot2) 
-  ratio3.Divide(MCtot3),  copyStyleUp(ratio3, MCtot3) 
-  styleBottomUp(ratio1)
-  ratio1.GetXaxis().SetTitle(mon['unit'])
-  ratio1.Draw()
-  ratioSyst=myRatioSyst(ratio1)
-  ratioSyst.Draw("e2")
-  ratio1.Draw("e1SAME")
-  ratio2.Draw("histSAME")
-  ratio3.Draw("histSAME")
+#leg3.AddEntry(histograms2["ttH"]["h1"]["hMM"], histograms2["ttH"]["label"], "l")
+###############
 
-  ########################
-  ########################
-  pad2.Modified()
-  c1.cd(), c1.Modified(), c1.cd()
+######################################
+pt,pt2,pt3mm,pt3ee,pt3em,pt3ll = addLegendLumi(),addLegendCMS(),addDecayMode("MM"),addDecayMode("EE"),addDecayMode("ME"),addDecayMode("LL")
+def aCanvas(mon,step,isLogy,Weight,f,f2):
+  return aCanvas2(mon,step,isLogy,Weight,f,f2,True)
+def aCanvas2(mon,step,isLogy,Weight,f,f2, isBatch):
+  from makeMCHistSet import makeMCHistSet,load1stHistograms
+  histograms=load1stHistograms(mon,step,Weight,f,f2)
+  histograms2,plotSet=makeMCHistSet(histograms)
+  StyleUp(histograms2)
+  AddLegendEntry(plotSet,histograms2)
 
-  return c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3,leg,leg2,leg3,ratio1,ratio2,ratio3,ratioSyst
+  decays = ["MM","EE","ME","LL"]
+  #c1s = {}
+  for decay in decays:
+    canvasname=mon["name"]+"_"+step+decay+"_"+Weight
+    print canvasname
+    c1,pad1,pad2 = myCanvas(canvasname), myPad1(canvasname+"pad1"), myPad2(canvasname+"pad2")
+    c1.Divide(1,2)
+    pad1.Draw(), pad1.cd()
+    if isLogy : pad1.SetLogy()
+    ########################
+    ########################
+    ########################
+    DATA   =  AddHist(decay,histograms2["DATA"])
+    MCtot1 =  AddHist(decay,histograms2["MCtot1"])
+    #MCtot1gr =  None
+    #myHist2TGraphError(MCtot1,MCtot1gr)
+    x,y,xer,yer = myHist2TGraphError(MCtot1)
+    MCtot1gr = TGraphErrors(len(x),x,y,xer,yer )
+    MCtot1gr.SetFillStyle(1001)
+    MCtot1gr.SetFillColor( MCtot1.GetLineColor() )
+    MCtot1gr.SetLineColor( MCtot1.GetFillColor() )
 
+
+    MCtot2 =  AddHist(decay,histograms2["MCtot2"])
+    MCtot3 =  AddHist(decay,histograms2["MCtot3"])
+    hs = StackHist(mon["name"],decay,histograms2,plotSet)
+    
+    ####################################
+    if isLogy : 
+      scale = MCtot1.GetMaximum()
+      maxY,minY=0., 1.
+      for i in range(int(DATA.GetNbinsX()*0.7)+1, DATA.GetNbinsX()+2):
+         if maxY<DATA.GetBinContent(i): maxY=DATA.GetBinContent(i)
+         if DATA.GetBinContent(i)>0 and minY>DATA.GetBinContent(i): minY=DATA.GetBinContent(i)
+    
+      DATA.SetMaximum(maxY*10000)
+      if maxY*10000 < scale*140 : DATA.SetMaximum(scale*140)
+      if minY>1       :  DATA.SetMinimum( 4.0 )
+      elif minY>0.4   :  DATA.SetMinimum( 0.4 )
+      elif minY>0.04  :  DATA.SetMinimum( 0.04 )
+      elif minY<0.04  :  DATA.SetMinimum( 0.004 )
+    else :
+      DATA.SetMaximum( 2.2*max(DATA.GetMaximum(),MCtot1.GetMaximum()) )
+    
+    ##################################
+    myDataHistStyleUp(DATA)
+    DATA.GetYaxis().SetTitle("Events")
+    DATA.GetXaxis().SetTitle("")
+    DATA.Draw(), hs.Draw("same,hist")
+    MCtot1gr.Draw("e2same")
+    MCtot2.Draw("same"), MCtot3.Draw("same")
+    DATA.Draw("same")
+    
+    ########################
+    ########################
+    pt.Draw(),  pt2.Draw()
+    if decay=="MM" : pt3mm.Draw()
+    if decay=="EE" : pt3ee.Draw()
+    if decay=="ME" : pt3em.Draw()
+    if decay=="LL" : pt3ll.Draw()
+
+    ########################
+    leg.Draw(),  leg2.Draw(),  leg3.Draw()
+    pad1.Modified()
+    c1.cd(),  pad2.Draw(),  pad2.cd()
+    ########################
+    ########################
+    ratio3,ratio2,ratio1 = myHistClone(DATA,canvasname+"AMC"),myHistClone(DATA,canvasname+"MG5"),myHistClone(DATA,canvasname+"POW")
+    ratio1.Divide(MCtot1),  copyStyleUp(ratio1, MCtot1) 
+    ratio2.Divide(MCtot2),  copyStyleUp(ratio2, MCtot2) 
+    ratio3.Divide(MCtot3),  copyStyleUp(ratio3, MCtot3) 
+    styleBottomUp(ratio1)
+    ratio1.GetXaxis().SetTitle(mon['unit'])
+    ratio1.Draw()
+    #ratioSyst=myRatioSyst(ratio1,canvasname+"syst")
+    #ratioSyst.Draw("e2")
+    ratio1.Draw("e1SAME")
+    ratio2.Draw("histSAME")
+    ratio3.Draw("histSAME")
+    
+    ########################
+    ########################
+    pad2.Modified()
+    c1.cd(), c1.Modified(), c1.cd()
+    
+    if isBatch : c1.Print("plots/TH1_"+canvasname+".eps")
+    else       : c1s[canvasname]=c1,pad1,pad2,histograms2,hs,MCtot1,MCtot2,MCtot3,DATA,pt,pt2,pt3,leg,leg2,leg3,ratio1,ratio2,ratio3,ratioSyst
+    
 ##################################
 ##################################
 ##################################
@@ -317,19 +351,39 @@ def main():
   
   gROOT.ProcessLine(".L tdrStyle.C")
   setTDRStyle()
+  from loadHistograms import loc
+  f = TFile.Open(loc+"/hist_csvweight.root")
+  f2 = TFile.Open(loc+"/hist_CEN.root")
 
   from monitors_cfi import monitors,monitors2d
-  mon = monitors[11]
-  #mon = monitors[34]
-  #mon = monitors[11]
+  #plotList = {"S2":["nGoodPV","ZMass","lep1Pt","lep2Pt","lep1Eta","lep2Eta","MET"]}
+  
+  plotList= {"S3":["ZMass","MET","NJet30","nBJet30M"]}
+  """
+  plotList2= {"S4":["ZMass","MET","NJet30","nBJet30M",
+          "jet1Pt","jet2Pt","jet3Pt","jet4Pt",
+          "jet1Eta","jet2Eta","jet3Eta","jet4Eta",
+          "jet1CSV","jet2CSV","jet3CSV","jet4CSV"
+          ]}
+  
+        "S5":["ZMass","MET","NJet30","nBJet30M",
+         # "jet1Pt","jet2Pt","jet3Pt","jet4Pt",
+         # "jet1Eta","jet2Eta","jet3Eta","jet4Eta",
+          "jet1CSV","jet2CSV","jet3CSV","jet4CSV"
+          ],
+        "S6":["ZMass","MET","NJet30","nBJet30M",
+         # "jet1Pt","jet2Pt","jet3Pt","jet4Pt",
+         # "jet1Eta","jet2Eta","jet3Eta","jet4Eta",
+          "jet1CSV","jet2CSV","jet3CSV","jet4CSV"
+          ]
+  }
+  """
   aaa = {}
-  #aaa[0]=aCanvas(mon,"S4","LL",True,"csvweight")
-  #aaa[1]=aCanvas(mon,"S5","LL",True,"csvweight")
-  aaa[2]=aCanvas(mon,"S4","LL",True,"csvweight")
-  aaa[3]=aCanvas(mon,"S4","MM",True,"csvweight")
-  aaa[4]=aCanvas(mon,"S4","EE",True,"csvweight")
-  aaa[5]=aCanvas(mon,"S4","ME",True,"csvweight")
-  #aaa[2]=aCanvas(mon,"S6","LL",True,"CEN")
+  for step in plotList.keys():
+    for mon in monitors:
+      if mon["name"] in plotList[step]:
+          name = mon["name"]+step
+          aCanvas(mon,step,True,"csvweight",f,f2)
 
   return aaa
 
